@@ -352,6 +352,19 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+		<Compile Include="models\IUnlocks.cs" />
+		<Compile Include="models\ProgressiveButtBounce.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_EndJump.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_IsSuperHipAtkOKJump.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateBombKey.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateDashKey.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_CheckFlipKickKey.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_SetHipAtk.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateJumpKey.cs" />
+		<Compile Include="services\DebugUnlockService.cs" />
+		<Compile Include="services\IUnlocksService.cs" />
+		<Compile Include="services\PlayerPacmanStateService.cs" />
+		<Compile Include="services\ServiceFactory.cs" />
 		<Content Include="Directory.Build.props" />
 	</ItemGroup>
 	
