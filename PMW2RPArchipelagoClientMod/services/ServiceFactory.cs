@@ -1,5 +1,7 @@
 ﻿using MelonLoader;
-using PMW2RPArchipelagoClientMod.models;
+using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.game;
+using PMW2RPArchipelagoClientMod.services.items;
 
 namespace PMW2RPArchipelagoClientMod.services
 {
@@ -27,17 +29,22 @@ namespace PMW2RPArchipelagoClientMod.services
             return _melonMod;
         }
 
-        public static IUnlocksService GetUnlocksService()
+        public static IDebugUnlocksService GetDebugUnlocksService()
         {
-            if (_melonMod == null)
-            {
-                throw new InvalidDataException("MELON MOD NULL");
-            }
             if (_debugUnlockService == null)
             {
+                if (_melonMod == null)
+                {
+                    throw new InvalidDataException("MELON MOD NULL");
+                }
                 _debugUnlockService = new DebugUnlockService(_melonMod);
             }
             return _debugUnlockService;
+        }
+
+        public static IUnlocksService GetUnlocksService()
+        {
+            return GetDebugUnlocksService();
         }
 
         public static IUnlocks GetUnlocks()
@@ -47,12 +54,12 @@ namespace PMW2RPArchipelagoClientMod.services
 
         public static PlayerPacmanStateService GetPlayerPacmanStateService()
         {
-            if (_melonMod == null)
-            {
-                throw new InvalidDataException("MELON MOD NULL");
-            }
             if (_playerPacmanStateService == null)
             {
+                if (_melonMod == null)
+                {
+                    throw new InvalidDataException("MELON MOD NULL");
+                }
                 _playerPacmanStateService = new PlayerPacmanStateService(_melonMod);
             }
             return _playerPacmanStateService;

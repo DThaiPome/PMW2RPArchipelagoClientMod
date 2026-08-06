@@ -1,4 +1,4 @@
-﻿namespace PMW2RPArchipelagoClientMod.models
+﻿namespace PMW2RPArchipelagoClientMod.models.data
 {
     public enum ProgressiveButtBounce
     {

@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace PMW2RPArchipelagoClientMod.services
+namespace PMW2RPArchipelagoClientMod.services.game
 {
     public class PlayerPacmanStateService
     {

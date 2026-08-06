@@ -1,7 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
-using PMW2RPArchipelagoClientMod.models;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.models.data;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
 {
