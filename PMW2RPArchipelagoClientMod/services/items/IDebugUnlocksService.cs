@@ -1,9 +1,5 @@
-﻿using PMW2RPArchipelagoClientMod.models.data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Il2Cpp;
+using PMW2RPArchipelagoClientMod.models.data;
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
@@ -13,5 +9,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public new bool Dash { get; set; }
         public new bool Bomb { get; set; }
         public new ProgressiveButtBounce ButtBounce { get; set; }
+
+        public IDictionary<EWorldStage, bool> StagesMutable { get; }
     }
 }

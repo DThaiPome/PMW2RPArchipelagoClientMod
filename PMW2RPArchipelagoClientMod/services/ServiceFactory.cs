@@ -10,6 +10,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static MelonMod _melonMod = null;
         private static DebugUnlockService _debugUnlockService = null;
         private static PlayerPacmanStateService _playerPacmanStateService = null;
+        private static LevelUnlockSyncService _levelUnlockSyncService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -20,12 +21,17 @@ namespace PMW2RPArchipelagoClientMod.services
             _melonMod = melonMod;
         }
 
-        public static MelonMod GetModInstance()
+        private static void _assertInit()
         {
             if (_melonMod == null)
             {
                 throw new InvalidDataException("MELON MOD NULL");
             }
+        }
+
+        public static MelonMod GetModInstance()
+        {
+            _assertInit();
             return _melonMod;
         }
 
@@ -33,10 +39,7 @@ namespace PMW2RPArchipelagoClientMod.services
         {
             if (_debugUnlockService == null)
             {
-                if (_melonMod == null)
-                {
-                    throw new InvalidDataException("MELON MOD NULL");
-                }
+                _assertInit();
                 _debugUnlockService = new DebugUnlockService(_melonMod);
             }
             return _debugUnlockService;
@@ -47,7 +50,7 @@ namespace PMW2RPArchipelagoClientMod.services
             return GetDebugUnlocksService();
         }
 
-        public static IUnlocks GetUnlocks()
+        public static IUnlocksSource GetUnlocks()
         {
             return GetUnlocksService();
         }
@@ -56,13 +59,20 @@ namespace PMW2RPArchipelagoClientMod.services
         {
             if (_playerPacmanStateService == null)
             {
-                if (_melonMod == null)
-                {
-                    throw new InvalidDataException("MELON MOD NULL");
-                }
+                _assertInit();
                 _playerPacmanStateService = new PlayerPacmanStateService(_melonMod);
             }
             return _playerPacmanStateService;
+        }
+
+        public static LevelUnlockSyncService GetLevelUnlockSyncService()
+        {
+            if (_levelUnlockSyncService == null)
+            {
+                _assertInit();
+                _levelUnlockSyncService = new LevelUnlockSyncService(_melonMod, GetUnlocks());
+            }
+            return _levelUnlockSyncService;
         }
     }
 }

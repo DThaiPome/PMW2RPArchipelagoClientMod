@@ -1,6 +1,7 @@
-﻿using MelonLoader;
+﻿using Il2Cpp;
+using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
-using UnityEngine.InputSystem;
+using System.Collections.Immutable;
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
@@ -11,6 +12,10 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public bool Dash { get; set; }
         public bool Bomb { get; set; }
         public ProgressiveButtBounce ButtBounce { get; set; }
+        
+        public Dictionary<EWorldStage, bool> _stagesUnlocked { get; private set; }
+        public IImmutableDictionary<EWorldStage, bool> Stages => _stagesUnlocked.ToImmutableDictionary();
+        public IDictionary<EWorldStage, bool> StagesMutable => _stagesUnlocked;
 
         public DebugUnlockService(MelonMod melonMod)
         {
@@ -19,6 +24,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
             Dash = true;
             Bomb = true;
             ButtBounce = ProgressiveButtBounce.SuperButtBounce;
+
+            _stagesUnlocked = new Dictionary<EWorldStage, bool>();
         }
 
         public void OnLateUpdate()

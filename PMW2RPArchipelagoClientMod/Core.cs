@@ -21,6 +21,7 @@ namespace PMW2RPArchipelagoClientMod
         {
             base.OnLateUpdate();
             ServiceFactory.GetUnlocksService().OnLateUpdate();
+            ServiceFactory.GetLevelUnlockSyncService().OnLateUpdate();
         }
     }
 }

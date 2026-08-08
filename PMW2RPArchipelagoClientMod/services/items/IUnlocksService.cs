@@ -2,7 +2,7 @@
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
-    public interface IUnlocksService : IUnlocks
+    public interface IUnlocksService : IUnlocksSource
     {
         void OnLateUpdate();
     }
