@@ -357,7 +357,6 @@
 		<Compile Include="Core.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
 		<Compile Include="services\ui\DebugUIService.cs" />
-		<Compile Include="ui\TestPanel.cs" />
 		<Compile Include="ui\UnlocksPanel.cs" />
 	</ItemGroup>
 
