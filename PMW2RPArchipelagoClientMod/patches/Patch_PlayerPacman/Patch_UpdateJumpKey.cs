@@ -14,7 +14,8 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
         private static void Prefix(PlayerPacman __instance)
         {
             if (GameUtil.UpdateKeyState(__instance.m_padNum, __instance.m_playerNo, EKeyAsign.Jump, __instance.m_jumpKeyState) == EKeyState.KeyDown
-                && ServiceFactory.GetUnlocks().ButtBounce == ProgressiveButtBounce.None)
+                && ServiceFactory.GetUnlocks().ButtBounce == ProgressiveButtBounce.None
+                && !__instance.IsJumpOK)
             {
                 ServiceFactory.GetPlayerPacmanStateService().PushSkipEndJump();
             }
