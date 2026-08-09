@@ -36,7 +36,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     return true;
                 }
-                return _outOfGameScenes.Contains(SceneManager.Instance.m_eCurrentScene);
+                return _outOfGameScenes.Contains(sceneManagerInstance.m_eCurrentScene);
             }
         }
 

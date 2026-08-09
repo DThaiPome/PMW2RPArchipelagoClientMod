@@ -357,6 +357,8 @@
 		<Compile Include="Core.cs" />
 		<Compile Include="models\data\IUnlocksSource.cs" />
 		<Compile Include="models\data\ProgressiveButtBounce.cs" />
+		<Compile Include="patches\Patch_GameUtil\Patch_GetVillageSpooky.cs" />
+		<Compile Include="patches\Patch_GameUtil\Patch_IsVillageSpooky.cs" />
 		<Compile Include="patches\Patch_GimmickGoStage\GimmickGoStage_IsExecOK.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_EndJump.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_IsSuperHipAtkOKJump.cs" />
@@ -365,8 +367,8 @@
 		<Compile Include="patches\Patch_PlayerPacman\Patch_CheckFlipKickKey.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_SetHipAtk.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateJumpKey.cs" />
-		<Compile Include="patches\Patch_SS_GoStageRoot\SS_GoStageRoot_get_CanGoStage.cs" />
-		<Compile Include="patches\Patch_SS_GoStageRoot\SS_GoStageRoot_get_IsUnlock.cs" />
+		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_CanGoStage.cs" />
+		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_IsUnlock.cs" />
 		<Compile Include="services\game\LevelUnlockSyncService.cs" />
 		<Compile Include="services\items\IDebugUnlocksService.cs" />
 		<Compile Include="services\items\DebugUnlockService.cs" />
