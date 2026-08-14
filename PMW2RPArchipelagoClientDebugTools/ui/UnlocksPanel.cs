@@ -16,6 +16,8 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
     {
         private Toggle _buttBounceToggle1;
         private Toggle _buttBounceToggle2;
+        private Toggle _dolphinKickToggle1;
+        private Toggle _dolphinKickToggle2;
         private Toggle _kickToggle;
         private Toggle _dashToggle;
         private Toggle _bombToggle;
@@ -54,6 +56,8 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
             _constructToggle(columnObj, "buttBounce1", "Progressive Butt-Bounce", out _buttBounceToggle1);
             _constructToggle(columnObj, "buttBounce2", "Progressive Butt-Bounce", out _buttBounceToggle2);
+            _constructToggle(columnObj, "dolphinKick1", "Progressive Dolphin Kick", out _dolphinKickToggle1);
+            _constructToggle(columnObj, "dolphinKick2", "Progressive Dolphin Kick", out _dolphinKickToggle2);
             _constructToggle(columnObj, "kick", "Flip Kick", out _kickToggle);
             _constructToggle(columnObj, "dash", "Dash", out _dashToggle);
             _constructToggle(columnObj, "bomb", "Pac-Dot Throw", out _bombToggle);
@@ -63,9 +67,12 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _kickToggle.isOn = debugUnlocksService.FlipKick;
             _dashToggle.isOn = debugUnlocksService.Dash;
             _bombToggle.isOn = debugUnlocksService.Bomb;
+            _flutterToggle.isOn = debugUnlocksService.Flutter;
 
             _buttBounceToggle1.isOn = debugUnlocksService.ButtBounce != ProgressiveButtBounce.None;
             _buttBounceToggle2.isOn = debugUnlocksService.ButtBounce == ProgressiveButtBounce.SuperButtBounce;
+            _dolphinKickToggle1.isOn = debugUnlocksService.DolphinKick != ProgressiveDolphinKick.None;
+            _dolphinKickToggle2.isOn = debugUnlocksService.DolphinKick == ProgressiveDolphinKick.SuperDolphinKick;
         }
 
         private void _constructStageToggles()
@@ -103,6 +110,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             debugUnlocksService.Dash = _dashToggle.isOn;
             debugUnlocksService.Bomb = _bombToggle.isOn;
             debugUnlocksService.Flutter = _flutterToggle.isOn;
+
             if (_buttBounceToggle1.isOn && _buttBounceToggle2.isOn)
             {
                 debugUnlocksService.ButtBounce = ProgressiveButtBounce.SuperButtBounce;
@@ -114,6 +122,19 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             else
             {
                 debugUnlocksService.ButtBounce = ProgressiveButtBounce.None;
+            }
+
+            if (_dolphinKickToggle1.isOn && _dolphinKickToggle2.isOn)
+            {
+                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.SuperDolphinKick;
+            }
+            else if (_dolphinKickToggle1.isOn || _dolphinKickToggle2.isOn)
+            {
+                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.DolphinKick;
+            }
+            else
+            {
+                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.None;
             }
         }
 

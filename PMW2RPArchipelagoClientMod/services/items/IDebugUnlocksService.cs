@@ -10,6 +10,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public new bool Bomb { get; set; }
         public new bool Flutter { get; set; }
         public new ProgressiveButtBounce ButtBounce { get; set; }
+        public new ProgressiveDolphinKick DolphinKick { get; set; }
 
         public IDictionary<EWorldStage, bool> StagesMutable { get; }
     }

@@ -73,7 +73,7 @@ namespace PMW2RPArchipelagoClientMod.services
                 if (_playerPacmanStateService == null)
                 {
                     _assertInit();
-                    _playerPacmanStateService = new PlayerPacmanStateService(_melonMod);
+                    _playerPacmanStateService = new PlayerPacmanStateService(_melonMod, Unlocks);
                 }
                 return _playerPacmanStateService;
             }

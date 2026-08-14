@@ -2,8 +2,8 @@
 {
     public enum ProgressiveButtBounce
     {
-        None,
-        ButtBounce,
-        SuperButtBounce
+        None = 0,
+        ButtBounce = 1,
+        SuperButtBounce = 2
     }
 }

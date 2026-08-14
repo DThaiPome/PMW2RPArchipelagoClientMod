@@ -10,7 +10,7 @@ namespace PMW2RPArchipelagoClientMod.models.data
         public bool Bomb { get; }
         public bool Flutter { get; }
         public ProgressiveButtBounce ButtBounce { get; }
+        public ProgressiveDolphinKick DolphinKick { get; }
         public IImmutableDictionary<EWorldStage, bool> Stages { get; }
-        // public Set<EArea> Worlds { get; }
     }
 }

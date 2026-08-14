@@ -13,7 +13,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public bool Bomb { get; set; }
         public bool Flutter { get; set; }
         public ProgressiveButtBounce ButtBounce { get; set; }
-        
+        public ProgressiveDolphinKick DolphinKick { get; set; }
+
         public Dictionary<EWorldStage, bool> _stagesUnlocked { get; private set; }
         public IImmutableDictionary<EWorldStage, bool> Stages => _stagesUnlocked.ToImmutableDictionary();
         public IDictionary<EWorldStage, bool> StagesMutable => _stagesUnlocked;
@@ -26,6 +27,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             Bomb = true;
             Flutter = true;
             ButtBounce = ProgressiveButtBounce.SuperButtBounce;
+            DolphinKick = ProgressiveDolphinKick.SuperDolphinKick;
 
             _stagesUnlocked = new Dictionary<EWorldStage, bool>();
         }
