@@ -11,7 +11,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix(ref bool __result, EJumpKind jump)
         {
-            if (ServiceFactory.GetUnlocks().ButtBounce != ProgressiveButtBounce.SuperButtBounce)
+            if (ServiceFactory.Unlocks.ButtBounce != ProgressiveButtBounce.SuperButtBounce)
             {
                 __result = false;
                 return false;

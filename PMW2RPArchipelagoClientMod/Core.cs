@@ -20,8 +20,8 @@ namespace PMW2RPArchipelagoClientMod
         public override void OnLateUpdate()
         {
             base.OnLateUpdate();
-            ServiceFactory.GetUnlocksService().OnLateUpdate();
-            ServiceFactory.GetLevelUnlockSyncService().OnLateUpdate();
+            ServiceFactory.UnlocksService.OnLateUpdate();
+            ServiceFactory.LevelUnlockSyncService.OnLateUpdate();
         }
     }
 }

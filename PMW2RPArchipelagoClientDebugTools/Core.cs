@@ -22,7 +22,7 @@ namespace PMW2RPArchipelagoClientDebugTools
         public override void OnLateUpdate()
         {
             base.OnLateUpdate();
-            ServiceFactory.GetDebugUIService().OnLateUpdate();
+            ServiceFactory.GetDebugUIService.OnLateUpdate();
         }
     }
 }

@@ -57,7 +57,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _constructToggle(columnObj, "dash", "Dash", out _dashToggle);
             _constructToggle(columnObj, "bomb", "Pac-Dot Throw", out _bombToggle);
 
-            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.GetDebugUnlocksService();
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             _kickToggle.isOn = debugUnlocksService.FlipKick;
             _dashToggle.isOn = debugUnlocksService.Dash;
             _bombToggle.isOn = debugUnlocksService.Bomb;
@@ -72,7 +72,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
-                var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.GetDebugUnlocksService();
+                var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
                 _constructToggle(columnObj, stage.ToString(), stage.ToString(), out Toggle toggle);
                 bool unlocked = debugUnlocksService.Stages.GetValueOrDefault(stage, false);
                 toggle.isOn = unlocked;
@@ -96,7 +96,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
 
         private void _updateMoveset()
         {
-            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.GetDebugUnlocksService();
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             debugUnlocksService.FlipKick = _kickToggle.isOn;
             debugUnlocksService.Dash = _dashToggle.isOn;
             debugUnlocksService.Bomb = _bombToggle.isOn;
@@ -116,7 +116,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
 
         private void _updateLevels()
         {
-            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.GetDebugUnlocksService();
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
                 debugUnlocksService.StagesMutable[stage] = _stageToggles[stage].isOn;

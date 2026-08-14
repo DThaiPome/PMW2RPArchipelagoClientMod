@@ -9,7 +9,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix(PlayerPacman __instance)
         {
-            if (ServiceFactory.GetUnlocks().Dash)
+            if (ServiceFactory.Unlocks.Dash)
             {
                 return true;
             }

@@ -17,26 +17,32 @@ namespace PMW2RPArchipelagoClientDebugTools.services
             _melonPlugin = melonPlugin;
         }
 
-        public static MelonPlugin GetModInstance()
+        public static MelonPlugin GetModInstance
         {
-            if (_melonPlugin == null)
-            {
-                throw new InvalidDataException("MELON MOD NULL");
-            }
-            return _melonPlugin;
-        }
-
-        public static DebugUIService GetDebugUIService()
-        {
-            if (_debugUIService == null)
+            get
             {
                 if (_melonPlugin == null)
                 {
                     throw new InvalidDataException("MELON MOD NULL");
                 }
-                _debugUIService = new DebugUIService(_melonPlugin);
+                return _melonPlugin;
             }
-            return _debugUIService;
+        }
+
+        public static DebugUIService GetDebugUIService
+        {
+            get
+            {
+                if (_debugUIService == null)
+                {
+                    if (_melonPlugin == null)
+                    {
+                        throw new InvalidDataException("MELON MOD NULL");
+                    }
+                    _debugUIService = new DebugUIService(_melonPlugin);
+                }
+                return _debugUIService;
+            }
         }
     }
 }

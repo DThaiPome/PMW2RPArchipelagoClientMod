@@ -12,7 +12,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix()
         {
-            return !ServiceFactory.GetPlayerPacmanStateService().PopSkipEndJump();
+            return !ServiceFactory.PlayerPacmanStateService.PopSkipEndJump();
         }
     }
 }

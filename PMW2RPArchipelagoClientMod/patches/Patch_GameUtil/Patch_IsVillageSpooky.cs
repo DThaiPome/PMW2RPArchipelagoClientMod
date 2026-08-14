@@ -9,7 +9,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
     {
         private static bool Prefix(ref bool __result)
         {
-            __result = ServiceFactory.GetUnlocks().Stages.GetValueOrDefault(EWorldStage.Stage6_4, false)
+            __result = ServiceFactory.Unlocks.Stages.GetValueOrDefault(EWorldStage.Stage6_4, false)
                 && PACWSaveData.GetStageFlag((int)EWorldStage.Stage6_4) != EStageFlag.Clear;
             return false;
         }

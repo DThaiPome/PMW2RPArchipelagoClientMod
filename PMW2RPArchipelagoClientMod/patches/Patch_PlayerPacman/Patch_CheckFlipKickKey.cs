@@ -9,7 +9,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix()
         {
-            if (ServiceFactory.GetUnlocks().FlipKick)
+            if (ServiceFactory.Unlocks.FlipKick)
             {
                 return true;
             }

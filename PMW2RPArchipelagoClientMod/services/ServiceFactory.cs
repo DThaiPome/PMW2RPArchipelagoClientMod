@@ -29,50 +29,67 @@ namespace PMW2RPArchipelagoClientMod.services
             }
         }
 
-        public static MelonMod GetModInstance()
-        {
-            _assertInit();
-            return _melonMod;
-        }
-
-        public static IDebugUnlocksService GetDebugUnlocksService()
-        {
-            if (_debugUnlockService == null)
-            {
+        public static MelonMod ModInstance
+        { 
+            get {
                 _assertInit();
-                _debugUnlockService = new DebugUnlockService(_melonMod);
+                return _melonMod;
             }
-            return _debugUnlockService;
         }
 
-        public static IUnlocksService GetUnlocksService()
+        public static IDebugUnlocksService DebugUnlocksService
         {
-            return GetDebugUnlocksService();
-        }
-
-        public static IUnlocksSource GetUnlocks()
-        {
-            return GetUnlocksService();
-        }
-
-        public static PlayerPacmanStateService GetPlayerPacmanStateService()
-        {
-            if (_playerPacmanStateService == null)
+            get
             {
-                _assertInit();
-                _playerPacmanStateService = new PlayerPacmanStateService(_melonMod);
+                if (_debugUnlockService == null)
+                {
+                    _assertInit();
+                    _debugUnlockService = new DebugUnlockService(_melonMod);
+                }
+                return _debugUnlockService;
             }
-            return _playerPacmanStateService;
         }
 
-        public static LevelUnlockSyncService GetLevelUnlockSyncService()
+        public static IUnlocksService UnlocksService
         {
-            if (_levelUnlockSyncService == null)
+            get
             {
-                _assertInit();
-                _levelUnlockSyncService = new LevelUnlockSyncService(_melonMod, GetUnlocks());
+                return DebugUnlocksService;
             }
-            return _levelUnlockSyncService;
+        }
+
+        public static IUnlocksSource Unlocks
+        {
+            get
+            {
+                return UnlocksService;
+            }
+        }
+
+        public static PlayerPacmanStateService PlayerPacmanStateService
+        {
+            get
+            {
+                if (_playerPacmanStateService == null)
+                {
+                    _assertInit();
+                    _playerPacmanStateService = new PlayerPacmanStateService(_melonMod);
+                }
+                return _playerPacmanStateService;
+            }
+        }
+
+        public static LevelUnlockSyncService LevelUnlockSyncService
+        {
+            get
+            {
+                if (_levelUnlockSyncService == null)
+                {
+                    _assertInit();
+                    _levelUnlockSyncService = new LevelUnlockSyncService(_melonMod, Unlocks);
+                }
+                return _levelUnlockSyncService;
+            }
         }
     }
 }

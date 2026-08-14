@@ -10,7 +10,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix(bool flag, ref bool super)
         {
-            ProgressiveButtBounce buttBounce = ServiceFactory.GetUnlocks().ButtBounce;
+            ProgressiveButtBounce buttBounce = ServiceFactory.Unlocks.ButtBounce;
             if (buttBounce == ProgressiveButtBounce.SuperButtBounce)
             {
                 return true;
