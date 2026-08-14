@@ -11,6 +11,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public bool FlipKick { get; set; }
         public bool Dash { get; set; }
         public bool Bomb { get; set; }
+        public bool Flutter { get; set; }
         public ProgressiveButtBounce ButtBounce { get; set; }
         
         public Dictionary<EWorldStage, bool> _stagesUnlocked { get; private set; }
@@ -23,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             FlipKick = true;
             Dash = true;
             Bomb = true;
+            Flutter = true;
             ButtBounce = ProgressiveButtBounce.SuperButtBounce;
 
             _stagesUnlocked = new Dictionary<EWorldStage, bool>();

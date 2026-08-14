@@ -367,6 +367,7 @@
 		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateDashKey.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_CheckFlipKickKey.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_SetHipAtk.cs" />
+		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateHunbariKey.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_UpdateJumpKey.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_CanGoStage.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_IsUnlock.cs" />

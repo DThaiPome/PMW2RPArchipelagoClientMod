@@ -19,6 +19,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private Toggle _kickToggle;
         private Toggle _dashToggle;
         private Toggle _bombToggle;
+        private Toggle _flutterToggle;
 
         private GameObject _uiRoot;
 
@@ -56,6 +57,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _constructToggle(columnObj, "kick", "Flip Kick", out _kickToggle);
             _constructToggle(columnObj, "dash", "Dash", out _dashToggle);
             _constructToggle(columnObj, "bomb", "Pac-Dot Throw", out _bombToggle);
+            _constructToggle(columnObj, "flutter", "Flutter", out _flutterToggle);
 
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             _kickToggle.isOn = debugUnlocksService.FlipKick;
@@ -100,6 +102,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             debugUnlocksService.FlipKick = _kickToggle.isOn;
             debugUnlocksService.Dash = _dashToggle.isOn;
             debugUnlocksService.Bomb = _bombToggle.isOn;
+            debugUnlocksService.Flutter = _flutterToggle.isOn;
             if (_buttBounceToggle1.isOn && _buttBounceToggle2.isOn)
             {
                 debugUnlocksService.ButtBounce = ProgressiveButtBounce.SuperButtBounce;
