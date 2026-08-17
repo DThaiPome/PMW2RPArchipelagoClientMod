@@ -370,17 +370,48 @@
 		<Compile Include="patches\Patch_PlayerPacman\Patch_Update.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_CanGoStage.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_IsUnlock.cs" />
+		<Compile Include="services\client\IAPClientEventHandler.cs" />
+		<Compile Include="services\game\ActiveSceneService.cs" />
+		<Compile Include="services\game\GameSaveDataService.cs" />
+		<Compile Include="services\game\IGameSaveDataService.cs" />
 		<Compile Include="services\game\LevelUnlockSyncService.cs" />
-		<Compile Include="services\items\IDebugUnlocksService.cs" />
-		<Compile Include="services\items\DebugUnlockService.cs" />
+		<Compile Include="services\items\DebuggableUnlocksService.cs" />
+		<Compile Include="services\items\ILocationsService.cs" />
+		<Compile Include="services\items\ILocationsSource.cs" />
+		<Compile Include="services\items\IUnlocksSourceMutable.cs" />
+		<Compile Include="services\items\debug\DebugUnlockService.cs" />
+		<Compile Include="services\items\LocationsService.cs" />
+		<Compile Include="services\items\mapping\CheckIdMapperService.cs" />
+		<Compile Include="services\items\mapping\ICheckIdMapperService.cs" />
 		<Compile Include="services\items\IUnlocksService.cs" />
 		<Compile Include="services\game\PlayerPacmanStateService.cs" />
+		<Compile Include="services\client\APConnectionService.cs" />
+		<Compile Include="services\client\IAPConnectionService.cs" />
+		<Compile Include="services\items\mapping\IItemMapEntry.cs" />
+		<Compile Include="services\items\mapping\ILocationMapEntry.cs" />
+		<Compile Include="services\items\mapping\items\BombItemResult.cs" />
+		<Compile Include="services\items\mapping\items\ButtBounceItemResult.cs" />
+		<Compile Include="services\items\mapping\items\DashItemResult.cs" />
+		<Compile Include="services\items\mapping\items\DolphinKickItemResult.cs" />
+		<Compile Include="services\items\mapping\items\FlipKickItemResult.cs" />
+		<Compile Include="services\items\mapping\items\FlutterItemResult.cs" />
+		<Compile Include="services\items\mapping\items\MovesetItem.cs" />
+		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
+		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
+		<Compile Include="services\items\mapping\locations\StageLocationResult.cs" />
+		<Compile Include="services\items\mapping\locations\UnknownLocationResult.cs" />
+		<Compile Include="services\items\UnlocksService.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
+		<Compile Include="util\FallbackDictionary.cs" />
 		<Content Include="Directory.Build.props" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="docs\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

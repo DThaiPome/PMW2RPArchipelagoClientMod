@@ -1,6 +1,7 @@
 ﻿using Il2Cpp;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.items;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -8,54 +9,30 @@ namespace PMW2RPArchipelagoClientMod.services.game
     {
         private MelonMod _melonMod;
         private IUnlocksSource _unlocks;
-
-
-        private static List<EScene> _outOfGameScenes = new List<EScene>()
-        {
-            EScene.None,
-            EScene.Title,
-            EScene.Logo,
-            EScene.Movie,
-            EScene.Original,
-            EScene.Credit,
-            EScene.CreditNew,
-            EScene.CreditSonic,
-            EScene.LoginXbox,
-            EScene.LaunchActivity,
-            EScene.GhostIsland_Title,
-            EScene.Scene_MazeStageCredit,
-            EScene.FirstScene,
-            EScene.Dummy
-        };
-        private static bool _isOutOfGame
-        {
-            get
-            {
-                var sceneManagerInstance = SceneManager.Instance;
-                if (sceneManagerInstance == null)
-                {
-                    return true;
-                }
-                return _outOfGameScenes.Contains(sceneManagerInstance.m_eCurrentScene);
-            }
-        }
+        private ILocationsSource _locations;
+        private IGameSaveDataService _gameSaveDataService;
 
         public LevelUnlockSyncService(MelonMod melonMod,
-            IUnlocksSource unlocks)
+            IUnlocksSource unlocks,
+            ILocationsSource locations,
+            IGameSaveDataService gameSaveDataService)
         {
             _melonMod = melonMod;
             _unlocks = unlocks;
+            _locations = locations;
+            _gameSaveDataService = gameSaveDataService;
         }
 
         public void OnLateUpdate()
         {
-            if (_isOutOfGame)
+            if (!_gameSaveDataService.SaveOperationsAllowed)
             {
                 return;
             }
             _syncLevelUnlocks();
             _syncAreaUnlocks();
             _syncPastUnlocked();
+            _syncStagesCleared();
         }
 
         private void _syncLevelUnlocks()
@@ -63,16 +40,16 @@ namespace PMW2RPArchipelagoClientMod.services.game
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
                 bool unlocked = _unlocks.Stages.GetValueOrDefault(stage, false);
-                EStageFlag stageFlag = PACWSaveData.GetStageFlag((int)stage);
-                if (!unlocked && stageFlag != EStageFlag.Locked)
-                {
-                    _melonMod.LoggerInstance.Msg("LOCKING STAGE: " + stage.ToString());
-                    PACWSaveData.SetStageFlag((int)stage, EStageFlag.Locked, force: true);
-                }
-                else if (unlocked && stageFlag == EStageFlag.Locked)
+                EStageFlag stageFlag = _gameSaveDataService.GetStageFlag(stage);
+                // if (!unlocked && stageFlag != EStageFlag.Locked)
+                // {
+                //     _melonMod.LoggerInstance.Msg("LOCKING STAGE: " + stage.ToString());
+                //     PACWSaveData.SetStageFlag((int)stage, EStageFlag.Locked, force: true);
+                // }
+                if (unlocked && stageFlag == EStageFlag.Locked)
                 {
                     _melonMod.LoggerInstance.Msg("UNLOCKING STAGE: " + stage.ToString());
-                    PACWSaveData.SetStageFlag((int)stage, EStageFlag.Unlock, force: true);
+                    _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
                 }
             }
         }
@@ -98,14 +75,14 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _syncAreaUnlock(EUnlockSSKind area, params EWorldStage[] stages)
         {
-            if (PACWSaveData.IsUnlockStageSelect(area))
+            if (_gameSaveDataService.IsUnlockStageSelect(area))
             {
                 return;
             }
 
-            if (stages.AsEnumerable().Any(stage => PACWSaveData.GetStageFlag((int)stage) != EStageFlag.Locked))
+            if (stages.AsEnumerable().Any(stage => _gameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked))
             {
-                PACWSaveData.SetUnlockStageSelect(area, true);
+                _gameSaveDataService.SetUnlockStageSelect(area, true);
             }
         }
 
@@ -127,9 +104,28 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _syncPastUnlocked()
         {
-            if (!PACWSaveData.IsEnterPast() && _pastStages.Any(stage => _unlocks.Stages.GetValueOrDefault(stage, false)))
+            if (!_gameSaveDataService.IsEnterPast() && _pastStages.Any(stage => _unlocks.Stages.GetValueOrDefault(stage, false)))
             {
-                PACWSaveData.SetEnterPast(true);
+                _gameSaveDataService.SetEnterPast(true);
+            }
+        }
+
+        private void _syncStagesCleared()
+        {
+            for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
+            {
+                EStageFlag flag = _gameSaveDataService.GetStageFlag(stage);
+
+                if (flag == EStageFlag.Clear && !_locations.ClearedStages.Contains(stage))
+                {
+                    _melonMod.LoggerInstance.Msg("SENDING CLEARED STAGE: " + stage.ToString());
+                    _locations.ClearStage(stage);
+                }
+                else if (flag != EStageFlag.Clear && _locations.ClearedStages.Contains(stage))
+                {
+                    _melonMod.LoggerInstance.Msg("STAGE CLEARED REMOTELY: " + stage.ToString());
+                    _gameSaveDataService.SetStageFlag(stage, EStageFlag.Clear);
+                }
             }
         }
     }

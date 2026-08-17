@@ -12,6 +12,7 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
 
         private UIBase _uiBase;
         private UnlocksPanel _unlocksPanel;
+        private ConnectionPanel _connectionPanel;
 
         public DebugUIService(MelonPlugin melonPlugin)
         {
@@ -37,15 +38,29 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
 
         private void SetUI()
         {
+            _toggleUnlocksPanel();
+            _toggleConnectionPanel();
+        }
+
+        private void _toggleUnlocksPanel() {
             if (_unlocksPanel == null)
             {
-                _melonPlugin.LoggerInstance.Msg("SPAWNING UI");
                 _unlocksPanel = new UnlocksPanel(_uiBase);
             }
             else
             {
-                _melonPlugin.LoggerInstance.Msg("TOGGLING UI");
                 _unlocksPanel.Enabled = !_unlocksPanel.Enabled;
+            }
+        }
+
+        private void _toggleConnectionPanel() {
+            if (_connectionPanel == null)
+            {
+                _connectionPanel = new ConnectionPanel(_uiBase);
+            }
+            else
+            {
+                _connectionPanel.Enabled = !_connectionPanel.Enabled;
             }
         }
     }

@@ -3,7 +3,7 @@ using PMW2RPArchipelagoClientMod.models.data;
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
-    public interface IDebugUnlocksService : IUnlocksService
+    public interface IUnlocksSourceMutable : IUnlocksService
     {
         public new bool FlipKick { get; set; }
         public new bool Dash { get; set; }

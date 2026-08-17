@@ -21,7 +21,10 @@ namespace PMW2RPArchipelagoClientMod
         {
             base.OnLateUpdate();
             ServiceFactory.UnlocksService.OnLateUpdate();
+            ServiceFactory.LocationsService.OnLateUpdate();
             ServiceFactory.LevelUnlockSyncService.OnLateUpdate();
+            ServiceFactory.ActiveSceneService.OnLateUpdate();
+            ServiceFactory.APConnectionService.OnLateUpdate();
         }
     }
 }
