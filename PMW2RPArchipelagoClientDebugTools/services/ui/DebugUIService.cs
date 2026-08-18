@@ -30,16 +30,17 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
 
         public void OnLateUpdate()
         {
-            if (Keyboard.current.pKey.wasPressedThisFrame)
+            if (Keyboard.current.leftCtrlKey.isPressed)
             {
-                SetUI();
+                if (Keyboard.current.pKey.wasPressedThisFrame)
+                {
+                    _toggleUnlocksPanel();
+                }
+                if (Keyboard.current.oKey.wasPressedThisFrame)
+                {
+                    _toggleConnectionPanel();
+                }
             }
-        }
-
-        private void SetUI()
-        {
-            _toggleUnlocksPanel();
-            _toggleConnectionPanel();
         }
 
         private void _toggleUnlocksPanel() {

@@ -38,10 +38,17 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         {
             _uiRoot = UIFactory.CreateUIObject("connectionPanelRoot", ContentRoot);
             UIFactory.SetLayoutGroup<HorizontalLayoutGroup>(_uiRoot, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: true);
-            UIFactory.CreateInputField(_uiRoot, "domainInput", "localhost").OnValueChanged += _onDomainInputChanged;
-            UIFactory.CreateInputField(_uiRoot, "portInput", "38281").OnValueChanged += _onPortInputChanged;
-            UIFactory.CreateInputField(_uiRoot, "slotInput", "DThaiPome_PMW2RP").OnValueChanged += _onSlotInputChanged;
+            _createInputField("domainInput", "localhost", _onDomainInputChanged);
+            _createInputField("portInput", "38281", _onPortInputChanged);
+            _createInputField("slotInput", "DThaiPome_PMW2RP", _onSlotInputChanged);
             UIFactory.CreateButton(_uiRoot, "connectButton", "Connect", ColorBlock.defaultColorBlock).OnClick += _onClick;
+        }
+
+        private void _createInputField(string name, string placeholder, Action<string> onValueChanged)
+        {
+            var iref = UIFactory.CreateInputField(_uiRoot, name, placeholder);
+            iref.OnValueChanged += onValueChanged;
+            UIFactory.SetLayoutElement(iref.GameObject, minWidth: 100, minHeight: 100);
         }
 
         private void _onDomainInputChanged(string value)

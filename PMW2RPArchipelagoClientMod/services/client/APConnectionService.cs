@@ -47,6 +47,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             try
             {
+                _resetConnectStates();
                 var session = ArchipelagoSessionFactory.CreateSession(domain, port);
                 session.Items.ItemReceived += _onItemReceived;
                 session.Locations.CheckedLocationsUpdated += _onCheckedLocationsUpdated;

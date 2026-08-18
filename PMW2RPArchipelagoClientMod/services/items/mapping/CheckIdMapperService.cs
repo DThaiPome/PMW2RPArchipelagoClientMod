@@ -36,7 +36,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         public IItemMapEntry MapItem(ItemInfo itemInfo)
         {
             long id = itemInfo.ItemId;
-            if (id >= 0 && id < GOLDEN_FRUIT_OFFSET)
+            if (id >= LEVEL_OFFSET && id < GOLDEN_FRUIT_OFFSET)
             {
                 return _mapStageItem(id);
             }

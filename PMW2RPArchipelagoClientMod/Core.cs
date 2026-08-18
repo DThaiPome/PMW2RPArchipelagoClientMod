@@ -13,18 +13,21 @@ namespace PMW2RPArchipelagoClientMod
         public override void OnInitializeMelon()
         {
             ServiceFactory.Init(this);
-            UniverseLib.Universe.Init();
+            UniverseLib.Universe.Init(0, null, null, new()
+            {
+                Allow_UI_Selection_Outside_UIBase = true
+            });
             LoggerInstance.Msg("Initialized PMW2RPArchipelagoClientMod.");
         }
 
         public override void OnLateUpdate()
         {
             base.OnLateUpdate();
+            ServiceFactory.APConnectionService.OnLateUpdate();
             ServiceFactory.UnlocksService.OnLateUpdate();
             ServiceFactory.LocationsService.OnLateUpdate();
             ServiceFactory.LevelUnlockSyncService.OnLateUpdate();
             ServiceFactory.ActiveSceneService.OnLateUpdate();
-            ServiceFactory.APConnectionService.OnLateUpdate();
         }
     }
 }
