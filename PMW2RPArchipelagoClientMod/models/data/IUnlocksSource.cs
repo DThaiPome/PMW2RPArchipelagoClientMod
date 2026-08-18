@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using PMW2RPArchipelagoClientMod.services;
 using System.Collections.Immutable;
 
 namespace PMW2RPArchipelagoClientMod.models.data
@@ -22,7 +23,7 @@ namespace PMW2RPArchipelagoClientMod.models.data
             GoldenFruitItem.GoldenMelon];
         public bool IsSpookyUnlocked()
         {
-            return Stages.GetValueOrDefault(EWorldStage.Stage6_4, false) && GoldenFruit.Overlaps(_allGoldenFruits);
+            return Stages.GetValueOrDefault(EWorldStage.Stage6_4, false) && GoldenFruit.SetEquals(_allGoldenFruits);
         }
 
         private static readonly IEnumerable<PastKeyItem> _allKeys = [PastKeyItem.WindyWoodsKey,
@@ -32,7 +33,7 @@ namespace PMW2RPArchipelagoClientMod.models.data
             PastKeyItem.GhostIslandKey];
         public bool IsTocManUnlocked()
         {
-            return Stages.GetValueOrDefault(EWorldStage.Stage6_5, false) && PastKeys.Overlaps(_allKeys);
+            return Stages.GetValueOrDefault(EWorldStage.Stage6_5, false) && PastKeys.SetEquals(_allKeys);
         }
     }
 }

@@ -355,6 +355,7 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+		<Compile Include="models\data\GoalBossOption.cs" />
 		<Compile Include="models\data\GoldenFruitItem.cs" />
 		<Compile Include="models\data\IUnlocksSource.cs" />
 		<Compile Include="models\data\PastKeyItem.cs" />
@@ -372,7 +373,6 @@
 		<Compile Include="patches\Patch_PlayerPacman\Patch_Update.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_CanGoStage.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_IsUnlock.cs" />
-		<Compile Include="services\client\IAPClientEventHandler.cs" />
 		<Compile Include="services\game\ActiveSceneService.cs" />
 		<Compile Include="services\game\GameSaveDataService.cs" />
 		<Compile Include="services\game\IGameSaveDataService.cs" />

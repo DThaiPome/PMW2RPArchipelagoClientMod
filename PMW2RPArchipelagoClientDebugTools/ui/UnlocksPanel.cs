@@ -26,6 +26,8 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private GameObject _uiRoot;
 
         private Dictionary<EWorldStage, Toggle> _stageToggles = new Dictionary<EWorldStage, Toggle>();
+        private Dictionary<GoldenFruitItem, Toggle> _goldenFruitToggles = new Dictionary<GoldenFruitItem, Toggle>();
+        private Dictionary<PastKeyItem, Toggle> _pastKeyToggles = new Dictionary<PastKeyItem, Toggle>();
 
         public UnlocksPanel(UIBase owner) : base(owner)
         {
@@ -34,7 +36,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
 
         public override string Name => "Toggle Unlocks";
 
-        public override int MinWidth => 600;
+        public override int MinWidth => 800;
 
         public override int MinHeight => 1050;
 
@@ -48,6 +50,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             UIFactory.SetLayoutGroup<HorizontalLayoutGroup>(_uiRoot, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: true);
             _constructMovesetToggles();
             _constructStageToggles();
+            _constructKeyToggles();
         }
 
         private void _constructMovesetToggles()
@@ -79,13 +82,34 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         {
             var columnObj = UIFactory.CreateUIObject("movesetColumn", _uiRoot);
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
-                var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
                 _constructToggle(columnObj, stage.ToString(), stage.ToString(), out Toggle toggle);
                 bool unlocked = debugUnlocksService.Stages.GetValueOrDefault(stage, false);
                 toggle.isOn = unlocked;
                 _stageToggles.Add(stage, toggle);
+            }
+        }
+
+        private void _constructKeyToggles()
+        {
+            var columnObj = UIFactory.CreateUIObject("keyColumn", _uiRoot);
+            UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
+            for (GoldenFruitItem item = GoldenFruitItem.GoldenCherry; item < GoldenFruitItem.MAX; item++)
+            {
+                _constructToggle(columnObj, item.ToString(), item.ToString(), out Toggle toggle);
+                bool unlocked = debugUnlocksService.GoldenFruit.Contains(item);
+                toggle.isOn = unlocked;
+                _goldenFruitToggles.Add(item, toggle);
+            }
+            for (PastKeyItem item = PastKeyItem.WindyWoodsKey; item < PastKeyItem.MAX; item++)
+            {
+                _constructToggle(columnObj, item.ToString(), item.ToString(), out Toggle toggle);
+                bool unlocked = debugUnlocksService.PastKeys.Contains(item);
+                toggle.isOn = unlocked;
+                _pastKeyToggles.Add(item, toggle);
             }
         }
 
@@ -101,6 +125,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         {
             _updateMoveset();
             _updateLevels();
+            _updateKeys();
         }
 
         private void _updateMoveset()
@@ -144,6 +169,37 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
                 debugUnlocksService.StagesMutable[stage] = _stageToggles[stage].isOn;
+            }
+        }
+        
+        private void _updateKeys()
+        {
+            var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
+            for (GoldenFruitItem item = GoldenFruitItem.GoldenCherry; item < GoldenFruitItem.MAX; item++)
+            {
+                bool isOn = _goldenFruitToggles[item].isOn;
+                if (isOn && !debugUnlocksService.GoldenFruit.Contains(item))
+                {
+                    PMW2RPArchipelagoClientMod.services.ServiceFactory.ModInstance.LoggerInstance.Msg("GOLDEN FRUIT UNLOCKED: " + item);
+                    debugUnlocksService.GoldenFruitMutable.Add(item);
+                }
+                else if (!isOn && debugUnlocksService.GoldenFruit.Contains(item))
+                {
+                    PMW2RPArchipelagoClientMod.services.ServiceFactory.ModInstance.LoggerInstance.Msg("GOLDEN FRUIT LOCKED: " + item);
+                    debugUnlocksService.GoldenFruitMutable.Remove(item);
+                }
+            }
+            for (PastKeyItem item = PastKeyItem.WindyWoodsKey; item < PastKeyItem.MAX; item++)
+            {
+                bool isOn = _pastKeyToggles[item].isOn;
+                if (isOn && !debugUnlocksService.PastKeys.Contains(item))
+                {
+                    debugUnlocksService.PastKeysMutable.Add(item);
+                }
+                else if (!isOn && debugUnlocksService.PastKeys.Contains(item))
+                {
+                    debugUnlocksService.PastKeysMutable.Remove(item);
+                }
             }
         }
     }

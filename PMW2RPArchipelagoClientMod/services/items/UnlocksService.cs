@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
-    public class UnlocksService : IUnlocksSourceMutable, IAPClientEventHandler
+    public class UnlocksService : IUnlocksSourceMutable
     {
         private MelonMod _melonMod;
         private IAPConnectionService _connectionService;
@@ -60,8 +60,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _connectionService = connectionService;
             _itemIdMapperService = itemIdMapperService;
 
-            _connectionService.HandleEvents(this);
-
+            _connectionService.OnConnect += OnConnect;
+            _connectionService.InitItems += InitItems;
+            _connectionService.ItemReceived += ItemReceived;
 
             _clearUnlocks();
         }

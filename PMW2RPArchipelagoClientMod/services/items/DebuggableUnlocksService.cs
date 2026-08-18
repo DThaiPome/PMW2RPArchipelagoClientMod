@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.util;
 using System;
@@ -19,14 +20,15 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private FallbackSet<GoldenFruitItem> _goldenFruit;
         private FallbackSet<PastKeyItem> _pastKeys;
 
-        public DebuggableUnlocksService(IUnlocksService releaseUnlocksSource, IUnlocksService debugUnlocksSource)
+        public DebuggableUnlocksService(IUnlocksService releaseUnlocksSource, 
+            IUnlocksService debugUnlocksSource)
         {
             _releaseUnlocksSource = releaseUnlocksSource;
             _debugUnlocksSource = debugUnlocksSource;
             
             _stages = new FallbackDictionary<EWorldStage>(() => _releaseUnlocksSource.Stages, () => _debugUnlocksSource.Stages);
-            _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => debugUnlocksSource.GoldenFruit);
-            _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => debugUnlocksSource.PastKeys);
+            _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => _debugUnlocksSource.GoldenFruit);
+            _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => _debugUnlocksSource.PastKeys);
         }
 
         public bool FlipKick => _releaseUnlocksSource.FlipKick || _debugUnlocksSource.FlipKick;

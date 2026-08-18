@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using Il2Cpp;
 using MelonLoader;
+using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.game;
 using PMW2RPArchipelagoClientMod.services.items.mapping;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.items
 {
-    public class LocationsService : ILocationsService, IAPClientEventHandler
+    public class LocationsService : ILocationsService
     {
         private MelonMod _melonMod;
         private IAPConnectionService _connectionService;
@@ -30,7 +31,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _connectionService = connectionService;
             _checkIdMapperService = checkIdMapperService;
 
-            _connectionService.HandleEvents(this);
+            _connectionService.InitLocations += InitLocations;
+            _connectionService.LocationCheckedRemotely += LocationCheckedRemotely;
         }
 
         public IImmutableSet<EWorldStage> ClearedStages => _clearedStages.ToImmutableHashSet();
@@ -38,11 +40,6 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public void ClearStage(EWorldStage stage)
         {
             _clearedStages.Add(stage);
-        }
-
-        public void InitItems(IReadOnlyList<ItemInfo> items)
-        {
-
         }
 
         public void InitLocations(IReadOnlyList<long> locationIds)
@@ -55,29 +52,14 @@ namespace PMW2RPArchipelagoClientMod.services.items
             }
         }
 
-        public void ItemReceived(ItemInfo item)
-        {
-
-        }
-
         public void LocationCheckedRemotely(long locationId)
         {
-
-        }
-
-        public void OnConnect()
-        {
-
+            _checkIdMapperService.MapLocation(locationId).ClearLocation(this);
         }
 
         public void OnLateUpdate()
         {
             _sendStagesCleared();
-        }
-
-        private void clearSentLocations()
-        {
-
         }
 
         private void _sendStagesCleared()
@@ -89,6 +71,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
                     continue;
                 }
                 _connectionService.SendLocationChecked(_checkIdMapperService.StageToClearStageLocationId(stage));
+                if ((stage == EWorldStage.Stage6_4 && _connectionService.GoalBoss == GoalBossOption.Spooky)
+                    || (stage == EWorldStage.Stage6_5 && _connectionService.GoalBoss == GoalBossOption.TocMan))
+                {
+                    _connectionService.Goal();
+                }
                 _sentStageClears.Add(stage);
             }
         }

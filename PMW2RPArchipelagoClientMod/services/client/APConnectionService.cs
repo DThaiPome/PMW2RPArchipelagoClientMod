@@ -4,6 +4,7 @@ using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Il2Cpp;
 using MelonLoader;
+using PMW2RPArchipelagoClientMod.models.data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,18 +19,25 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private MelonMod _melonMod;
 
         private ArchipelagoSession _session;
-        private List<IAPClientEventHandler> _clientEventHandlers;
+        private Dictionary<string, object> _slotData;
 
         private static readonly long ITEMS_INIT_THRESHOLD_MS = 250;
 
         private long _lastConnectMs;
         private List<ItemInfo> _initItems = new List<ItemInfo>();
 
+        public Action OnConnect { get; set; }
+        public Action<IReadOnlyList<ItemInfo>> InitItems { get; set; }
+        public Action<IReadOnlyList<long>> InitLocations { get; set; }
+        public Action<ItemInfo> ItemReceived { get; set; }
+        public Action<long> LocationCheckedRemotely { get; set; }
+
+        public GoalBossOption? GoalBoss => _goalBossOption;
+
         public APConnectionService(MelonMod melonMod)
         {
             _melonMod = melonMod;
             _session = null;
-            _clientEventHandlers = new List<IAPClientEventHandler>();
         }
 
         public bool CloseSession()
@@ -75,11 +83,9 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private void _onLoginSuccess()
         {
             _melonMod.LoggerInstance.Msg("CONNECTED TO SERVER");
-            foreach (var handler in _clientEventHandlers)
-            {
-                handler.OnConnect();
-                handler.InitLocations(_session.Locations.AllLocationsChecked);
-            }
+            OnConnect.Invoke();
+            InitLocations.Invoke(_session.Locations.AllLocationsChecked);
+            _slotData = new Dictionary<string, object>(_session.DataStorage.GetSlotData());
         }
 
         private void _onItemReceived(ReceivedItemsHelper helper)
@@ -93,10 +99,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 }
                 else
                 {
-                    foreach (var handler in _clientEventHandlers)
-                    {
-                        handler.ItemReceived(item);
-                    }
+                    ItemReceived.Invoke(item);
                 }
                 item = helper.DequeueItem();
             }
@@ -106,16 +109,8 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             foreach (long id in newCheckedLocations)
             {
-                foreach (var handler in _clientEventHandlers)
-                {
-                    handler.LocationCheckedRemotely(id);
-                }
+                LocationCheckedRemotely.Invoke(id);
             }
-        }
-
-        public void HandleEvents(IAPClientEventHandler handler)
-        {
-            _clientEventHandlers.Add(handler);
         }
 
         public void SendLocationChecked(long id)
@@ -146,11 +141,34 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             if (DateTime.Now.Millisecond - _lastConnectMs > ITEMS_INIT_THRESHOLD_MS && _initItems.Count > 0)
             {
-                foreach (var handler in _clientEventHandlers)
-                {
-                    handler.InitItems(_initItems);
-                }
+                InitItems.Invoke(_initItems);
                 _initItems.Clear();
+            }
+        }
+
+        public void Goal()
+        {
+            if (_session == null)
+            {
+                return;
+            }
+            _session.SetGoalAchieved();
+        }
+
+        private GoalBossOption? _goalBossOption
+        {
+            get
+            {
+                if (_slotData == null)
+                {
+                    return null;
+                }
+                long? goalBossId = (long?)_slotData.GetValueOrDefault("goal_boss", null);
+                if (goalBossId == null)
+                {
+                    return null;
+                }
+                return (GoalBossOption)goalBossId;
             }
         }
     }
