@@ -16,6 +16,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private IUnlocksService _debugUnlocksSource;
 
         private FallbackDictionary<EWorldStage> _stages;
+        private FallbackSet<GoldenFruitItem> _goldenFruit;
+        private FallbackSet<PastKeyItem> _pastKeys;
 
         public DebuggableUnlocksService(IUnlocksService releaseUnlocksSource, IUnlocksService debugUnlocksSource)
         {
@@ -23,6 +25,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _debugUnlocksSource = debugUnlocksSource;
             
             _stages = new FallbackDictionary<EWorldStage>(() => _releaseUnlocksSource.Stages, () => _debugUnlocksSource.Stages);
+            _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => debugUnlocksSource.GoldenFruit);
+            _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => debugUnlocksSource.PastKeys);
         }
 
         public bool FlipKick => _releaseUnlocksSource.FlipKick || _debugUnlocksSource.FlipKick;
@@ -38,6 +42,10 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public ProgressiveDolphinKick DolphinKick => (ProgressiveDolphinKick)Math.Max((int)_releaseUnlocksSource.DolphinKick, (int)_debugUnlocksSource.DolphinKick);
 
         public IImmutableDictionary<EWorldStage, bool> Stages => _stages;
+
+        public IImmutableSet<GoldenFruitItem> GoldenFruit => _goldenFruit;
+
+        public IImmutableSet<PastKeyItem> PastKeys => _pastKeys;
 
         public void OnLateUpdate()
         {

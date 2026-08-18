@@ -355,7 +355,9 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+		<Compile Include="models\data\GoldenFruitItem.cs" />
 		<Compile Include="models\data\IUnlocksSource.cs" />
+		<Compile Include="models\data\PastKeyItem.cs" />
 		<Compile Include="models\data\ProgressiveButtBounce.cs" />
 		<Compile Include="models\data\ProgressiveDolphinKick.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_GetVillageSpooky.cs" />
@@ -395,7 +397,9 @@
 		<Compile Include="services\items\mapping\items\DolphinKickItemResult.cs" />
 		<Compile Include="services\items\mapping\items\FlipKickItemResult.cs" />
 		<Compile Include="services\items\mapping\items\FlutterItemResult.cs" />
-		<Compile Include="services\items\mapping\items\MovesetItem.cs" />
+		<Compile Include="models\data\MovesetItem.cs" />
+		<Compile Include="services\items\mapping\items\GoldenFruitItemResult.cs" />
+		<Compile Include="services\items\mapping\items\PastKeyItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
 		<Compile Include="services\items\mapping\locations\StageLocationResult.cs" />
@@ -403,6 +407,7 @@
 		<Compile Include="services\items\UnlocksService.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
 		<Compile Include="util\FallbackDictionary.cs" />
+		<Compile Include="util\FallbackSet.cs" />
 		<Content Include="Directory.Build.props" />
 	</ItemGroup>
 

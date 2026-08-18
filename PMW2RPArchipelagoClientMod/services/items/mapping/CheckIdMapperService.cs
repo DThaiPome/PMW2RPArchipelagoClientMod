@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using Il2Cpp;
+using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.items.mapping.items;
 using PMW2RPArchipelagoClientMod.services.items.mapping.locations;
 using System;
@@ -40,6 +41,14 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapStageItem(id);
             }
+            if (id >= GOLDEN_FRUIT_OFFSET && id < KEY_OFFSET)
+            {
+                return _mapGoldenFruitItem(id);
+            }
+            if (id >= KEY_OFFSET && id < COSTUME_OFFSET)
+            {
+                return _mapPastKeyItem(id); 
+            }
             if (id >= MOVEMENT_OFFSET && id < TIMETRIAL_OFFSET)
             {
                 return _mapMoveset(id);
@@ -56,6 +65,25 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             return new StageItemResult(stage);
         }
 
+        private IItemMapEntry _mapGoldenFruitItem(long id)
+        {
+            GoldenFruitItem item = (GoldenFruitItem)(id - GOLDEN_FRUIT_OFFSET);
+            if (id >= (long)GoldenFruitItem.MAX)
+            {
+                return new UnknownItemResult(id);
+            }
+            return new GoldenFruitItemResult(item);
+        }
+
+        private IItemMapEntry _mapPastKeyItem(long id)
+        {
+            PastKeyItem item = (PastKeyItem)(id - KEY_OFFSET);
+            if (id >= (long)PastKeyItem.MAX)
+            {
+                return new UnknownItemResult(id);
+            }
+            return new PastKeyItemResult(item);
+        }
         private IItemMapEntry _mapMoveset(long id)
         {
             return (MovesetItem)(id - MOVEMENT_OFFSET) switch

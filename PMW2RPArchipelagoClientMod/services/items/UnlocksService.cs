@@ -21,6 +21,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private ICheckIdMapperService _itemIdMapperService;
 
         private Dictionary<EWorldStage, bool> _stages = new Dictionary<EWorldStage, bool>();
+        private HashSet<GoldenFruitItem> _goldenFruit = new HashSet<GoldenFruitItem>();
+        private HashSet<PastKeyItem> _pastKeys = new HashSet<PastKeyItem>();
 
         public bool FlipKick { get; set; }
 
@@ -43,6 +45,12 @@ namespace PMW2RPArchipelagoClientMod.services.items
         }
 
         public IDictionary<EWorldStage, bool> StagesMutable => _stages;
+
+        public IImmutableSet<GoldenFruitItem> GoldenFruit => _goldenFruit.ToImmutableHashSet();
+        public ISet<GoldenFruitItem> GoldenFruitMutable => _goldenFruit;
+
+        public IImmutableSet<PastKeyItem> PastKeys => _pastKeys.ToImmutableHashSet();
+        public ISet<PastKeyItem> PastKeysMutable => _pastKeys;
 
         public UnlocksService(MelonMod melonMod,
             IAPConnectionService connectionService,
@@ -89,6 +97,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
             Flutter = false;
             ButtBounce = ProgressiveButtBounce.None;
             DolphinKick = ProgressiveDolphinKick.None;
+            _stages.Clear();
+            _goldenFruit.Clear();
+            _pastKeys.Clear();
         }
 
         public void OnLateUpdate()

@@ -12,5 +12,27 @@ namespace PMW2RPArchipelagoClientMod.models.data
         public ProgressiveButtBounce ButtBounce { get; }
         public ProgressiveDolphinKick DolphinKick { get; }
         public IImmutableDictionary<EWorldStage, bool> Stages { get; }
+        public IImmutableSet<GoldenFruitItem> GoldenFruit { get; }
+        public IImmutableSet<PastKeyItem> PastKeys { get; }
+
+        private static readonly IEnumerable<GoldenFruitItem> _allGoldenFruits = [GoldenFruitItem.GoldenCherry,
+            GoldenFruitItem.GoldenStrawberry,
+            GoldenFruitItem.GoldenApple,
+            GoldenFruitItem.GoldenOrange,
+            GoldenFruitItem.GoldenMelon];
+        public bool IsSpookyUnlocked()
+        {
+            return Stages.GetValueOrDefault(EWorldStage.Stage6_4, false) && GoldenFruit.Overlaps(_allGoldenFruits);
+        }
+
+        private static readonly IEnumerable<PastKeyItem> _allKeys = [PastKeyItem.WindyWoodsKey,
+            PastKeyItem.ThunderSnowMountainKey,
+            PastKeyItem.FieryCavernsKey,
+            PastKeyItem.DimUnderwatersKey,
+            PastKeyItem.GhostIslandKey];
+        public bool IsTocManUnlocked()
+        {
+            return Stages.GetValueOrDefault(EWorldStage.Stage6_5, false) && PastKeys.Overlaps(_allKeys);
+        }
     }
 }
