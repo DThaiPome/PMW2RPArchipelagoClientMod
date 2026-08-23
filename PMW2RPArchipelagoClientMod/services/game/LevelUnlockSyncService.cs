@@ -33,6 +33,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncAreaUnlocks();
             _syncPastUnlocked();
             _syncStagesCleared();
+            _syncMissionsCleared();
         }
 
         private void _syncLevelUnlocks()
@@ -125,6 +126,25 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     _melonMod.LoggerInstance.Msg("STAGE CLEARED REMOTELY: " + stage.ToString());
                     _gameSaveDataService.SetStageFlag(stage, EStageFlag.Clear);
+                }
+            }
+        }
+        
+        private void _syncMissionsCleared()
+        {
+            for (EMissionKind kind = EMissionKind.Mission1; kind < EMissionKind.Mission99; kind++)
+            {
+                EMissionFlag flag = _gameSaveDataService.GetMissionFlag(kind);
+                
+                if (flag == EMissionFlag.Achieved && !_locations.ClearedMissions.Contains(kind))
+                {
+                    _melonMod.LoggerInstance.Msg("SENDING CLEARED MISSION: " + kind.ToString());
+                    _locations.ClearMission(kind);
+                }
+                else if (flag != EMissionFlag.Achieved && _locations.ClearedMissions.Contains(kind))
+                {
+                    _melonMod.LoggerInstance.Msg("MISSION CLEARED REMOTELY: " + kind.ToString());
+                    _gameSaveDataService.SetMissionFlag(kind, EMissionFlag.Achieved);
                 }
             }
         }

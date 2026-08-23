@@ -12,5 +12,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
     {
         IImmutableSet<EWorldStage> ClearedStages { get; }
         void ClearStage(EWorldStage stage);
+        IImmutableSet<EMissionKind> ClearedMissions { get; }
+        void ClearMission(EMissionKind kind);
     }
 }

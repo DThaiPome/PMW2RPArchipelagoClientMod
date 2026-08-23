@@ -68,7 +68,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         private IItemMapEntry _mapGoldenFruitItem(long id)
         {
             GoldenFruitItem item = (GoldenFruitItem)(id - GOLDEN_FRUIT_OFFSET);
-            if (id >= (long)GoldenFruitItem.MAX)
+            if (item >= GoldenFruitItem.MAX)
             {
                 return new UnknownItemResult(id);
             }
@@ -78,7 +78,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         private IItemMapEntry _mapPastKeyItem(long id)
         {
             PastKeyItem item = (PastKeyItem)(id - KEY_OFFSET);
-            if (id >= (long)PastKeyItem.MAX)
+            if (item >= PastKeyItem.MAX)
             {
                 return new UnknownItemResult(id);
             }
@@ -104,6 +104,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapStageLocation(id);
             }
+            if (id >= MISSION_OFFSET && id < GASHAPON_OFFSET)
+            {
+                return _mapMission(id);
+            }
             return new UnknownLocationResult(id);
         }
 
@@ -116,6 +120,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             return new StageLocationResult(stage);
         }
 
+        private ILocationMapEntry _mapMission(long id)
+        {
+            EMissionKind kind = (EMissionKind)(id - MISSION_OFFSET);
+            if (kind <= EMissionKind.None || kind >= EMissionKind.Mission100)
+            {
+                return new UnknownLocationResult(id);
+            }
+            return new MissionLocationResult(kind);
+        }
+
         private bool _dataIdToStage(long id, out EWorldStage stageId)
         {
             stageId = (EWorldStage)(id - 1);
@@ -125,6 +139,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         public long StageToClearStageLocationId(EWorldStage stage)
         {
             return (long)stage + 1;
+        }
+
+        public long MissionToClearMissionLocationId(EMissionKind kind)
+        {
+            return (long)kind + MISSION_OFFSET;
         }
     }
 }

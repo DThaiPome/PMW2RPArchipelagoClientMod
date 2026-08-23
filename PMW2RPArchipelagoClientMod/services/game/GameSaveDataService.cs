@@ -65,5 +65,17 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _assertOpAllowed();
             PACWSaveData.SetEnterPast(enterPast);
         }
+
+        public EMissionFlag GetMissionFlag(EMissionKind kind)
+        {
+            _assertOpAllowed();
+            return PACWSaveData.GetMissionFlag(kind);
+        }
+
+        public void SetMissionFlag(EMissionKind kind, EMissionFlag flag)
+        {
+            _assertOpAllowed();
+            PACWSaveData.SetMissionFlag(kind, flag);
+        }
     }
 }

@@ -402,6 +402,7 @@
 		<Compile Include="services\items\mapping\items\PastKeyItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
+		<Compile Include="services\items\mapping\locations\MissionLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\StageLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\UnknownLocationResult.cs" />
 		<Compile Include="services\items\UnlocksService.cs" />

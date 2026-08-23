@@ -16,5 +16,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         void SetUnlockStageSelect(EUnlockSSKind area, bool unlocked);
         bool IsEnterPast();
         void SetEnterPast(bool enterPast);
+        EMissionFlag GetMissionFlag(EMissionKind kind);
+        void SetMissionFlag(EMissionKind kind, EMissionFlag flag);
     }
 }

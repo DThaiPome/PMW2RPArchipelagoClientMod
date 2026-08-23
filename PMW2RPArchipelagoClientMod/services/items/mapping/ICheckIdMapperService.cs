@@ -12,6 +12,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
     {
         IItemMapEntry MapItem(ItemInfo itemInfo);
         long StageToClearStageLocationId(EWorldStage stage);
+        long MissionToClearMissionLocationId(EMissionKind kind);
         ILocationMapEntry MapLocation(long id);
     }
 }

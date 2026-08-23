@@ -20,8 +20,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private IAPConnectionService _connectionService;
         private ICheckIdMapperService _checkIdMapperService;
 
+        private ISet<long> _sentLocations = new HashSet<long>();
         private ISet<EWorldStage> _clearedStages = new HashSet<EWorldStage>();
-        private ISet<EWorldStage> _sentStageClears = new HashSet<EWorldStage>();
+        private ISet<EMissionKind> _clearedMissions = new HashSet<EMissionKind>();
 
         public LocationsService(MelonMod melonMod,
             IAPConnectionService connectionService,
@@ -37,6 +38,13 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<EWorldStage> ClearedStages => _clearedStages.ToImmutableHashSet();
 
+        public IImmutableSet<EMissionKind> ClearedMissions => _clearedMissions.ToImmutableHashSet();
+
+        public void ClearMission(EMissionKind kind)
+        {
+            _clearedMissions.Add(kind);
+        }
+
         public void ClearStage(EWorldStage stage)
         {
             _clearedStages.Add(stage);
@@ -44,8 +52,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public void InitLocations(IReadOnlyList<long> locationIds)
         {
+            _sentLocations.Clear();
             _clearedStages.Clear();
-            _sentStageClears.Clear();
             foreach (var locationId in locationIds)
             {
                 _checkIdMapperService.MapLocation(locationId).ClearLocation(this);
@@ -60,23 +68,39 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public void OnLateUpdate()
         {
             _sendStagesCleared();
+            _sendMissionsCleared();
         }
 
         private void _sendStagesCleared()
         {
             foreach (EWorldStage stage in _clearedStages)
             {
-                if (_sentStageClears.Contains(stage))
+                long locationId = _checkIdMapperService.StageToClearStageLocationId(stage);
+                if (_sentLocations.Contains(locationId))
                 {
                     continue;
                 }
-                _connectionService.SendLocationChecked(_checkIdMapperService.StageToClearStageLocationId(stage));
+                _connectionService.SendLocationChecked(locationId);
                 if ((stage == EWorldStage.Stage6_4 && _connectionService.GoalBoss == GoalBossOption.Spooky)
                     || (stage == EWorldStage.Stage6_5 && _connectionService.GoalBoss == GoalBossOption.TocMan))
                 {
                     _connectionService.Goal();
                 }
-                _sentStageClears.Add(stage);
+                _sentLocations.Add(locationId);
+            }
+        }
+
+        private void _sendMissionsCleared()
+        {
+            foreach (EMissionKind kind in _clearedMissions)
+            {
+                long locationId = _checkIdMapperService.MissionToClearMissionLocationId(kind);
+                if (_sentLocations.Contains(locationId))
+                {
+                    continue;
+                }
+                _connectionService.SendLocationChecked(locationId);
+                _sentLocations.Add(locationId);
             }
         }
     }
