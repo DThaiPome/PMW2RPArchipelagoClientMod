@@ -34,6 +34,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncPastUnlocked();
             _syncStagesCleared();
             _syncMissionsCleared();
+            _syncMazesUnlocked();
         }
 
         private void _syncLevelUnlocks()
@@ -145,6 +146,25 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     _melonMod.LoggerInstance.Msg("MISSION CLEARED REMOTELY: " + kind.ToString());
                     _gameSaveDataService.SetMissionFlag(kind, EMissionFlag.Achieved);
+                }
+            }
+        }
+
+        private void _syncMazesUnlocked()
+        {
+            for (int mazeId = 0; mazeId < 15; mazeId++)
+            {
+                bool unlocked = _gameSaveDataService.CheckMazeUnlock(mazeId);
+                if (unlocked && !_locations.UnlockedMazes.Contains(mazeId))
+                {
+                    _melonMod.LoggerInstance.Msg("SENDING UNLOCKED MAZE: " + mazeId);
+                    _locations.UnlockMaze(mazeId);
+                }
+                else if (!unlocked && _locations.UnlockedMazes.Contains(mazeId))
+                {
+                    _melonMod.LoggerInstance.Msg("MAZE UNLOCKED REMOTELY: " + mazeId);
+                    // TODO: This might not do anything if a maze gets unlocked remotely while that level is actually being played. Find a way to fix this maybe, not urgent.
+                    _gameSaveDataService.UnlockMaze(mazeId);
                 }
             }
         }

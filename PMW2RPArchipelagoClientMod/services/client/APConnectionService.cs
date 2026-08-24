@@ -26,6 +26,9 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private long _lastConnectMs;
         private List<ItemInfo> _initItems = new List<ItemInfo>();
 
+        private object _xItemsInitializedLock = new();
+        private bool _xItemsInitialized;
+
         public Action OnConnect { get; set; }
         public Action<IReadOnlyList<ItemInfo>> InitItems { get; set; }
         public Action<IReadOnlyList<long>> InitLocations { get; set; }
@@ -38,6 +41,11 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             _melonMod = melonMod;
             _session = null;
+
+            lock(_xItemsInitializedLock)
+            {
+                _xItemsInitialized = false;
+            }
         }
 
         public bool CloseSession()
@@ -55,8 +63,8 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             try
             {
-                _resetConnectStates();
                 var session = ArchipelagoSessionFactory.CreateSession(domain, port);
+                _resetConnectStates();
                 session.Items.ItemReceived += _onItemReceived;
                 session.Locations.CheckedLocationsUpdated += _onCheckedLocationsUpdated;
                 var loginResult = session.TryConnectAndLogin("Pac-Man World 2 Re-Pac", slotName, ItemsHandlingFlags.AllItems, version: new Version("0.6.7"), password: password);
@@ -78,6 +86,10 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private void _resetConnectStates()
         {
             _initItems.Clear();
+            lock(_xItemsInitializedLock)
+            {
+                _xItemsInitialized = false;
+            }
         }
 
         private void _onLoginSuccess()
@@ -99,6 +111,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 }
                 else
                 {
+                    _initItemsIfNeeded();
                     ItemReceived.Invoke(item);
                 }
                 item = helper.DequeueItem();
@@ -139,11 +152,20 @@ namespace PMW2RPArchipelagoClientMod.services.client
 
         private void _initItemsIfNeeded()
         {
-            if (DateTime.Now.Millisecond - _lastConnectMs > ITEMS_INIT_THRESHOLD_MS && _initItems.Count > 0)
+            if ((DateTime.Now.Millisecond - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS) || _initItems.Count == 0)
             {
-                InitItems.Invoke(_initItems);
-                _initItems.Clear();
+                return;
             }
+            lock(_xItemsInitializedLock)
+            {
+                if (_xItemsInitialized)
+                {
+                    return;
+                }
+                _xItemsInitialized = true;
+            }
+            InitItems.Invoke(_initItems);
+            _initItems.Clear();
         }
 
         public void Goal()

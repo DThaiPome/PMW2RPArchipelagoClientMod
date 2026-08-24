@@ -60,7 +60,6 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _connectionService = connectionService;
             _itemIdMapperService = itemIdMapperService;
 
-            _connectionService.OnConnect += OnConnect;
             _connectionService.InitItems += InitItems;
             _connectionService.ItemReceived += ItemReceived;
 
@@ -69,6 +68,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public void InitItems(IReadOnlyList<ItemInfo> items)
         {
+            _clearUnlocks();
             foreach (var item in items)
             {
                 _itemIdMapperService.MapItem(item).Unlock(this);
@@ -83,11 +83,6 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public void ItemReceived(ItemInfo item)
         {
             _itemIdMapperService.MapItem(item).Unlock(this);
-        }
-
-        public void OnConnect()
-        {
-            _clearUnlocks();
         }
 
         private void _clearUnlocks()

@@ -365,7 +365,8 @@
 		<Compile Include="patches\Patch_GameUtil\Patch_IsUnlockStage.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_IsVillageSpooky.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_UpdateKeyState.cs" />
-		<Compile Include="patches\Patch_GimmickGoStage\GimmickGoStage_IsExecOK.cs" />
+		<Compile Include="patches\Patch_GimmickGoMaze\Patch_Exec.cs" />
+		<Compile Include="patches\Patch_GimmickGoStage\Patch_IsExecOK.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_EndJump.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_IsSuperHipAtkOKJump.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_SetHipAtk.cs" />
@@ -405,6 +406,7 @@
 		<Compile Include="services\items\mapping\locations\MissionLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\StageLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\UnknownLocationResult.cs" />
+		<Compile Include="services\items\mapping\locations\UnlockMazeLocationResult.cs" />
 		<Compile Include="services\items\UnlocksService.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
 		<Compile Include="util\FallbackDictionary.cs" />

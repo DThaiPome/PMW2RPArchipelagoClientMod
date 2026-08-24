@@ -18,5 +18,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         void SetEnterPast(bool enterPast);
         EMissionFlag GetMissionFlag(EMissionKind kind);
         void SetMissionFlag(EMissionKind kind, EMissionFlag flag);
+        bool CheckMazeUnlock(int mazeId);
+        void UnlockMaze(int mazeId);
     }
 }

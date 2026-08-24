@@ -5,7 +5,7 @@ using PMW2RPArchipelagoClientMod.services;
 namespace PMW2RPArchipelagoClientMod.patches.Patch_GimmickGoStage
 {
     [HarmonyPatch(typeof(GimmickGoStage), "get_IsExecOK", [])]
-    public class GimmickGoStage_IsExecOK
+    public class Patch_IsExecOK
     {
         private static void Postfix(GimmickGoStage __instance, ref bool __result)
         {

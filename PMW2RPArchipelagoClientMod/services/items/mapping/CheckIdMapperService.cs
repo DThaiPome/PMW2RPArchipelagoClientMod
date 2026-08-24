@@ -108,6 +108,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapMission(id);
             }
+            if (id >= GALAXIAN_OFFSET && id < CHERRY_OFFSET)
+            {
+                return _mapGalaxian(id);
+            }
             return new UnknownLocationResult(id);
         }
 
@@ -130,6 +134,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             return new MissionLocationResult(kind);
         }
 
+        private ILocationMapEntry _mapGalaxian(long id)
+        {
+            int mazeId = (int)(id - GALAXIAN_OFFSET);
+            if (mazeId >= 15)
+            {
+                return new UnknownLocationResult(id);
+            }
+            return new UnlockMazeLocationResult(mazeId);
+        }
+
         private bool _dataIdToStage(long id, out EWorldStage stageId)
         {
             stageId = (EWorldStage)(id - 1);
@@ -144,6 +158,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         public long MissionToClearMissionLocationId(EMissionKind kind)
         {
             return (long)kind + MISSION_OFFSET;
+        }
+
+        public long MazeUnlockToUnlockMazeLocationId(int mazeId)
+        {
+            return mazeId + GALAXIAN_OFFSET;
         }
     }
 }

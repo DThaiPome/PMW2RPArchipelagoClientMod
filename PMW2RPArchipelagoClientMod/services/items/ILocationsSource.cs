@@ -14,5 +14,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         void ClearStage(EWorldStage stage);
         IImmutableSet<EMissionKind> ClearedMissions { get; }
         void ClearMission(EMissionKind kind);
+        IImmutableSet<int> UnlockedMazes { get; }
+        void UnlockMaze(int mazeId);
     }
 }

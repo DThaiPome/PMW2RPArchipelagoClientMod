@@ -23,6 +23,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private ISet<long> _sentLocations = new HashSet<long>();
         private ISet<EWorldStage> _clearedStages = new HashSet<EWorldStage>();
         private ISet<EMissionKind> _clearedMissions = new HashSet<EMissionKind>();
+        private ISet<int> _unlockedMazes = new HashSet<int>();
+
 
         public LocationsService(MelonMod melonMod,
             IAPConnectionService connectionService,
@@ -40,6 +42,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<EMissionKind> ClearedMissions => _clearedMissions.ToImmutableHashSet();
 
+        public IImmutableSet<int> UnlockedMazes => _unlockedMazes.ToImmutableHashSet();
+
         public void ClearMission(EMissionKind kind)
         {
             _clearedMissions.Add(kind);
@@ -54,6 +58,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         {
             _sentLocations.Clear();
             _clearedStages.Clear();
+            _clearedMissions.Clear();
+            _unlockedMazes.Clear();
             foreach (var locationId in locationIds)
             {
                 _checkIdMapperService.MapLocation(locationId).ClearLocation(this);
@@ -69,24 +75,22 @@ namespace PMW2RPArchipelagoClientMod.services.items
         {
             _sendStagesCleared();
             _sendMissionsCleared();
+            _sendMazesUnlocked();
         }
 
         private void _sendStagesCleared()
         {
             foreach (EWorldStage stage in _clearedStages)
             {
-                long locationId = _checkIdMapperService.StageToClearStageLocationId(stage);
-                if (_sentLocations.Contains(locationId))
+                if (!_sendLocationClearedIfNeeded(_checkIdMapperService.StageToClearStageLocationId(stage)))
                 {
                     continue;
                 }
-                _connectionService.SendLocationChecked(locationId);
                 if ((stage == EWorldStage.Stage6_4 && _connectionService.GoalBoss == GoalBossOption.Spooky)
                     || (stage == EWorldStage.Stage6_5 && _connectionService.GoalBoss == GoalBossOption.TocMan))
                 {
                     _connectionService.Goal();
                 }
-                _sentLocations.Add(locationId);
             }
         }
 
@@ -94,14 +98,32 @@ namespace PMW2RPArchipelagoClientMod.services.items
         {
             foreach (EMissionKind kind in _clearedMissions)
             {
-                long locationId = _checkIdMapperService.MissionToClearMissionLocationId(kind);
-                if (_sentLocations.Contains(locationId))
-                {
-                    continue;
-                }
-                _connectionService.SendLocationChecked(locationId);
-                _sentLocations.Add(locationId);
+                _sendLocationClearedIfNeeded(_checkIdMapperService.MissionToClearMissionLocationId(kind));
             }
+        }
+
+        private void _sendMazesUnlocked()
+        {
+            foreach (int mazeId in _unlockedMazes)
+            {
+                _sendLocationClearedIfNeeded(_checkIdMapperService.MazeUnlockToUnlockMazeLocationId(mazeId));
+            }
+        }
+
+        private bool _sendLocationClearedIfNeeded(long locationId)
+        {
+            if (_sentLocations.Contains(locationId))
+            {
+                return false;
+            }
+            _connectionService.SendLocationChecked(locationId);
+            _sentLocations.Add(locationId);
+            return true;
+        }
+
+        public void UnlockMaze(int mazeId)
+        {
+            _unlockedMazes.Add(mazeId);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         Action<IReadOnlyList<ItemInfo>> InitItems { get; set; }
         Action<IReadOnlyList<long>> InitLocations { get; set; }
         Action<ItemInfo> ItemReceived { get; set; }
-        Action<long> LocationCheckedRemotely {  get; set; }
+        Action<long> LocationCheckedRemotely { get; set; }
 
         GoalBossOption? GoalBoss { get; }
     }
