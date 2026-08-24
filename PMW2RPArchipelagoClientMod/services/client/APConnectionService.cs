@@ -44,7 +44,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
 
             lock(_xItemsInitializedLock)
             {
-                _xItemsInitialized = false;
+                _xItemsInitialized = true;
             }
         }
 
@@ -95,26 +95,28 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private void _onLoginSuccess()
         {
             _melonMod.LoggerInstance.Msg("CONNECTED TO SERVER");
-            OnConnect.Invoke();
-            InitLocations.Invoke(_session.Locations.AllLocationsChecked);
+            OnConnect?.Invoke();
+            InitLocations?.Invoke(_session.Locations.AllLocationsChecked);
             _slotData = new Dictionary<string, object>(_session.DataStorage.GetSlotData());
         }
 
         private void _onItemReceived(ReceivedItemsHelper helper)
         {
-            ItemInfo? item = helper.DequeueItem();
-            while (item != null)
+            lock(_xItemsInitializedLock)
             {
-                if (DateTime.Now.Millisecond - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS)
+                ItemInfo? item = helper.DequeueItem();
+                while (item != null)
                 {
-                    _initItems.Add(item);
+                    if (!_xItemsInitialized)
+                    {
+                        _initItems.Add(item);
+                    }
+                    else
+                    {
+                        ItemReceived?.Invoke(item);
+                    }
+                    item = helper.DequeueItem();
                 }
-                else
-                {
-                    _initItemsIfNeeded();
-                    ItemReceived.Invoke(item);
-                }
-                item = helper.DequeueItem();
             }
         }
 
@@ -122,7 +124,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             foreach (long id in newCheckedLocations)
             {
-                LocationCheckedRemotely.Invoke(id);
+                LocationCheckedRemotely?.Invoke(id);
             }
         }
 
@@ -152,20 +154,16 @@ namespace PMW2RPArchipelagoClientMod.services.client
 
         private void _initItemsIfNeeded()
         {
-            if ((DateTime.Now.Millisecond - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS) || _initItems.Count == 0)
-            {
-                return;
-            }
             lock(_xItemsInitializedLock)
             {
-                if (_xItemsInitialized)
+                if ((DateTime.Now.Millisecond - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS) || _xItemsInitialized)
                 {
                     return;
                 }
                 _xItemsInitialized = true;
+                InitItems?.Invoke(_initItems);
+                _initItems.Clear();
             }
-            InitItems.Invoke(_initItems);
-            _initItems.Clear();
         }
 
         public void Goal()
