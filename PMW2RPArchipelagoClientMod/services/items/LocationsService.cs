@@ -24,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private ISet<EWorldStage> _clearedStages = new HashSet<EWorldStage>();
         private ISet<EMissionKind> _clearedMissions = new HashSet<EMissionKind>();
         private ISet<int> _unlockedMazes = new HashSet<int>();
+        private ISet<ECapsule> _collectedCapsules = new HashSet<ECapsule>();
 
 
         public LocationsService(MelonMod melonMod,
@@ -44,6 +45,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<int> UnlockedMazes => _unlockedMazes.ToImmutableHashSet();
 
+        public IImmutableSet<ECapsule> CollectedCapsules => _collectedCapsules.ToImmutableHashSet();
+
         public void ClearMission(EMissionKind kind)
         {
             _clearedMissions.Add(kind);
@@ -60,6 +63,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _clearedStages.Clear();
             _clearedMissions.Clear();
             _unlockedMazes.Clear();
+            _collectedCapsules.Clear();
             foreach (var locationId in locationIds)
             {
                 _checkIdMapperService.MapLocation(locationId).ClearLocation(this);
@@ -76,6 +80,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _sendStagesCleared();
             _sendMissionsCleared();
             _sendMazesUnlocked();
+            _sendCapsulesCollected();
         }
 
         private void _sendStagesCleared()
@@ -110,6 +115,14 @@ namespace PMW2RPArchipelagoClientMod.services.items
             }
         }
 
+        private void _sendCapsulesCollected()
+        {
+            foreach (ECapsule capsule in _collectedCapsules)
+            {
+                _sendLocationClearedIfNeeded(_checkIdMapperService.CapsuleToCollectCapsuleLocationId(capsule));
+            }
+        }
+
         private bool _sendLocationClearedIfNeeded(long locationId)
         {
             if (_sentLocations.Contains(locationId))
@@ -124,6 +137,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public void UnlockMaze(int mazeId)
         {
             _unlockedMazes.Add(mazeId);
+        }
+
+        public void CollectCapsule(ECapsule capsule)
+        {
+            _collectedCapsules.Add(capsule);
         }
     }
 }

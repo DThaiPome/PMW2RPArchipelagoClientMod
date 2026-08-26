@@ -14,7 +14,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_GimmickGoStage
             {
                 return;
             }
-            __result = __result && ServiceFactory.Unlocks.Stages.GetValueOrDefault((EWorldStage)stageObj.StageInfo.stageId, false);
+            __result = __result && ServiceFactory.GameSaveDataService.GetStageFlag((EWorldStage)stageObj.StageInfo.stageId) != EStageFlag.Locked;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_SS_GoStageRoot
         {
             __result = __result &&
                 ((__instance.Kind == SS_GoStageRoot.EKind.PacVillage || __instance.Kind == SS_GoStageRoot.EKind.PacVillage_Sub) 
-                || ServiceFactory.Unlocks.Stages.GetValueOrDefault((EWorldStage)__instance.StageInfo.stageId, false));
+                || ServiceFactory.GameSaveDataService.GetStageFlag((EWorldStage)__instance.StageInfo.stageId) != EStageFlag.Locked);
         }
     }
 }

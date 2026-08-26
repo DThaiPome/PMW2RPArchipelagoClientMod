@@ -108,6 +108,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapMission(id);
             }
+            if (id >= GASHAPON_OFFSET && id < GALAXIAN_OFFSET)
+            {
+                return _mapCapsule(id);
+            }
             if (id >= GALAXIAN_OFFSET && id < CHERRY_OFFSET)
             {
                 return _mapGalaxian(id);
@@ -144,6 +148,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             return new UnlockMazeLocationResult(mazeId);
         }
 
+        private ILocationMapEntry _mapCapsule(long id)
+        {
+            ECapsule capsule = (ECapsule)(id - GASHAPON_OFFSET);
+            if (capsule <= ECapsule.None || capsule > ECapsule.Capsule54)
+            {
+                return new UnknownLocationResult(id);
+            }
+            return new CollectCapsuleLocationResult(capsule);
+        }
+
         private bool _dataIdToStage(long id, out EWorldStage stageId)
         {
             stageId = (EWorldStage)(id - 1);
@@ -163,6 +177,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         public long MazeUnlockToUnlockMazeLocationId(int mazeId)
         {
             return mazeId + GALAXIAN_OFFSET;
+        }
+
+        public long CapsuleToCollectCapsuleLocationId(ECapsule capsule)
+        {
+            return (long)capsule + GASHAPON_OFFSET;
         }
     }
 }

@@ -367,6 +367,7 @@
 		<Compile Include="patches\Patch_GameUtil\Patch_UpdateKeyState.cs" />
 		<Compile Include="patches\Patch_GimmickGoMaze\Patch_Exec.cs" />
 		<Compile Include="patches\Patch_GimmickGoStage\Patch_IsExecOK.cs" />
+		<Compile Include="patches\Patch_ItemCapsule\Patch_Hit.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_EndJump.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_IsSuperHipAtkOKJump.cs" />
 		<Compile Include="patches\Patch_PlayerPacman\Patch_SetHipAtk.cs" />
@@ -403,6 +404,7 @@
 		<Compile Include="services\items\mapping\items\PastKeyItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
+		<Compile Include="services\items\mapping\locations\CollectCapsuleLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\MissionLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\StageLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\UnknownLocationResult.cs" />

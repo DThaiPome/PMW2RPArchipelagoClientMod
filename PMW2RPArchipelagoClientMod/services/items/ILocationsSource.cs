@@ -16,5 +16,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         void ClearMission(EMissionKind kind);
         IImmutableSet<int> UnlockedMazes { get; }
         void UnlockMaze(int mazeId);
+        IImmutableSet<ECapsule> CollectedCapsules { get; }
+        void CollectCapsule(ECapsule capsule);
     }
 }
