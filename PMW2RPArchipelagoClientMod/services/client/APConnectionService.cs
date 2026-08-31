@@ -2,15 +2,9 @@
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
-using Il2Cpp;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.client
 {

@@ -1,12 +1,6 @@
 ﻿using Il2Cpp;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.services.client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.Playables;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PMW2RPArchipelagoClientMod.services.items.mapping.locations
+﻿namespace PMW2RPArchipelagoClientMod.services.items.mapping.locations
 {
     public class UnlockMazeLocationResult : ILocationMapEntry
     {

@@ -1,7 +1,5 @@
-﻿using Il2Cpp;
-using MelonLoader;
+﻿using MelonLoader;
 using PMW2RPArchipelagoClientMod.services;
-using UnityEngine.InputSystem;
 
 [assembly: MelonInfo(typeof(PMW2RPArchipelagoClientMod.Core), "PMW2RPArchipelagoClientMod", "1.0.0", "DThaiPome", null)]
 [assembly: MelonGame("Bandai Namco Entertainment Inc.", "PAC-MAN WORLD 2 Re-PAC")]

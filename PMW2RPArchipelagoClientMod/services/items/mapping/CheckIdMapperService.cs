@@ -3,11 +3,6 @@ using Il2Cpp;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.items.mapping.items;
 using PMW2RPArchipelagoClientMod.services.items.mapping.locations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.items.mapping
 {

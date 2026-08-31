@@ -1,5 +1,4 @@
 ﻿using Il2Cpp;
-using PMW2RPArchipelagoClientMod.services;
 using System.Collections.Immutable;
 
 namespace PMW2RPArchipelagoClientMod.models.data

@@ -1,6 +1,5 @@
 ﻿using MelonLoader;
 using PMW2RPArchipelagoClientDebugTools.ui;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UniverseLib.UI;
 

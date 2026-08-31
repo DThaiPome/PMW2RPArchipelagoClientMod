@@ -1,9 +1,4 @@
 ﻿using Il2Cpp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HarmonyLib;
 using System.Numerics;
 using PMW2RPArchipelagoClientMod.services;
