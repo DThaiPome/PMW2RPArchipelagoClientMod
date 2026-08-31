@@ -99,6 +99,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapStageLocation(id);
             }
+            if (id >= TIMETRIAL_OFFSET && id < MISSION_OFFSET)
+            {
+                return _mapGoldMedal(id);
+            }
             if (id >= MISSION_OFFSET && id < GASHAPON_OFFSET)
             {
                 return _mapMission(id);
@@ -153,6 +157,15 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             return new CollectCapsuleLocationResult(capsule);
         }
 
+        private ILocationMapEntry _mapGoldMedal(long id)
+        {
+            if (!_dataIdToStage(id - TIMETRIAL_OFFSET, out EWorldStage stage))
+            {
+                return new UnknownLocationResult(id);
+            }
+            return new ClearGoldMedalLocationResult(stage);
+        }
+
         private bool _dataIdToStage(long id, out EWorldStage stageId)
         {
             stageId = (EWorldStage)(id - 1);
@@ -177,6 +190,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         public long CapsuleToCollectCapsuleLocationId(ECapsule capsule)
         {
             return (long)capsule + GASHAPON_OFFSET;
+        }
+
+        public long StageToClearedGoldMedalLocationId(EWorldStage stage)
+        {
+            return (long)stage + 1 + TIMETRIAL_OFFSET;
         }
     }
 }

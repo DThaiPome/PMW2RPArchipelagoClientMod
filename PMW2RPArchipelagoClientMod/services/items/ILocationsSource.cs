@@ -13,5 +13,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         void UnlockMaze(int mazeId);
         IImmutableSet<ECapsule> CollectedCapsules { get; }
         void CollectCapsule(ECapsule capsule);
+        IImmutableSet<EWorldStage> ClearedGoldMedals { get; }
+        void ClearGoldMedal(EWorldStage stage);
     }
 }

@@ -46,6 +46,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncMissionsCleared();
             _syncMazesUnlocked();
             _syncFruitLevelUnlocks();
+            _syncGoldMedalsCleared();
         }
 
         private void _syncLevelUnlocks()
@@ -234,6 +235,30 @@ namespace PMW2RPArchipelagoClientMod.services.game
             {
                 _melonMod.LoggerInstance.Msg("UNLOCKING STAGE DIRECTLY: " + stage.ToString());
                 _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
+            }
+        }
+
+        private void _syncGoldMedalsCleared()
+        {
+            foreach (var stageInfo in MasterData.StageList.m_stageList)
+            {
+                EWorldStage stageId = (EWorldStage)stageInfo.stageId;
+                if (stageInfo.stageId == (int)EWorldStage.Stage5_3)
+                {
+                    continue;
+                }
+                double time = PACWSaveData.GetStageTime((int)stageId);
+                EEstimateTime medal = time == 0 ? EEstimateTime.None : stageInfo.GetMedalKind(time + 0.01);
+                if (medal == EEstimateTime.Gold && !_locations.ClearedGoldMedals.Contains(stageId))
+                {
+                    _melonMod.LoggerInstance.Msg("SENDING GOLD MEDAL CLEARED: " + stageId);
+                    _locations.ClearGoldMedal(stageId);
+                }
+                else if (medal != EEstimateTime.Gold && _locations.ClearedGoldMedals.Contains(stageId))
+                {
+                    _melonMod.LoggerInstance.Msg("GOLD MEDAL CLEARED REMOTELY: " + stageId);
+                    PACWSaveData.SetStageTime((int)stageId, (stageInfo.estimateTimeG - 1) / 100.0);
+                }
             }
         }
     }

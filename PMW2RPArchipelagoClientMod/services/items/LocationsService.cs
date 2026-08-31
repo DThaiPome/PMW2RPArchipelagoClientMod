@@ -18,6 +18,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private ISet<EMissionKind> _clearedMissions = new HashSet<EMissionKind>();
         private ISet<int> _unlockedMazes = new HashSet<int>();
         private ISet<ECapsule> _collectedCapsules = new HashSet<ECapsule>();
+        private ISet<EWorldStage> _goldMedals = new HashSet<EWorldStage>();
 
 
         public LocationsService(MelonMod melonMod,
@@ -39,6 +40,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public IImmutableSet<int> UnlockedMazes => _unlockedMazes.ToImmutableHashSet();
 
         public IImmutableSet<ECapsule> CollectedCapsules => _collectedCapsules.ToImmutableHashSet();
+
+        public IImmutableSet<EWorldStage> ClearedGoldMedals => _goldMedals.ToImmutableHashSet();
 
         public void ClearMission(EMissionKind kind)
         {
@@ -74,6 +77,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _sendMissionsCleared();
             _sendMazesUnlocked();
             _sendCapsulesCollected();
+            _sendGoldMedalCleared();
         }
 
         private void _sendStagesCleared()
@@ -116,6 +120,14 @@ namespace PMW2RPArchipelagoClientMod.services.items
             }
         }
 
+        private void _sendGoldMedalCleared()
+        {
+            foreach (EWorldStage stage in _goldMedals)
+            {
+                _sendLocationClearedIfNeeded(_checkIdMapperService.StageToClearedGoldMedalLocationId(stage));
+            }
+        }
+
         private bool _sendLocationClearedIfNeeded(long locationId)
         {
             if (_sentLocations.Contains(locationId))
@@ -135,6 +147,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public void CollectCapsule(ECapsule capsule)
         {
             _collectedCapsules.Add(capsule);
+        }
+
+        public void ClearGoldMedal(EWorldStage stage)
+        {
+            _goldMedals.Add(stage);
         }
     }
 }

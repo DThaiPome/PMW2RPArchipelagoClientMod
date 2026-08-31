@@ -10,6 +10,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         long MissionToClearMissionLocationId(EMissionKind kind);
         long MazeUnlockToUnlockMazeLocationId(int mazeId);
         long CapsuleToCollectCapsuleLocationId(ECapsule capsule);
+        long StageToClearedGoldMedalLocationId(EWorldStage stage);
         ILocationMapEntry MapLocation(long id);
     }
 }
