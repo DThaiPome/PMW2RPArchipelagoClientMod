@@ -16,6 +16,10 @@ namespace PMW2RPArchipelagoClientDebugTools
         public override void OnInitializeMelon()
         {
             ServiceFactory.Init(this);
+            UniverseLib.Universe.Init(0, null, null, new()
+            {
+                Allow_UI_Selection_Outside_UIBase = true
+            });
             LoggerInstance.Msg("Initialized.");
         }
 

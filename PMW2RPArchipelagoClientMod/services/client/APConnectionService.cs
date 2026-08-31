@@ -36,6 +36,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         public Action<long> LocationCheckedRemotely { get; set; }
 
         public GoalBossOption? GoalBoss => _goalBossOption;
+        public bool? IsLevelRando => _isLevelRando;
 
         public APConnectionService(MelonMod melonMod)
         {
@@ -95,9 +96,9 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private void _onLoginSuccess()
         {
             _melonMod.LoggerInstance.Msg("CONNECTED TO SERVER");
+            _slotData = new Dictionary<string, object>(_session.DataStorage.GetSlotData());
             OnConnect?.Invoke();
             InitLocations?.Invoke(_session.Locations.AllLocationsChecked);
-            _slotData = new Dictionary<string, object>(_session.DataStorage.GetSlotData());
         }
 
         private void _onItemReceived(ReceivedItemsHelper helper)
@@ -191,5 +192,22 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 return (GoalBossOption)goalBossId;
             }
         }
+
+        private bool? _isLevelRando
+        {
+            get
+            {
+                if (_slotData == null)
+                {
+                    return null;
+                }
+                long? isLevelRando = (long?)_slotData.GetValueOrDefault("level_randomizer", null);
+                if (isLevelRando == null)
+                {
+                    return null;
+                }
+                return isLevelRando == 1;
+            }
+        } 
     }
 }

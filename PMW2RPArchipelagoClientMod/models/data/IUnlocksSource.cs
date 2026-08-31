@@ -21,9 +21,9 @@ namespace PMW2RPArchipelagoClientMod.models.data
             GoldenFruitItem.GoldenApple,
             GoldenFruitItem.GoldenOrange,
             GoldenFruitItem.GoldenMelon];
-        public bool IsSpookyUnlocked()
+        public bool AreAllGoldenFruitsUnlocked()
         {
-            return Stages.GetValueOrDefault(EWorldStage.Stage6_4, false) && GoldenFruit.SetEquals(_allGoldenFruits);
+            return GoldenFruit.SetEquals(_allGoldenFruits);
         }
 
         private static readonly IEnumerable<PastKeyItem> _allKeys = [PastKeyItem.WindyWoodsKey,
@@ -31,9 +31,9 @@ namespace PMW2RPArchipelagoClientMod.models.data
             PastKeyItem.FieryCavernsKey,
             PastKeyItem.DimUnderwatersKey,
             PastKeyItem.GhostIslandKey];
-        public bool IsTocManUnlocked()
+        public bool AreAllKeysUnlocked()
         {
-            return Stages.GetValueOrDefault(EWorldStage.Stage6_5, false) && PastKeys.SetEquals(_allKeys);
+            return PastKeys.SetEquals(_allKeys);
         }
     }
 }

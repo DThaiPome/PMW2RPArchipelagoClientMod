@@ -1,6 +1,8 @@
 ﻿using Il2Cpp;
+using Il2CppUI;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.items;
 
 namespace PMW2RPArchipelagoClientMod.services.game
@@ -11,16 +13,25 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private IUnlocksSource _unlocks;
         private ILocationsSource _locations;
         private IGameSaveDataService _gameSaveDataService;
+        private IAPConnectionService _apConnectionService;
+        private StageSelectCinematicService _stageSelectCinematicService;
+        private ActiveSceneService _activeSceneService;
 
         public LevelUnlockSyncService(MelonMod melonMod,
             IUnlocksSource unlocks,
             ILocationsSource locations,
-            IGameSaveDataService gameSaveDataService)
+            IGameSaveDataService gameSaveDataService,
+            IAPConnectionService apConnectionService,
+            StageSelectCinematicService stageSelectCinematicService,
+            ActiveSceneService activeSceneService)
         {
             _melonMod = melonMod;
             _unlocks = unlocks;
             _locations = locations;
             _gameSaveDataService = gameSaveDataService;
+            _apConnectionService = apConnectionService;
+            _stageSelectCinematicService = stageSelectCinematicService;
+            _activeSceneService = activeSceneService;
         }
 
         public void OnLateUpdate()
@@ -35,6 +46,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncStagesCleared();
             _syncMissionsCleared();
             _syncMazesUnlocked();
+            _syncFruitLevelUnlocks();
         }
 
         private void _syncLevelUnlocks()
@@ -43,15 +55,13 @@ namespace PMW2RPArchipelagoClientMod.services.game
             {
                 bool unlocked = _unlocks.Stages.GetValueOrDefault(stage, false);
                 EStageFlag stageFlag = _gameSaveDataService.GetStageFlag(stage);
-                // if (!unlocked && stageFlag != EStageFlag.Locked)
-                // {
-                //     _melonMod.LoggerInstance.Msg("LOCKING STAGE: " + stage.ToString());
-                //     PACWSaveData.SetStageFlag((int)stage, EStageFlag.Locked, force: true);
-                // }
                 if (unlocked && stageFlag == EStageFlag.Locked)
                 {
-                    _melonMod.LoggerInstance.Msg("UNLOCKING STAGE: " + stage.ToString());
-                    _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
+                    if (stage == EWorldStage.Stage6_5 && !_unlocks.AreAllKeysUnlocked())
+                    {
+                        continue;
+                    }
+                    _unlockStage(stage);
                 }
             }
         }
@@ -166,6 +176,65 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     // TODO: This might not do anything if a maze gets unlocked remotely while that level is actually being played. Find a way to fix this maybe, not urgent.
                     _gameSaveDataService.UnlockMaze(mazeId);
                 }
+            }
+        }
+
+        private void _syncFruitLevelUnlocks()
+        {
+            if (_apConnectionService.IsLevelRando ?? true)
+            {
+                return;
+            }
+            foreach (var goldenFruitItem in _unlocks.GoldenFruit)
+            {
+                var stageId = _goldenFruitToLevelUnlock(goldenFruitItem);
+                if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Locked)
+                {
+                    _melonMod.LoggerInstance.Msg("UNLOCKING STAGE FROM GOLDEN FRUIT: " + stageId);
+                    _unlockStage(stageId);
+                }
+            }
+            if (_unlocks.AreAllGoldenFruitsUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Locked)
+            {
+                _melonMod.LoggerInstance.Msg("UNLOCKING SPOOKY FROM FRUITS");
+                _gameSaveDataService.SetStageFlag(EWorldStage.Stage6_4, EStageFlag.Unlock);
+            }
+            if (_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked)
+            {
+                _melonMod.LoggerInstance.Msg("UNLOCKING TOC-MAN FROM KEYS");
+                _unlockStage(EWorldStage.Stage6_5);
+            }
+        }
+
+        private EWorldStage _goldenFruitToLevelUnlock(GoldenFruitItem goldenFruitItem)
+        {
+            return goldenFruitItem switch
+            {
+                GoldenFruitItem.GoldenCherry => EWorldStage.Stage2_1,
+                GoldenFruitItem.GoldenStrawberry => EWorldStage.Stage3_1,
+                GoldenFruitItem.GoldenApple => EWorldStage.Stage4_1,
+                GoldenFruitItem.GoldenOrange => EWorldStage.Stage5_1,
+                GoldenFruitItem.GoldenMelon => EWorldStage.Stage6_1,
+                _ => throw new NotImplementedException("what kinda golden fruit is this")
+            };
+        }
+
+        private void _unlockStage(EWorldStage stage)
+        {
+            if (stage == EWorldStage.Stage6_4)
+            {
+                _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
+                return;
+            }
+
+            if (_stageSelectCinematicService.IsStageQueued(stage))
+            {
+                return;
+            }
+            if (_activeSceneService.OnStageSelect || !_stageSelectCinematicService.EnqueueUnlock(stage))
+            {
+                _melonMod.LoggerInstance.Msg("UNLOCKING STAGE DIRECTLY: " + stage.ToString());
+                _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
             }
         }
     }

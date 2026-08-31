@@ -9,6 +9,10 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_SS_GoStageRoot
     {
         private static void Postfix(SS_GoStageRoot __instance, ref bool __result)
         {
+            if (!(ServiceFactory.APConnectionService.IsLevelRando ?? true))
+            {
+                return;
+            }
             __result = __result &&
                 ((__instance.Kind == SS_GoStageRoot.EKind.PacVillage || __instance.Kind == SS_GoStageRoot.EKind.PacVillage_Sub) 
                 || ServiceFactory.GameSaveDataService.GetStageFlag((EWorldStage)__instance.StageInfo.stageId) != EStageFlag.Locked);

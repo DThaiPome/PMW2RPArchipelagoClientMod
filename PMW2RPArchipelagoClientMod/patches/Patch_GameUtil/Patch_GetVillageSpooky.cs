@@ -13,8 +13,8 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
             {
                 return true;
             }
-            if (ServiceFactory.Unlocks.IsSpookyUnlocked()
-                && ServiceFactory.GameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) != EStageFlag.Clear)
+            if (ServiceFactory.Unlocks.AreAllGoldenFruitsUnlocked()
+                && ServiceFactory.GameSaveDataService.IsSpookyUnlockedOrPlayed())
             {
                 __result = MasterData.GetStage(EArea.Area6, 4);
             }

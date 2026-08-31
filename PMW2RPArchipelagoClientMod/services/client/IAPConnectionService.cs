@@ -25,5 +25,6 @@ namespace PMW2RPArchipelagoClientMod.services.client
         Action<long> LocationCheckedRemotely { get; set; }
 
         GoalBossOption? GoalBoss { get; }
+        bool? IsLevelRando { get; }
     }
 }

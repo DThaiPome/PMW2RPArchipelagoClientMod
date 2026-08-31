@@ -14,11 +14,13 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
     [HarmonyPatch(typeof(GameUtil), "IsUnlockStage")]
     public class Patch_IsUnlockStage
     {
-        private static bool Prefix(Il2CppSystem.Collections.Generic.List<int> unlockStageIdList, Il2CppSystem.Collections.Generic.List<int> defaultStageIdList, ref bool __result)
+        private static void Postfix(Il2CppSystem.Collections.Generic.List<int> unlockStageIdList, Il2CppSystem.Collections.Generic.List<int> defaultStageIdList, ref bool __result)
         {
-            defaultStageIdList.Add((int)EWorldStage.PacVillage);
-            __result = false;
-            return false;
+            foreach (var stage in ServiceFactory.StageSelectCinematicService.FlushUnlocks())
+            {
+                unlockStageIdList.Add((int)stage);
+            }
+            __result = __result || unlockStageIdList.Count > 0;
         }
     }
 }

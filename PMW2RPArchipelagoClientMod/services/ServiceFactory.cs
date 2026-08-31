@@ -21,6 +21,8 @@ namespace PMW2RPArchipelagoClientMod.services
         private static IAPConnectionService _apConnectionService = null;
         private static ICheckIdMapperService _checkIdMapperService = null;
         private static ILocationsService _locationsService = null;
+        private static StageDataPatchService _stageDataPatchService = null;
+        private static StageSelectCinematicService _stageSelectCinematicService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -117,7 +119,13 @@ namespace PMW2RPArchipelagoClientMod.services
             {
                 if (_levelUnlockSyncService == null)
                 {
-                    _levelUnlockSyncService = new LevelUnlockSyncService(ModInstance, Unlocks, Locations, GameSaveDataService);
+                    _levelUnlockSyncService = new LevelUnlockSyncService(ModInstance,
+                        Unlocks,
+                        Locations,
+                        GameSaveDataService,
+                        APConnectionService,
+                        StageSelectCinematicService,
+                        ActiveSceneService);
                 }
                 return _levelUnlockSyncService;
             }
@@ -184,5 +192,29 @@ namespace PMW2RPArchipelagoClientMod.services
         }
 
         public static ILocationsService Locations => LocationsService;
+
+        public static StageDataPatchService StageDataPatchService
+        {
+            get
+            {
+                if (_stageDataPatchService == null)
+                {
+                    _stageDataPatchService = new StageDataPatchService(ModInstance, APConnectionService);
+                }
+                return _stageDataPatchService;
+            }
+        }
+
+        public static StageSelectCinematicService StageSelectCinematicService
+        {
+            get
+            {
+                if (_stageSelectCinematicService == null)
+                {
+                    _stageSelectCinematicService = new StageSelectCinematicService(ModInstance);
+                }
+                return _stageSelectCinematicService;
+            }
+        }
     }
 }

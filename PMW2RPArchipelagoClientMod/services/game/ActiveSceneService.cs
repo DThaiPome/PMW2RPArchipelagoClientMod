@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UniverseLib.UI;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -43,6 +42,19 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     return false;
                 }
                 return !_outOfGameScenes.Contains(sceneManagerInstance.m_eCurrentScene);
+            }
+        }
+
+        public bool OnStageSelect
+        {
+            get
+            {
+                var sceneManagerInstance = SceneManager.Instance;
+                if (sceneManagerInstance == null)
+                {
+                    return false;
+                }
+                return sceneManagerInstance.m_eCurrentScene == EScene.StageSelect || sceneManagerInstance.m_eCurrentScene == EScene.StageSelect_Past;
             }
         }
 

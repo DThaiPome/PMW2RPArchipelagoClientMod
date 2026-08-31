@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
+using PMW2RPArchipelagoClientMod.services;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_SS_GoStageRoot
 {
@@ -8,6 +9,10 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_SS_GoStageRoot
     {
         private static bool Prefix(ref bool __result)
         {
+            if (!(ServiceFactory.APConnectionService.IsLevelRando ?? true))
+            {
+                return true;
+            }
             __result = true;
             return false;
         }

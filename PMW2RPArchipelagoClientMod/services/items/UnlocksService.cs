@@ -102,10 +102,5 @@ namespace PMW2RPArchipelagoClientMod.services.items
         {
 
         }
-
-        public void LocationCheckedRemotely(long locationId)
-        {
-
-        }
     }
 }
