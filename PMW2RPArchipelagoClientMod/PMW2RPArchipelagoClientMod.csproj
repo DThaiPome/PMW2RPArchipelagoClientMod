@@ -401,6 +401,7 @@
 		<Compile Include="models\data\MovesetItem.cs" />
 		<Compile Include="services\items\mapping\items\GoldenFruitItemResult.cs" />
 		<Compile Include="services\items\mapping\items\PastKeyItemResult.cs" />
+		<Compile Include="services\items\mapping\items\SkinItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
 		<Compile Include="services\items\mapping\locations\ClearGoldMedalLocationResult.cs" />

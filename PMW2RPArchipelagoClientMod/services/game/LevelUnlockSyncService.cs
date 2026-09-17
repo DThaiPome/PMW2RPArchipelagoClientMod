@@ -47,6 +47,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncMazesUnlocked();
             _syncFruitLevelUnlocks();
             _syncGoldMedalsCleared();
+            _syncSkinUnlocks();
         }
 
         private void _syncLevelUnlocks()
@@ -258,6 +259,44 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     _melonMod.LoggerInstance.Msg("GOLD MEDAL CLEARED REMOTELY: " + stageId);
                     PACWSaveData.SetStageTime((int)stageId, (stageInfo.estimateTimeG - 1) / 100.0);
+                }
+            }
+        }
+
+        private static HashSet<EPlayerSkin> _ignoredSkins = new HashSet<EPlayerSkin>()
+        {
+            EPlayerSkin.Street,
+            EPlayerSkin.Street2,
+            EPlayerSkin.Street3,
+            EPlayerSkin.BirthDay,
+            EPlayerSkin.Xmas,
+            EPlayerSkin.Xmas2,
+            EPlayerSkin.Xmas3
+        };
+
+        private void _syncSkinUnlocks()
+        {
+            for (EPlayerSkin skin = EPlayerSkin.Hunter; skin < EPlayerSkin.MAX; skin++)
+            {
+                if (_ignoredSkins.Contains(skin))
+                {
+                    continue;
+                }
+                bool unlockedInSave = _gameSaveDataService.IsSkinUnlocked(skin);
+                bool unlockedInWorld = _unlocks.Skins.Contains(skin);
+                if (unlockedInSave && unlockedInWorld)
+                {
+                    _melonMod.LoggerInstance.Msg("UNLOCKING SKIN: " + skin);
+                    _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
+                }
+                else if (!unlockedInSave && !unlockedInWorld)
+                {
+                    _melonMod.LoggerInstance.Msg("LOCKING SKIN: " + skin);
+                    _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
+                    if (_gameSaveDataService.GetPlayerSkin() == skin)
+                    {
+                        _gameSaveDataService.SetPlayerSkin(EPlayerSkin.Normal);
+                    }
                 }
             }
         }

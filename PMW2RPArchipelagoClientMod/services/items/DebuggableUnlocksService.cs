@@ -13,6 +13,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private FallbackDictionary<EWorldStage> _stages;
         private FallbackSet<GoldenFruitItem> _goldenFruit;
         private FallbackSet<PastKeyItem> _pastKeys;
+        private FallbackSet<EPlayerSkin> _skins;
 
         public DebuggableUnlocksService(IUnlocksService releaseUnlocksSource, 
             IUnlocksService debugUnlocksSource)
@@ -23,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _stages = new FallbackDictionary<EWorldStage>(() => _releaseUnlocksSource.Stages, () => _debugUnlocksSource.Stages);
             _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => _debugUnlocksSource.GoldenFruit);
             _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => _debugUnlocksSource.PastKeys);
+            _skins = new FallbackSet<EPlayerSkin>(() => _releaseUnlocksSource.Skins, () => _debugUnlocksSource.Skins);
         }
 
         public bool FlipKick => _releaseUnlocksSource.FlipKick || _debugUnlocksSource.FlipKick;
@@ -42,6 +44,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public IImmutableSet<GoldenFruitItem> GoldenFruit => _goldenFruit;
 
         public IImmutableSet<PastKeyItem> PastKeys => _pastKeys;
+
+        public IImmutableSet<EPlayerSkin> Skins => _skins;
 
         public void OnLateUpdate()
         {

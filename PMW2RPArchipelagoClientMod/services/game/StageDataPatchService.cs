@@ -11,6 +11,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private IDictionary<EWorldStage, EWorldStage> _stageUnlocks;
 
+        private bool _missionRewardSkinsPatched = false;
+
         public StageDataPatchService(MelonMod melonMod, IAPConnectionService connectionService)
         {
             _melonMod = melonMod;
@@ -20,6 +22,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
         }
 
         public void OnLateUpdate()
+        {
+            _initUnlockCondsIfNeeded();
+            _patchMissionRewardSkins();
+        }
+
+        private void _initUnlockCondsIfNeeded()
         {
             if (_stageUnlocks == null && MasterData.StageList != null)
             {
@@ -43,10 +51,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _onConnect()
         {
-            if (_stageUnlocks == null && MasterData.StageList != null)
-            {
-                _initUnlockConds();
-            }
+            _patchStageUnlockConds();
+        }
+
+        private void _patchStageUnlockConds()
+        {
+            _initUnlockCondsIfNeeded();
             _syncUnlockConds();
         }
 
@@ -64,6 +74,23 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 EWorldStage cond = isLevelRando || _isBlockedStage((EWorldStage)stageInfo.stageId) ? EWorldStage.Stage6_5 : _stageUnlocks[stageId];
                 stageInfo.unlockCond.Clear();
                 stageInfo.unlockCond.Add((int)cond);
+            }
+        }
+
+        private void _patchMissionRewardSkins()
+        {
+            if (_missionRewardSkinsPatched || (MasterData.MissionRewardList?.m_rewardList?.Count ?? 0) == 0)
+            {
+                return;
+            }
+            _missionRewardSkinsPatched = true;
+            foreach (var missionRewardData in MasterData.MissionRewardList.m_rewardList)
+            {
+                if (missionRewardData.type != EMissionRewardType.Skin)
+                {
+                    continue;
+                }
+                missionRewardData.rewardId = 0;
             }
         }
 

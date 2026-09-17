@@ -15,5 +15,6 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public IDictionary<EWorldStage, bool> StagesMutable { get; }
         public ISet<GoldenFruitItem> GoldenFruitMutable { get;}
         public ISet<PastKeyItem> PastKeysMutable { get; }
+        public ISet<EPlayerSkin> SkinsMutable { get; }
     }
 }

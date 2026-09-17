@@ -89,5 +89,37 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 PACWSaveData.SetMazeFlag(mazeId, EMazeFlag.Unlocked);
             }
         }
+
+        public bool IsSkinUnlocked(EPlayerSkin skin)
+        {
+            _assertOpAllowed();
+            return PACWSaveData.GetPlayerSkinFlag(skin) != EPlayerSkinFlag.None;
+        }
+
+        public void SetSkinUnlocked(EPlayerSkin skin, bool unlocked)
+        {
+            _assertOpAllowed();
+            EPlayerSkinFlag flag = PACWSaveData.GetPlayerSkinFlag(skin);
+            if (flag == EPlayerSkinFlag.None && unlocked)
+            {
+                PACWSaveData.SetPlayerSkinFlag(skin, EPlayerSkinFlag.Unlocked);
+            }
+            else if (flag != EPlayerSkinFlag.None && !unlocked)
+            {
+                PACWSaveData.SetPlayerSkinFlag(skin, EPlayerSkinFlag.None);
+            }
+        }
+
+        public EPlayerSkin GetPlayerSkin()
+        {
+            _assertOpAllowed();
+            return PACWSaveData.GetPlayerSkin(EPlayerNo.P1);
+        }
+
+        public void SetPlayerSkin(EPlayerSkin skin)
+        {
+            _assertOpAllowed();
+            PACWSaveData.SetPlayerSkin(EPlayerNo.P1, skin);
+        }
     }
 }

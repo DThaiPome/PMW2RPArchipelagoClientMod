@@ -14,6 +14,7 @@ namespace PMW2RPArchipelagoClientMod.models.data
         public IImmutableDictionary<EWorldStage, bool> Stages { get; }
         public IImmutableSet<GoldenFruitItem> GoldenFruit { get; }
         public IImmutableSet<PastKeyItem> PastKeys { get; }
+        public IImmutableSet<EPlayerSkin> Skins { get; }
 
         private static readonly IEnumerable<GoldenFruitItem> _allGoldenFruits = [GoldenFruitItem.GoldenCherry,
             GoldenFruitItem.GoldenStrawberry,

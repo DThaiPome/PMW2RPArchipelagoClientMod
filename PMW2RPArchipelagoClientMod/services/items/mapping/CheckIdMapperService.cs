@@ -42,7 +42,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             }
             if (id >= KEY_OFFSET && id < COSTUME_OFFSET)
             {
-                return _mapPastKeyItem(id); 
+                return _mapPastKeyItem(id);
+            }
+            if (id >= COSTUME_OFFSET && id < FRUIT_SWITCH_OFFSET)
+            {
+                return _mapSkin(id);
             }
             if (id >= MOVEMENT_OFFSET && id < TIMETRIAL_OFFSET)
             {
@@ -91,6 +95,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
                 MovesetItem.Flutter => new FlutterItemResult(),
                 _ => new UnknownItemResult(id)
             };
+        }
+
+        private IItemMapEntry _mapSkin(long id)
+        {
+            EPlayerSkin skin = (EPlayerSkin)(id - COSTUME_OFFSET);
+            if (skin <= EPlayerSkin.Normal || skin >= EPlayerSkin.MAX)
+            {
+                return new UnknownItemResult(id);
+            }
+            return new SkinItemResult(skin);
         }
 
         public ILocationMapEntry MapLocation(long id)

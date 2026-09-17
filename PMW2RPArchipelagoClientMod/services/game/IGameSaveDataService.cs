@@ -20,5 +20,9 @@ namespace PMW2RPArchipelagoClientMod.services.game
         void SetMissionFlag(EMissionKind kind, EMissionFlag flag);
         bool CheckMazeUnlock(int mazeId);
         void UnlockMaze(int mazeId);
+        bool IsSkinUnlocked(EPlayerSkin skin);
+        void SetSkinUnlocked(EPlayerSkin skin, bool unlocked);
+        EPlayerSkin GetPlayerSkin();
+        void SetPlayerSkin(EPlayerSkin skin);
     }
 }

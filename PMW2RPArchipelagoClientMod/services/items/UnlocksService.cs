@@ -17,6 +17,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private Dictionary<EWorldStage, bool> _stages = new Dictionary<EWorldStage, bool>();
         private HashSet<GoldenFruitItem> _goldenFruit = new HashSet<GoldenFruitItem>();
         private HashSet<PastKeyItem> _pastKeys = new HashSet<PastKeyItem>();
+        private HashSet<EPlayerSkin> _skins = new HashSet<EPlayerSkin>();
 
         public bool FlipKick { get; set; }
 
@@ -45,6 +46,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<PastKeyItem> PastKeys => _pastKeys.ToImmutableHashSet();
         public ISet<PastKeyItem> PastKeysMutable => _pastKeys;
+
+        public IImmutableSet<EPlayerSkin> Skins => _skins.ToImmutableHashSet();
+        public ISet<EPlayerSkin> SkinsMutable => _skins;
 
         public UnlocksService(MelonMod melonMod,
             IAPConnectionService connectionService,
@@ -90,6 +94,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _stages.Clear();
             _goldenFruit.Clear();
             _pastKeys.Clear();
+            _skins.Clear();
         }
 
         public void OnLateUpdate()
