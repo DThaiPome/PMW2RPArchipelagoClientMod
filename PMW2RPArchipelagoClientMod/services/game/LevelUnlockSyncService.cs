@@ -271,7 +271,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
             EPlayerSkin.BirthDay,
             EPlayerSkin.Xmas,
             EPlayerSkin.Xmas2,
-            EPlayerSkin.Xmas3
+            EPlayerSkin.Xmas3,
+            EPlayerSkin.Sonic
         };
 
         private void _syncSkinUnlocks()
@@ -284,12 +285,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 }
                 bool unlockedInSave = _gameSaveDataService.IsSkinUnlocked(skin);
                 bool unlockedInWorld = _unlocks.Skins.Contains(skin);
-                if (unlockedInSave && unlockedInWorld)
+                if (!unlockedInSave && unlockedInWorld)
                 {
                     _melonMod.LoggerInstance.Msg("UNLOCKING SKIN: " + skin);
                     _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
                 }
-                else if (!unlockedInSave && !unlockedInWorld)
+                else if (unlockedInSave && !unlockedInWorld)
                 {
                     _melonMod.LoggerInstance.Msg("LOCKING SKIN: " + skin);
                     _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
