@@ -31,7 +31,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
 
         public override string Name => "Toggle Unlocks";
 
-        public override int MinWidth => 800;
+        public override int MinWidth => 1033;
 
         public override int MinHeight => 1050;
 
@@ -46,6 +46,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _constructMovesetToggles();
             _constructStageToggles();
             _constructKeyToggles();
+            _constructFillerButtons();
         }
 
         private void _constructMovesetToggles()
@@ -106,6 +107,27 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
                 toggle.isOn = unlocked;
                 _pastKeyToggles.Add(item, toggle);
             }
+        }
+
+        private void _constructFillerButtons()
+        {
+            var columnObj = UIFactory.CreateUIObject("fillerColumn", _uiRoot);
+            UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
+            ColorBlock colorBlock = ColorBlock.defaultColorBlock;
+            colorBlock.m_NormalColor = Color.gray;
+            colorBlock.m_HighlightedColor = Color.black;
+            UIFactory.CreateButton(_uiRoot, "dotButton", "Give Pac Dot", colorBlock).OnClick += _givePacDotClick;
+            UIFactory.CreateButton(_uiRoot, "pointButton", "Give Point", colorBlock).OnClick += _givePointClick;
+        }
+
+        private void _givePacDotClick()
+        {
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GivePacDots(1);
+        }
+
+        private void _givePointClick()
+        {
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GivePoints(100);
         }
 
         private void _constructToggle(GameObject parent, string name, string label, out Toggle toggle)

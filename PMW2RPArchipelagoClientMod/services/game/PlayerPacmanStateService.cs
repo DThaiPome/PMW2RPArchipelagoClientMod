@@ -8,6 +8,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
     {
         private MelonMod _melonMod;
         private IUnlocksSource _unlocksSource;
+        private ActiveSceneService _activeSceneService;
 
         private bool _skipEndJump;
 
@@ -19,13 +20,18 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private float _scSwimDK2SDKTimeMax;
         private bool _superDKSet;
 
+        private bool _isInMoveState;
+        private bool _isUIVisible;
+
         public PlayerPacmanStateService(MelonMod melonMod,
-            IUnlocksSource unlocksSource)
+            IUnlocksSource unlocksSource,
+            ActiveSceneService activeSceneService)
         {
             _melonMod = melonMod;
             _unlocksSource = unlocksSource;
 
             _skipEndJump = false;
+            _activeSceneService = activeSceneService;
         }
 
         public void OnLateUpdate()
@@ -81,6 +87,24 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _scSwimSDK2SDKTimeMax = __instance.scSwimSDK2SDKTimeMax;
             _scSwimDK2SDKTimeMin = __instance.scSwimDK2SDKTimeMin;
             _scSwimDK2SDKTimeMax = __instance.scSwimDK2SDKTimeMax;
+        }
+
+        public void UpdateState(PlayerPacman __instance)
+        {
+            _isInMoveState = !__instance.IsState(PlayerPacman.EState.NoMoveMotion);
+        }
+
+        public void UpdateUIVisible(bool visible)
+        {
+            _isUIVisible = visible && _activeSceneService.InNonVillageStage;
+        }
+
+        public bool IsInMoveState
+        {
+            get
+            {
+                return _isInMoveState && _isUIVisible && !PlayerManager.IsDead() && !PlayerManager.IsGoal();
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
         private static void Prefix(PlayerPacman __instance)
         {
             ServiceFactory.PlayerPacmanStateService.SetSuperDK(__instance);
+            ServiceFactory.PlayerPacmanStateService.UpdateState(__instance);
         }
     }
 }

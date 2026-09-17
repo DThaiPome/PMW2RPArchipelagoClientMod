@@ -53,6 +53,19 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
+        public bool InNonVillageStage
+        {
+            get
+            {
+                var sceneManagerInstance = SceneManager.Instance;
+                if (sceneManagerInstance == null)
+                {
+                    return false;
+                }
+                return sceneManagerInstance.m_eCurrentScene >= EScene.Stage1_1 && sceneManagerInstance.m_eCurrentScene <= EScene.StageSonic_3;
+            }
+        }
+
         public void OnLateUpdate()
         {
 

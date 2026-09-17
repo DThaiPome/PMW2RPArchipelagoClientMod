@@ -107,7 +107,7 @@ namespace PMW2RPArchipelagoClientMod.services
             {
                 if (_playerPacmanStateService == null)
                 {
-                    _playerPacmanStateService = new PlayerPacmanStateService(ModInstance, Unlocks);
+                    _playerPacmanStateService = new PlayerPacmanStateService(ModInstance, Unlocks, ActiveSceneService);
                 }
                 return _playerPacmanStateService;
             }
@@ -125,7 +125,8 @@ namespace PMW2RPArchipelagoClientMod.services
                         GameSaveDataService,
                         APConnectionService,
                         StageSelectCinematicService,
-                        ActiveSceneService);
+                        ActiveSceneService,
+                        PlayerPacmanStateService);
                 }
                 return _levelUnlockSyncService;
             }

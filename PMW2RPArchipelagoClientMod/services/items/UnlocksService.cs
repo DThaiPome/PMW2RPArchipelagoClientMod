@@ -19,6 +19,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private HashSet<PastKeyItem> _pastKeys = new HashSet<PastKeyItem>();
         private HashSet<EPlayerSkin> _skins = new HashSet<EPlayerSkin>();
 
+        private int _pendingPacDots = 0;
+        private int _pendingPoints = 0;
+
+        private bool _unlocksInitialized = false;
+
         public bool FlipKick { get; set; }
 
         public bool Dash { get; set; }
@@ -71,6 +76,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             {
                 _itemIdMapperService.MapItem(item).Unlock(this);
             }
+            _unlocksInitialized = true;
         }
 
         public void InitLocations(IReadOnlyList<long> locationIds)
@@ -95,11 +101,44 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _goldenFruit.Clear();
             _pastKeys.Clear();
             _skins.Clear();
+            _unlocksInitialized = false;
         }
 
         public void OnLateUpdate()
         {
 
+        }
+
+        public void GivePacDots(int count)
+        {
+            if (!_unlocksInitialized)
+            {
+                return;
+            }
+            _pendingPacDots += count;
+        }
+
+        public void GivePoints(int count)
+        {
+            if (!_unlocksInitialized)
+            {
+                return;
+            }
+            _pendingPoints += count;
+        }
+
+        public int FlushPacDots()
+        {
+            int count = _pendingPacDots;
+            _pendingPacDots = 0;
+            return count;
+        }
+
+        public int FlushPoints()
+        {
+            int count = _pendingPoints;
+            _pendingPoints = 0;
+            return count;
         }
     }
 }

@@ -3,6 +3,7 @@ using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.items;
+using UnityEngine;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -15,6 +16,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private IAPConnectionService _apConnectionService;
         private StageSelectCinematicService _stageSelectCinematicService;
         private ActiveSceneService _activeSceneService;
+        private PlayerPacmanStateService _playerPacmanStateService;
 
         public LevelUnlockSyncService(MelonMod melonMod,
             IUnlocksSource unlocks,
@@ -22,7 +24,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
             IGameSaveDataService gameSaveDataService,
             IAPConnectionService apConnectionService,
             StageSelectCinematicService stageSelectCinematicService,
-            ActiveSceneService activeSceneService)
+            ActiveSceneService activeSceneService,
+            PlayerPacmanStateService playerPacmanStateService)
         {
             _melonMod = melonMod;
             _unlocks = unlocks;
@@ -31,6 +34,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _apConnectionService = apConnectionService;
             _stageSelectCinematicService = stageSelectCinematicService;
             _activeSceneService = activeSceneService;
+            _playerPacmanStateService = playerPacmanStateService;
         }
 
         public void OnLateUpdate()
@@ -48,6 +52,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncFruitLevelUnlocks();
             _syncGoldMedalsCleared();
             _syncSkinUnlocks();
+            _flushFillerUnlocks();
         }
 
         private void _syncLevelUnlocks()
@@ -299,6 +304,28 @@ namespace PMW2RPArchipelagoClientMod.services.game
                         _gameSaveDataService.SetPlayerSkin(EPlayerSkin.Normal);
                     }
                 }
+            }
+        }
+
+        private void _flushFillerUnlocks()
+        {
+            if (!_activeSceneService.InNonVillageStage || !_playerPacmanStateService.IsInMoveState)
+            {
+                return;
+            }
+
+            int dots = _unlocks.FlushPacDots();
+            if (dots > 0)
+            {
+                _melonMod.LoggerInstance.Msg(string.Format("GIVING {0} DOTS", dots));
+                StageStateManager.AddPacDot(dots);
+            }
+
+            int score = _unlocks.FlushPoints();
+            if (score > 0)
+            {
+                _melonMod.LoggerInstance.Msg(string.Format("GIVING {0} POINTS", score));
+                StageStateManager.AddScore(EStageScore.Dot, Vector3.zero, score);
             }
         }
     }

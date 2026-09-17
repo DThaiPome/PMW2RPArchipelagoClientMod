@@ -47,6 +47,16 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<EPlayerSkin> Skins => _skins;
 
+        public int FlushPacDots()
+        {
+            return _releaseUnlocksSource.FlushPacDots() + _debugUnlocksSource.FlushPacDots();
+        }
+
+        public int FlushPoints()
+        {
+            return _releaseUnlocksSource.FlushPoints() + _debugUnlocksSource.FlushPoints();
+        }
+
         public void OnLateUpdate()
         {
             _releaseUnlocksSource.OnLateUpdate();

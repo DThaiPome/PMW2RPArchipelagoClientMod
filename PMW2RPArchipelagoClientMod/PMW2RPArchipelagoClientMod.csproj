@@ -358,6 +358,7 @@
 		<Compile Include="models\data\PastKeyItem.cs" />
 		<Compile Include="models\data\ProgressiveButtBounce.cs" />
 		<Compile Include="models\data\ProgressiveDolphinKick.cs" />
+		<Compile Include="patches\Patch_GameUI\Patch_SetDisp.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_GetVillageSpooky.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_IsUnlockStage.cs" />
 		<Compile Include="patches\Patch_GameUtil\Patch_IsVillageSpooky.cs" />
@@ -400,7 +401,9 @@
 		<Compile Include="services\items\mapping\items\FlutterItemResult.cs" />
 		<Compile Include="models\data\MovesetItem.cs" />
 		<Compile Include="services\items\mapping\items\GoldenFruitItemResult.cs" />
+		<Compile Include="services\items\mapping\items\PacDotItemResult.cs" />
 		<Compile Include="services\items\mapping\items\PastKeyItemResult.cs" />
+		<Compile Include="services\items\mapping\items\PointsItemResult.cs" />
 		<Compile Include="services\items\mapping\items\SkinItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />

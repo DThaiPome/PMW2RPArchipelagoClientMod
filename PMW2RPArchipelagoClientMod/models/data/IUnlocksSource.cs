@@ -35,5 +35,7 @@ namespace PMW2RPArchipelagoClientMod.models.data
         {
             return PastKeys.SetEquals(_allKeys);
         }
+        int FlushPacDots();
+        int FlushPoints();
     }
 }

@@ -52,6 +52,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapMoveset(id);
             }
+            if (id >= FILLER_OFFSET && id < TRAP_OFFSET)
+            {
+                return _mapFiller(id);
+            }
             return new UnknownItemResult(id);
         }
 
@@ -105,6 +109,21 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
                 return new UnknownItemResult(id);
             }
             return new SkinItemResult(skin);
+        }
+
+        private IItemMapEntry _mapFiller(long id)
+        {
+            return (id - FILLER_OFFSET) switch
+            {
+                0 => new PacDotItemResult(1),
+                1 => new PacDotItemResult(5),
+                2 => new PacDotItemResult(10),
+                3 => new PointsItemResult(100),
+                4 => new PointsItemResult(200),
+                5 => new PointsItemResult(500),
+                6 => new PointsItemResult(1000),
+                _ => new UnknownItemResult(id)
+            };
         }
 
         public ILocationMapEntry MapLocation(long id)
