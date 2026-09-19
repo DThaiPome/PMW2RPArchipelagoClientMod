@@ -18,6 +18,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private HashSet<GoldenFruitItem> _goldenFruit = new HashSet<GoldenFruitItem>();
         private HashSet<PastKeyItem> _pastKeys = new HashSet<PastKeyItem>();
         private HashSet<EPlayerSkin> _skins = new HashSet<EPlayerSkin>();
+        private HashSet<EFruits> _fruitsSwitches = new HashSet<EFruits>();
 
         private int _pendingPacDots = 0;
         private int _pendingPoints = 0;
@@ -54,6 +55,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<EPlayerSkin> Skins => _skins.ToImmutableHashSet();
         public ISet<EPlayerSkin> SkinsMutable => _skins;
+
+        public IImmutableSet<EFruits> FruitSwitches => _fruitsSwitches.ToImmutableHashSet();
+        public ISet<EFruits> FruitSwitchesMutable => _fruitsSwitches;
 
         public UnlocksService(MelonMod melonMod,
             IAPConnectionService connectionService,

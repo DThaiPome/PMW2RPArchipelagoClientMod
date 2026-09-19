@@ -48,6 +48,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapSkin(id);
             }
+            if (id >= FRUIT_SWITCH_OFFSET && id < MOVEMENT_OFFSET)
+            {
+                return _mapFruitSwitch(id);
+            }
             if (id >= MOVEMENT_OFFSET && id < TIMETRIAL_OFFSET)
             {
                 return _mapMoveset(id);
@@ -109,6 +113,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
                 return new UnknownItemResult(id);
             }
             return new SkinItemResult(skin);
+        }
+
+        private IItemMapEntry _mapFruitSwitch(long id)
+        {
+            EFruits fruit = (EFruits)(id - FRUIT_SWITCH_OFFSET);
+            if (fruit < EFruits.Cherry || fruit > EFruits.MAX)
+            {
+                return new UnknownItemResult(id);
+            }
+            return new FruitSwitchItemResult(fruit);
         }
 
         private IItemMapEntry _mapFiller(long id)

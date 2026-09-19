@@ -105,7 +105,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 {
                     if (!_xItemsInitialized)
                     {
-                        _initItems.Add(item);
+                                                _initItems.Add(item);
                     }
                     else
                     {
@@ -152,7 +152,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             lock(_xItemsInitializedLock)
             {
-                if ((TimeUtil.NowMs() - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS))
+                if ((TimeUtil.NowMs() - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS) || _xItemsInitialized)
                 {
                     return;
                 }

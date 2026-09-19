@@ -293,12 +293,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 if (!unlockedInSave && unlockedInWorld)
                 {
                     _melonMod.LoggerInstance.Msg("UNLOCKING SKIN: " + skin);
-                    _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
+                    _gameSaveDataService.SetSkinUnlocked(skin, true);
                 }
                 else if (unlockedInSave && !unlockedInWorld)
                 {
                     _melonMod.LoggerInstance.Msg("LOCKING SKIN: " + skin);
-                    _gameSaveDataService.SetSkinUnlocked(skin, unlockedInSave);
+                    _gameSaveDataService.SetSkinUnlocked(skin, false);
                     if (_gameSaveDataService.GetPlayerSkin() == skin)
                     {
                         _gameSaveDataService.SetPlayerSkin(EPlayerSkin.Normal);

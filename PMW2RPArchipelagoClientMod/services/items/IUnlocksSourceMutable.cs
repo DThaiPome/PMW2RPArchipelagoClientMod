@@ -16,6 +16,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public ISet<GoldenFruitItem> GoldenFruitMutable { get;}
         public ISet<PastKeyItem> PastKeysMutable { get; }
         public ISet<EPlayerSkin> SkinsMutable { get; }
+        public ISet<EFruits> FruitSwitchesMutable { get; }
         public void GivePacDots(int count);
         public void GivePoints(int count);
     }

@@ -14,6 +14,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private FallbackSet<GoldenFruitItem> _goldenFruit;
         private FallbackSet<PastKeyItem> _pastKeys;
         private FallbackSet<EPlayerSkin> _skins;
+        private FallbackSet<EFruits> _fruitSwitches;
 
         public DebuggableUnlocksService(IUnlocksService releaseUnlocksSource, 
             IUnlocksService debugUnlocksSource)
@@ -25,6 +26,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => _debugUnlocksSource.GoldenFruit);
             _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => _debugUnlocksSource.PastKeys);
             _skins = new FallbackSet<EPlayerSkin>(() => _releaseUnlocksSource.Skins, () => _debugUnlocksSource.Skins);
+            _fruitSwitches = new FallbackSet<EFruits>(() => _releaseUnlocksSource.FruitSwitches, () => _debugUnlocksSource.FruitSwitches);
         }
 
         public bool FlipKick => _releaseUnlocksSource.FlipKick || _debugUnlocksSource.FlipKick;
@@ -46,6 +48,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public IImmutableSet<PastKeyItem> PastKeys => _pastKeys;
 
         public IImmutableSet<EPlayerSkin> Skins => _skins;
+
+        public IImmutableSet<EFruits> FruitSwitches => _fruitSwitches;
 
         public int FlushPacDots()
         {
