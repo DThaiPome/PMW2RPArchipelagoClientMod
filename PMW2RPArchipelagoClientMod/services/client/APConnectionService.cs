@@ -4,6 +4,7 @@ using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.util;
 using System.Collections.ObjectModel;
 
 namespace PMW2RPArchipelagoClientMod.services.client
@@ -15,7 +16,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         private ArchipelagoSession _session;
         private Dictionary<string, object> _slotData;
 
-        private static readonly long ITEMS_INIT_THRESHOLD_MS = 250;
+        private static readonly long ITEMS_INIT_THRESHOLD_MS = 500;
 
         private long _lastConnectMs;
         private List<ItemInfo> _initItems = new List<ItemInfo>();
@@ -65,7 +66,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 var loginResult = session.TryConnectAndLogin("Pac-Man World 2 Re-Pac", slotName, ItemsHandlingFlags.AllItems, version: new Version("0.6.7"), password: password);
                 if (loginResult.Successful)
                 {
-                    _lastConnectMs = DateTime.Now.Millisecond;
+                    _lastConnectMs = TimeUtil.NowMs();
                     _session = session;
                     _onLoginSuccess();
                 }
@@ -151,7 +152,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
         {
             lock(_xItemsInitializedLock)
             {
-                if ((DateTime.Now.Millisecond - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS) || _xItemsInitialized)
+                if ((TimeUtil.NowMs() - _lastConnectMs < ITEMS_INIT_THRESHOLD_MS))
                 {
                     return;
                 }
