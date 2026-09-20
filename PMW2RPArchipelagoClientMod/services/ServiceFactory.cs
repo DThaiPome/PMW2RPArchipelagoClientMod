@@ -5,6 +5,7 @@ using PMW2RPArchipelagoClientMod.services.game;
 using PMW2RPArchipelagoClientMod.services.items;
 using PMW2RPArchipelagoClientMod.services.items.debug;
 using PMW2RPArchipelagoClientMod.services.items.mapping;
+using PMW2RPArchipelagoClientMod.services.traps;
 
 namespace PMW2RPArchipelagoClientMod.services
 {
@@ -23,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static ILocationsService _locationsService = null;
         private static StageDataPatchService _stageDataPatchService = null;
         private static StageSelectCinematicService _stageSelectCinematicService = null;
+        private static VoiceLineTrapService _voiceLineTrapService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -215,6 +217,18 @@ namespace PMW2RPArchipelagoClientMod.services
                     _stageSelectCinematicService = new StageSelectCinematicService(ModInstance);
                 }
                 return _stageSelectCinematicService;
+            }
+        }
+
+        public static VoiceLineTrapService VoiceLineTrapService
+        {
+            get
+            {
+                if (_voiceLineTrapService == null)
+                {
+                    _voiceLineTrapService = new VoiceLineTrapService(ModInstance, Unlocks);
+                }
+                return _voiceLineTrapService;
             }
         }
     }

@@ -22,6 +22,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         private int _pendingPacDots = 0;
         private int _pendingPoints = 0;
+        private int _pendingVoiceLineTraps = 0;
 
         private bool _unlocksInitialized = false;
 
@@ -143,6 +144,26 @@ namespace PMW2RPArchipelagoClientMod.services.items
             int count = _pendingPoints;
             _pendingPoints = 0;
             return count;
+        }
+
+        public void QueueVoiceLineTrap()
+        {
+            if (!_unlocksInitialized)
+            {
+                return;
+            }
+            _pendingVoiceLineTraps++;
+        }
+
+        public bool DequeueVoiceLineTrap()
+        {
+            if (_pendingVoiceLineTraps <= 0)
+            {
+                _pendingVoiceLineTraps = 0;
+                return false;
+            }
+            _pendingVoiceLineTraps--;
+            return true;
         }
     }
 }

@@ -38,5 +38,6 @@ namespace PMW2RPArchipelagoClientMod.models.data
         }
         int FlushPacDots();
         int FlushPoints();
+        bool DequeueVoiceLineTrap();
     }
 }

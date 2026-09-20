@@ -413,6 +413,7 @@
 		<Compile Include="services\items\mapping\items\SkinItemResult.cs" />
 		<Compile Include="services\items\mapping\items\StageItemResult.cs" />
 		<Compile Include="services\items\mapping\items\UnknownItemResult.cs" />
+		<Compile Include="services\items\mapping\items\VoiceLineTrapItemResult.cs" />
 		<Compile Include="services\items\mapping\locations\ClearGoldMedalLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\CollectCapsuleLocationResult.cs" />
 		<Compile Include="services\items\mapping\locations\MissionLocationResult.cs" />
@@ -421,6 +422,7 @@
 		<Compile Include="services\items\mapping\locations\UnlockMazeLocationResult.cs" />
 		<Compile Include="services\items\UnlocksService.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
+		<Compile Include="services\traps\VoiceLineTrapService.cs" />
 		<Compile Include="util\FallbackDictionary.cs" />
 		<Compile Include="util\FallbackSet.cs" />
 		<Compile Include="util\FruitsUtil.cs" />

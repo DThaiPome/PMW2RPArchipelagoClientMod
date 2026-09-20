@@ -51,6 +51,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableSet<EFruits> FruitSwitches => _fruitSwitches;
 
+        public bool DequeueVoiceLineTrap()
+        {
+            return _releaseUnlocksSource.DequeueVoiceLineTrap() || _debugUnlocksSource.DequeueVoiceLineTrap();
+        }
+
         public int FlushPacDots()
         {
             return _releaseUnlocksSource.FlushPacDots() + _debugUnlocksSource.FlushPacDots();

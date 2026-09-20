@@ -24,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod
             ServiceFactory.ActiveSceneService.OnLateUpdate();
             ServiceFactory.StageDataPatchService.OnLateUpdate();
             ServiceFactory.StageSelectCinematicService.OnLateUpdate();
+            ServiceFactory.VoiceLineTrapService.OnLateUpdate();
         }
     }
 }

@@ -60,6 +60,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
             {
                 return _mapFiller(id);
             }
+            if (id >= TRAP_OFFSET)
+            {
+                return _mapTrap(id);
+            }
             return new UnknownItemResult(id);
         }
 
@@ -138,6 +142,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
                 6 => new PointsItemResult(1000),
                 _ => new UnknownItemResult(id)
             };
+        }
+
+        private IItemMapEntry _mapTrap(long id)
+        {
+            return id == TRAP_OFFSET ? new VoiceLineTrapItemResult() : new UnknownItemResult(id);
         }
 
         public ILocationMapEntry MapLocation(long id)
