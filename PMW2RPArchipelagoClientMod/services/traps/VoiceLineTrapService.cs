@@ -1,15 +1,7 @@
 ﻿using Il2CppCriWare;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
-using PMW2RPArchipelagoClientMod.services.items;
 using PMW2RPArchipelagoClientMod.util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace PMW2RPArchipelagoClientMod.services.traps
 {

@@ -1,16 +1,8 @@
 ﻿using Archipelago.MultiClient.Net.Models;
-using Il2Cpp;
-using Il2CppUI;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
