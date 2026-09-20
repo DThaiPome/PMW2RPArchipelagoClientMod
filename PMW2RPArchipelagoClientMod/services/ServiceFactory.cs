@@ -239,7 +239,7 @@ namespace PMW2RPArchipelagoClientMod.services
             {
                 if (_stageSelectUIService == null)
                 {
-                    _stageSelectUIService = new StageSelectUIService(ModInstance, Unlocks, APConnectionService);
+                    _stageSelectUIService = new StageSelectUIService(ModInstance, Unlocks, APConnectionService, GameSaveDataService);
                 }
                 return _stageSelectUIService;
             }

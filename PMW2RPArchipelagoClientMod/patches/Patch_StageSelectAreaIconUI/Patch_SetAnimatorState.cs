@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_StageSelectAreaIconUI
     {
         private static void Prefix(ref StageSelectAreaIconUI.EAnimatorState state, StageSelectAreaIconUI __instance)
         {
-            if (!(ServiceFactory.APConnectionService.IsLevelRando ?? true))
-            {
-                return;
-            }
+            bool isLevelRando = ServiceFactory.APConnectionService.IsLevelRando ?? true;
 
             EWorldStage stage = (EWorldStage?)__instance.StageRoot?.StageInfo?.stageId ?? EWorldStage.PacVillage;
             if (stage == EWorldStage.PacVillage)
@@ -25,7 +23,8 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_StageSelectAreaIconUI
                 return;
             }
 
-            state = ServiceFactory.Unlocks.Stages.GetValueOrDefault(stage, false) ? state : StageSelectAreaIconUI.EAnimatorState.DISABLED;
+            bool stageUnlocked = isLevelRando ? ServiceFactory.Unlocks.Stages.GetValueOrDefault(stage, false) : ServiceFactory.GameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
+            state = stageUnlocked ? state : StageSelectAreaIconUI.EAnimatorState.DISABLED;
             return;
         }
     }

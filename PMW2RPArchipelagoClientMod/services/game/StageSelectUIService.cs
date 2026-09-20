@@ -15,12 +15,17 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private MelonMod _melonMod;
         private IUnlocksSource _unlocks;
         private IAPConnectionService _apConnectionService;
+        private IGameSaveDataService _gameSaveDataService;
 
-        public StageSelectUIService(MelonMod melonMod, IUnlocksSource unlocks, IAPConnectionService apConnectionService)
+        public StageSelectUIService(MelonMod melonMod,
+            IUnlocksSource unlocks,
+            IAPConnectionService apConnectionService,
+            IGameSaveDataService gameSaveDataService)
         {
             _melonMod = melonMod;
             _unlocks = unlocks;
             _apConnectionService = apConnectionService;
+            _gameSaveDataService = gameSaveDataService;
         }
 
         public void OnLateUpdate()
@@ -30,10 +35,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _updateMapUIIfAble()
         {
-            if (!(_apConnectionService.IsLevelRando ?? true))
-            {
-                return;
-            }
+            bool isLevelRando = _apConnectionService.IsLevelRando ?? true;
 
             StageSelectMapUI mapUI = StageSelectMapUI.Instance;
             if (mapUI == null || mapUI.m_iconList == null)
@@ -44,7 +46,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
             foreach (StageSelectAreaIconUI icon in mapUI.m_iconList)
             {
                 EWorldStage stage = (EWorldStage?)icon.StageRoot?.StageInfo?.stageId ?? EWorldStage.PacVillage;
-                if (stage == EWorldStage.PacVillage || _unlocks.Stages.GetValueOrDefault(stage, false))
+                if (stage == EWorldStage.PacVillage)
+                {
+                    continue;
+                }
+                bool stageUnlocked = isLevelRando ? _unlocks.Stages.GetValueOrDefault(stage, false) : _gameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
+                if (stageUnlocked)
                 {
                     continue;
                 }
