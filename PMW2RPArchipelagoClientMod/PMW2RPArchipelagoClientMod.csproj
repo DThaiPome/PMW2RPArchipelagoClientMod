@@ -404,6 +404,7 @@
 		<Compile Include="services\items\mapping\items\ButtBounceItemResult.cs" />
 		<Compile Include="services\items\mapping\items\DashItemResult.cs" />
 		<Compile Include="services\items\mapping\items\DolphinKickItemResult.cs" />
+		<Compile Include="services\items\mapping\items\ExtraLifeItemResult.cs" />
 		<Compile Include="services\items\mapping\items\FlipKickItemResult.cs" />
 		<Compile Include="services\items\mapping\items\FlutterItemResult.cs" />
 		<Compile Include="models\data\MovesetItem.cs" />

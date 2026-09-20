@@ -22,6 +22,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         private int _pendingPacDots = 0;
         private int _pendingPoints = 0;
+        private int _pendingLives = 0;
         private int _pendingVoiceLineTraps = 0;
 
         private bool _unlocksInitialized = false;
@@ -164,6 +165,22 @@ namespace PMW2RPArchipelagoClientMod.services.items
             }
             _pendingVoiceLineTraps--;
             return true;
+        }
+
+        public void GiveLife()
+        {
+            if (!_unlocksInitialized)
+            {
+                return;
+            }
+            _pendingLives++;
+        }
+
+        public int FlushLives()
+        {
+            int lives = _pendingLives;
+            _pendingLives = 0;
+            return lives;
         }
     }
 }

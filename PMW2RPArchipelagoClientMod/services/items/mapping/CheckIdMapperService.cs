@@ -140,6 +140,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
                 4 => new PointsItemResult(200),
                 5 => new PointsItemResult(500),
                 6 => new PointsItemResult(1000),
+                7 => new ExtraLifeItemResult(),
                 _ => new UnknownItemResult(id)
             };
         }

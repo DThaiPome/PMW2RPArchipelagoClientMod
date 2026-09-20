@@ -56,6 +56,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
             return _releaseUnlocksSource.DequeueVoiceLineTrap() || _debugUnlocksSource.DequeueVoiceLineTrap();
         }
 
+        public int FlushLives()
+        {
+            return _releaseUnlocksSource.FlushLives() + _debugUnlocksSource.FlushLives();
+        }
+
         public int FlushPacDots()
         {
             return _releaseUnlocksSource.FlushPacDots() + _debugUnlocksSource.FlushPacDots();

@@ -121,5 +121,18 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _assertOpAllowed();
             PACWSaveData.SetPlayerSkin(EPlayerNo.P1, skin);
         }
+
+        public int GetLifeCount()
+        {
+            _assertOpAllowed();
+            return PACWSaveData.GetStockNum();
+        }
+
+        public void AddExtraLife()
+        {
+            _assertOpAllowed();
+            PACWSaveData.SetStockNum(PACWSaveData.GetStockNum() + 1);
+        }
+
     }
 }

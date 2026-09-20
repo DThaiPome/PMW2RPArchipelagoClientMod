@@ -8,6 +8,8 @@ namespace PMW2RPArchipelagoClientDebugTools
 {
     public class Core : MelonPlugin
     {
+        private static bool _initializedUI = false;
+
         public override void OnPreInitialization()
         {
             LoggerInstance.Msg("Pre-initialization.");
@@ -16,16 +18,20 @@ namespace PMW2RPArchipelagoClientDebugTools
         public override void OnInitializeMelon()
         {
             ServiceFactory.Init(this);
-            UniverseLib.Universe.Init(0, null, null, new()
-            {
-                Allow_UI_Selection_Outside_UIBase = true
-            });
             LoggerInstance.Msg("Initialized.");
         }
 
         public override void OnLateUpdate()
         {
             base.OnLateUpdate();
+            if (!_initializedUI)
+            {
+                UniverseLib.Universe.Init(0, null, null, new()
+                {
+                    Allow_UI_Selection_Outside_UIBase = true
+                });
+                _initializedUI = true;
+            }
             ServiceFactory.GetDebugUIService.OnLateUpdate();
         }
     }

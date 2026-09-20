@@ -19,6 +19,7 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public ISet<EFruits> FruitSwitchesMutable { get; }
         public void GivePacDots(int count);
         public void GivePoints(int count);
+        public void GiveLife();
         public void QueueVoiceLineTrap();
     }
 }

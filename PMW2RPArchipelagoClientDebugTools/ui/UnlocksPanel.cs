@@ -118,6 +118,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             colorBlock.m_HighlightedColor = Color.black;
             UIFactory.CreateButton(_uiRoot, "dotButton", "Give Pac Dot", colorBlock).OnClick += _givePacDotClick;
             UIFactory.CreateButton(_uiRoot, "pointButton", "Give Point", colorBlock).OnClick += _givePointClick;
+            UIFactory.CreateButton(_uiRoot, "lifeButton", "Give Life", colorBlock).OnClick += _giveLifeClick;
             UIFactory.CreateButton(_uiRoot, "vlTrapButton", "Give Voice Line Trap", colorBlock).OnClick += _giveVoiceLineTrap;
         }
 
@@ -129,6 +130,11 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private void _givePointClick()
         {
             PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GivePoints(100);
+        }
+
+        private void _giveLifeClick()
+        {
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GiveLife();
         }
 
         private void _giveVoiceLineTrap()

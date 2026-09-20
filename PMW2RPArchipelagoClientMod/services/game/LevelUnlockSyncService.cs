@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppUI;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
@@ -298,9 +299,25 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _flushFillerUnlocks()
         {
+            int ogLifeCount = _gameSaveDataService.GetLifeCount();
+            int lives = _unlocks.FlushLives();
+
             if (!_activeSceneService.InNonVillageStage || !_playerPacmanStateService.IsInMoveState)
             {
+                if (lives > 0)
+                {
+                    _gameSaveDataService.AddExtraLife();
+                    _syncStockCount(ogLifeCount + 1);
+                }
                 return;
+            }
+
+            ogLifeCount = StageStateManager.CurrentStock;
+
+            if (lives > 0)
+            {
+                StageStateManager.AddStock(1);
+                _syncStockCount(ogLifeCount + 1);
             }
 
             int dots = _unlocks.FlushPacDots();
@@ -314,6 +331,17 @@ namespace PMW2RPArchipelagoClientMod.services.game
             {
                 StageStateManager.AddScore(EStageScore.Dot, Vector3.zero, score);
             }
+        }
+
+        private void _syncStockCount(int count)
+        {
+            var lifeGauge = GameUI.LifeGauge;
+            if (lifeGauge == null)
+            {
+                return;
+            }
+
+            lifeGauge.SetStock(count, Vector3.zero);
         }
     }
 }
