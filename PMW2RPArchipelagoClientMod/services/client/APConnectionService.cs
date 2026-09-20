@@ -11,10 +11,13 @@ namespace PMW2RPArchipelagoClientMod.services.client
 {
     public class APConnectionService : IAPConnectionService
     {
+        private static readonly string CONNECTION_INI_PATH = "./UserData/ap_connection.ini";
+
         private MelonMod _melonMod;
 
         private ArchipelagoSession _session;
         private Dictionary<string, object> _slotData;
+        private bool _connectionNotConfigured = false;
 
         private static readonly long ITEMS_INIT_THRESHOLD_MS = 500;
 
@@ -90,7 +93,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
 
         private void _onLoginSuccess()
         {
-            _melonMod.LoggerInstance.Msg("CONNECTED TO SERVER");
+            _melonMod.LoggerInstance.Msg("SUCCESS - CONNECTED TO SERVER: " + _session.Socket.Uri);
             _slotData = new Dictionary<string, object>(_session.DataStorage.GetSlotData());
             OnConnect?.Invoke();
             InitLocations?.Invoke(_session.Locations.AllLocationsChecked);
@@ -145,7 +148,88 @@ namespace PMW2RPArchipelagoClientMod.services.client
 
         public void OnLateUpdate()
         {
+            _initConnectionIfNeeded();
             _initItemsIfNeeded();
+        }
+
+        private void _initConnectionIfNeeded()
+        {
+            if (_session != null || _connectionNotConfigured)
+            {
+                return;
+            }
+
+            if (!File.Exists(CONNECTION_INI_PATH))
+            {
+                _melonMod.LoggerInstance.Warning(string.Format("CREATING CONNECTION CONFIG FILE: Configure your connection at {0}, then restart the game", CONNECTION_INI_PATH));
+                _writeIniFileTemplate();
+                _connectionNotConfigured = true;
+                return;
+            }
+
+            string[] lines = File.ReadAllLines(CONNECTION_INI_PATH);
+            string domain = null;
+            int? port = null;
+            string slot = null;
+            string password = null;
+
+            foreach (string line in lines)
+            {
+                if (line.StartsWith("domain="))
+                {
+                    domain = line.Split('=')[1];
+                    continue;
+                }
+                if (line.StartsWith("port="))
+                {
+                    int _port;
+                    if (!int.TryParse(line.Split('=')[1], out _port))
+                    {
+                        _melonMod.LoggerInstance.Error("BAD CONNECTION CONFIG: Port must be a number");
+                        _connectionNotConfigured = true;
+                        return;
+                    }
+                    port = _port;
+                    continue;
+                }
+                if (line.StartsWith("slot="))
+                {
+                    slot = line.Split('=')[1];
+                    continue;
+                }
+                if (line.StartsWith("password="))
+                {
+                    password = line.Split('=')[1];
+                    if (string.IsNullOrEmpty(password))
+                    {
+                        password = null;
+                    }
+                    continue;
+                }
+            }
+
+            if (domain == null || port == null || slot == null)
+            {
+                _melonMod.LoggerInstance.Error("BAD CONNECTION CONFIG: MISSING FIELDS");
+                _connectionNotConfigured = true;
+                return;
+            }
+
+            CreateSessionAndLogIn(domain, (int)port, slot, password);
+        }
+
+        private void _writeIniFileTemplate()
+        {
+            File.WriteAllLines(CONNECTION_INI_PATH, new string[]{
+                "# The multiorld server domain",
+                "domain=archipelago.gg",
+                "# The multiworld port",
+                "port=38281",
+                "# The name of your player slot in the multiworld",
+                "slot=DThaiPome_PMW2RP",
+                "# The multiworld password (leave this blank if there is no password)",
+                "password="
+            });
         }
 
         private void _initItemsIfNeeded()

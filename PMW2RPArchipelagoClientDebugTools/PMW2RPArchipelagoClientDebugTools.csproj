@@ -365,7 +365,7 @@
 	  <ProjectReference Include="..\PMW2RPArchipelagoClientMod\PMW2RPArchipelagoClientMod.csproj" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="COPY &quot;$(TargetPath)&quot; &quot;$(GamePath)/Plugins&quot;" />
-	</Target>
+	</Target> -->
 </Project>

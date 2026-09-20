@@ -136,12 +136,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
                 if (flag == EStageFlag.Clear && !_locations.ClearedStages.Contains(stage))
                 {
-                    _melonMod.LoggerInstance.Msg("SENDING CLEARED STAGE: " + stage.ToString());
                     _locations.ClearStage(stage);
                 }
                 else if (flag != EStageFlag.Clear && _locations.ClearedStages.Contains(stage))
                 {
-                    _melonMod.LoggerInstance.Msg("STAGE CLEARED REMOTELY: " + stage.ToString());
                     _gameSaveDataService.SetStageFlag(stage, EStageFlag.Clear);
                 }
             }
@@ -155,12 +153,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 
                 if (flag == EMissionFlag.Achieved && !_locations.ClearedMissions.Contains(kind))
                 {
-                    _melonMod.LoggerInstance.Msg("SENDING CLEARED MISSION: " + kind.ToString());
                     _locations.ClearMission(kind);
                 }
                 else if (flag != EMissionFlag.Achieved && _locations.ClearedMissions.Contains(kind))
                 {
-                    _melonMod.LoggerInstance.Msg("MISSION CLEARED REMOTELY: " + kind.ToString());
                     _gameSaveDataService.SetMissionFlag(kind, EMissionFlag.Achieved);
                 }
             }
@@ -173,12 +169,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 bool unlocked = _gameSaveDataService.CheckMazeUnlock(mazeId);
                 if (unlocked && !_locations.UnlockedMazes.Contains(mazeId))
                 {
-                    _melonMod.LoggerInstance.Msg("SENDING UNLOCKED MAZE: " + mazeId);
                     _locations.UnlockMaze(mazeId);
                 }
                 else if (!unlocked && _locations.UnlockedMazes.Contains(mazeId))
                 {
-                    _melonMod.LoggerInstance.Msg("MAZE UNLOCKED REMOTELY: " + mazeId);
                     // TODO: This might not do anything if a maze gets unlocked remotely while that level is actually being played. Find a way to fix this maybe, not urgent.
                     _gameSaveDataService.UnlockMaze(mazeId);
                 }
@@ -239,7 +233,6 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
             if (_activeSceneService.OnStageSelect || !_stageSelectCinematicService.EnqueueUnlock(stage))
             {
-                _melonMod.LoggerInstance.Msg("UNLOCKING STAGE DIRECTLY: " + stage.ToString());
                 _gameSaveDataService.SetStageFlag(stage, EStageFlag.Unlock);
             }
         }
@@ -257,12 +250,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 EEstimateTime medal = time == 0 ? EEstimateTime.None : stageInfo.GetMedalKind(time + 0.01);
                 if (medal == EEstimateTime.Gold && !_locations.ClearedGoldMedals.Contains(stageId))
                 {
-                    _melonMod.LoggerInstance.Msg("SENDING GOLD MEDAL CLEARED: " + stageId);
                     _locations.ClearGoldMedal(stageId);
                 }
                 else if (medal != EEstimateTime.Gold && _locations.ClearedGoldMedals.Contains(stageId))
                 {
-                    _melonMod.LoggerInstance.Msg("GOLD MEDAL CLEARED REMOTELY: " + stageId);
                     PACWSaveData.SetStageTime((int)stageId, (stageInfo.estimateTimeG - 1) / 100.0);
                 }
             }
@@ -292,12 +283,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 bool unlockedInWorld = _unlocks.Skins.Contains(skin);
                 if (!unlockedInSave && unlockedInWorld)
                 {
-                    _melonMod.LoggerInstance.Msg("UNLOCKING SKIN: " + skin);
                     _gameSaveDataService.SetSkinUnlocked(skin, true);
                 }
                 else if (unlockedInSave && !unlockedInWorld)
                 {
-                    _melonMod.LoggerInstance.Msg("LOCKING SKIN: " + skin);
                     _gameSaveDataService.SetSkinUnlocked(skin, false);
                     if (_gameSaveDataService.GetPlayerSkin() == skin)
                     {
@@ -317,14 +306,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
             int dots = _unlocks.FlushPacDots();
             if (dots > 0)
             {
-                _melonMod.LoggerInstance.Msg(string.Format("GIVING {0} DOTS", dots));
                 StageStateManager.AddPacDot(dots);
             }
 
             int score = _unlocks.FlushPoints();
             if (score > 0)
             {
-                _melonMod.LoggerInstance.Msg(string.Format("GIVING {0} POINTS", score));
                 StageStateManager.AddScore(EStageScore.Dot, Vector3.zero, score);
             }
         }

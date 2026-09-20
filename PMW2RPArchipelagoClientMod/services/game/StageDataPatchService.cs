@@ -13,6 +13,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private bool _missionRewardSkinsPatched = false;
 
+        private bool _unlockCondsNeedPatching = false;
+
         public StageDataPatchService(MelonMod melonMod, IAPConnectionService connectionService)
         {
             _melonMod = melonMod;
@@ -25,6 +27,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         {
             _initUnlockCondsIfNeeded();
             _patchMissionRewardSkins();
+            _patchStageUnlockConds();
         }
 
         private void _initUnlockCondsIfNeeded()
@@ -51,13 +54,18 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _onConnect()
         {
-            _patchStageUnlockConds();
+            _unlockCondsNeedPatching = true;
         }
 
         private void _patchStageUnlockConds()
         {
+            if (!_unlockCondsNeedPatching || MasterData.StageList == null)
+            {
+                return;
+            }
             _initUnlockCondsIfNeeded();
             _syncUnlockConds();
+            _unlockCondsNeedPatching = false;
         }
 
         private void _syncUnlockConds()

@@ -54,7 +54,6 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     return false;
                 }
-                _melonMod.LoggerInstance.Msg("QUEUEING FOR UNLOCK: " + stage);
                 _unlocksRecord.Add(stage);
                 _unlocks.Enqueue(stage);
             }
