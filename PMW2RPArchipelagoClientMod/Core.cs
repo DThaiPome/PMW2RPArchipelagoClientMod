@@ -24,6 +24,7 @@ namespace PMW2RPArchipelagoClientMod
             ServiceFactory.StageDataPatchService.OnLateUpdate();
             ServiceFactory.StageSelectCinematicService.OnLateUpdate();
             ServiceFactory.VoiceLineTrapService.OnLateUpdate();
+            ServiceFactory.StageSelectUIService.OnLateUpdate();
 
             // Run this last so that services have a chance to subscribe to events
             ServiceFactory.APConnectionService.OnLateUpdate();

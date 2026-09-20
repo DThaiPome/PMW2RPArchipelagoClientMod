@@ -25,6 +25,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static StageDataPatchService _stageDataPatchService = null;
         private static StageSelectCinematicService _stageSelectCinematicService = null;
         private static VoiceLineTrapService _voiceLineTrapService = null;
+        private static StageSelectUIService _stageSelectUIService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -229,6 +230,18 @@ namespace PMW2RPArchipelagoClientMod.services
                     _voiceLineTrapService = new VoiceLineTrapService(ModInstance, Unlocks);
                 }
                 return _voiceLineTrapService;
+            }
+        }
+
+        public static StageSelectUIService StageSelectUIService
+        {
+            get
+            {
+                if (_stageSelectUIService == null)
+                {
+                    _stageSelectUIService = new StageSelectUIService(ModInstance, Unlocks, APConnectionService);
+                }
+                return _stageSelectUIService;
             }
         }
     }
