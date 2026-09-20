@@ -26,6 +26,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static StageSelectCinematicService _stageSelectCinematicService = null;
         private static VoiceLineTrapService _voiceLineTrapService = null;
         private static StageSelectUIService _stageSelectUIService = null;
+        private static GoalCheckVisibilityService _goalCheckVisibilityService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -242,6 +243,18 @@ namespace PMW2RPArchipelagoClientMod.services
                     _stageSelectUIService = new StageSelectUIService(ModInstance, Unlocks, APConnectionService, GameSaveDataService);
                 }
                 return _stageSelectUIService;
+            }
+        }
+
+        public static GoalCheckVisibilityService GoalCheckVisibilityService
+        {
+            get
+            {
+                if (_goalCheckVisibilityService == null)
+                {
+                    _goalCheckVisibilityService = new GoalCheckVisibilityService(ModInstance, Unlocks, APConnectionService);
+                }
+                return _goalCheckVisibilityService;
             }
         }
     }

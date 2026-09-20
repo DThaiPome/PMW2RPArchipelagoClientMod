@@ -14,6 +14,12 @@ namespace PMW2RPArchipelagoClientMod
             LoggerInstance.Msg("Initialized PMW2RPArchipelagoClientMod.");
         }
 
+        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
+        {
+            base.OnSceneWasInitialized(buildIndex, sceneName);
+            ServiceFactory.GoalCheckVisibilityService.OnSceneWasInitialized();
+        }
+
         public override void OnLateUpdate()
         {
             base.OnLateUpdate();
@@ -25,6 +31,7 @@ namespace PMW2RPArchipelagoClientMod
             ServiceFactory.StageSelectCinematicService.OnLateUpdate();
             ServiceFactory.VoiceLineTrapService.OnLateUpdate();
             ServiceFactory.StageSelectUIService.OnLateUpdate();
+            ServiceFactory.GoalCheckVisibilityService.OnLateUpdate();
 
             // Run this last so that services have a chance to subscribe to events
             ServiceFactory.APConnectionService.OnLateUpdate();

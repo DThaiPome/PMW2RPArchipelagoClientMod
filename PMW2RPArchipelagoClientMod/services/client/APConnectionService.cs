@@ -108,7 +108,7 @@ namespace PMW2RPArchipelagoClientMod.services.client
                 {
                     if (!_xItemsInitialized)
                     {
-                                                _initItems.Add(item);
+                        _initItems.Add(item);
                     }
                     else
                     {
