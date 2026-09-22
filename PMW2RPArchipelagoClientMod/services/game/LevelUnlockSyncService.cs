@@ -50,7 +50,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncStagesCleared();
             _syncMissionsCleared();
             _syncMazesUnlocked();
-            _syncFruitLevelUnlocks();
+            _syncWorldKeyLevelUnlocks();
             _syncGoldMedalsCleared();
             _syncSkinUnlocks();
             _flushFillerUnlocks();
@@ -64,7 +64,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 EStageFlag stageFlag = _gameSaveDataService.GetStageFlag(stage);
                 if (unlocked && stageFlag == EStageFlag.Locked)
                 {
-                    if (stage == EWorldStage.Stage6_5 && !_unlocks.AreAllKeysUnlocked())
+                    if (stage == EWorldStage.Stage6_5 && !_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
                     {
                         continue;
                     }
@@ -123,7 +123,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _syncPastUnlocked()
         {
-            if (!_gameSaveDataService.IsEnterPast() && _pastStages.Any(stage => _unlocks.Stages.GetValueOrDefault(stage, false)))
+            if (!_gameSaveDataService.IsEnterPast() && _pastStages.Any(stage => _gameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked))
             {
                 _gameSaveDataService.SetEnterPast(true);
             }
@@ -180,12 +180,13 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private void _syncFruitLevelUnlocks()
+        private void _syncWorldKeyLevelUnlocks()
         {
             if (_apConnectionService.IsLevelRando ?? true)
             {
                 return;
             }
+
             foreach (var goldenFruitItem in _unlocks.GoldenFruit)
             {
                 var stageId = _goldenFruitToLevelUnlock(goldenFruitItem);
@@ -198,7 +199,16 @@ namespace PMW2RPArchipelagoClientMod.services.game
             {
                 _gameSaveDataService.SetStageFlag(EWorldStage.Stage6_4, EStageFlag.Unlock);
             }
-            if (_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked)
+
+            foreach (var pastKeyItem in _unlocks.PastKeys)
+            {
+                var stageId = _keyToLevelUnlock(pastKeyItem);
+                if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Locked)
+                {
+                    _unlockStage(stageId);
+                }
+            }
+            if (_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
             {
                 _unlockStage(EWorldStage.Stage6_5);
             }
@@ -214,6 +224,19 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 GoldenFruitItem.GoldenOrange => EWorldStage.Stage5_1,
                 GoldenFruitItem.GoldenMelon => EWorldStage.Stage6_1,
                 _ => throw new NotImplementedException("what kinda golden fruit is this")
+            };
+        }
+
+        private EWorldStage _keyToLevelUnlock(PastKeyItem pastKeyItem)
+        {
+            return pastKeyItem switch
+            {
+                PastKeyItem.WindyWoodsKey => EWorldStage.Stage8_1,
+                PastKeyItem.ThunderSnowMountainKey => EWorldStage.Stage9_1,
+                PastKeyItem.FieryCavernsKey => EWorldStage.Stage10_1,
+                PastKeyItem.DimUnderwatersKey => EWorldStage.Stage11_1,
+                PastKeyItem.GhostIslandKey => EWorldStage.Stage12_1,
+                _ => throw new NotImplementedException("what kinda key is this")
             };
         }
 

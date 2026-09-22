@@ -70,8 +70,6 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _syncUnlockConds()
         {
-            bool isLevelRando = _connectionService.IsLevelRando ?? true;
-
             foreach (var stageInfo in MasterData.StageList.m_stageList)
             {
                 EWorldStage stageId = (EWorldStage)stageInfo.stageId;
@@ -79,10 +77,20 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     continue;
                 }
-                EWorldStage cond = isLevelRando || _isBlockedStage((EWorldStage)stageInfo.stageId) ? EWorldStage.Stage6_5 : _stageUnlocks[stageId];
+                EWorldStage cond = _getLevelUnlockCond(stageId);
                 stageInfo.unlockCond.Clear();
                 stageInfo.unlockCond.Add((int)cond);
             }
+        }
+
+        private EWorldStage _getLevelUnlockCond(EWorldStage stageId)
+        {
+            bool isLevelRando = _connectionService.IsLevelRando ?? true;
+            if (stageId == EWorldStage.Stage7_1)
+            {
+                return isLevelRando ? EWorldStage.Stage6_5 : EWorldStage.Stage6_4;
+            }
+            return isLevelRando || _isBlockedStage(stageId) ? EWorldStage.Stage6_5 : _stageUnlocks[stageId];
         }
 
         private void _patchMissionRewardSkins()
