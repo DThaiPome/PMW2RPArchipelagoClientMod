@@ -357,7 +357,6 @@
 		<Compile Include="Core.cs" />
 		<Compile Include="services\ServiceFactory.cs" />
 		<Compile Include="services\ui\DebugUIService.cs" />
-		<Compile Include="ui\ConnectionPanel.cs" />
 		<Compile Include="ui\UnlocksPanel.cs" />
 	</ItemGroup>
 
@@ -365,7 +364,8 @@
 	  <ProjectReference Include="..\PMW2RPArchipelagoClientMod\PMW2RPArchipelagoClientMod.csproj" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!-- ENABLE THIS TO ENABLE DEBUG TOOLS-->
+	<!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="COPY &quot;$(TargetPath)&quot; &quot;$(GamePath)/Plugins&quot;" />
-	</Target>
+	</Target> -->
 </Project>

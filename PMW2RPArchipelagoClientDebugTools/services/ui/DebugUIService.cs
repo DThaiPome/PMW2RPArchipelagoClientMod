@@ -11,7 +11,6 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
 
         private UIBase _uiBase;
         private UnlocksPanel _unlocksPanel;
-        private ConnectionPanel _connectionPanel;
 
         public DebugUIService(MelonPlugin melonPlugin)
         {
@@ -35,10 +34,6 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
                 {
                     _toggleUnlocksPanel();
                 }
-                if (Keyboard.current.oKey.wasPressedThisFrame)
-                {
-                    _toggleConnectionPanel();
-                }
             }
         }
 
@@ -50,17 +45,6 @@ namespace PMW2RPArchipelagoClientDebugTools.services.ui
             else
             {
                 _unlocksPanel.Enabled = !_unlocksPanel.Enabled;
-            }
-        }
-
-        private void _toggleConnectionPanel() {
-            if (_connectionPanel == null)
-            {
-                _connectionPanel = new ConnectionPanel(_uiBase);
-            }
-            else
-            {
-                _connectionPanel.Enabled = !_connectionPanel.Enabled;
             }
         }
     }

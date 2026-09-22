@@ -20,6 +20,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static ActiveSceneService _activeSceneService = null;
         private static IGameSaveDataService _gameSaveDataService = null;
         private static IAPConnectionService _apConnectionService = null;
+        private static IAPSessionService _apSessionService = null;
         private static ICheckIdMapperService _checkIdMapperService = null;
         private static ILocationsService _locationsService = null;
         private static StageDataPatchService _stageDataPatchService = null;
@@ -166,9 +167,21 @@ namespace PMW2RPArchipelagoClientMod.services
             {
                 if (_apConnectionService == null)
                 {
-                    _apConnectionService = new APConnectionService(ModInstance);
+                    _apConnectionService = new APConnectionService(ModInstance, APSessionService);
                 }
                 return _apConnectionService;
+            }
+        }
+
+        public static IAPSessionService APSessionService
+        {
+            get
+            {
+                if (_apSessionService == null)
+                {
+                    _apSessionService = new APSessionService(ModInstance);
+                }
+                return _apSessionService;
             }
         }
 

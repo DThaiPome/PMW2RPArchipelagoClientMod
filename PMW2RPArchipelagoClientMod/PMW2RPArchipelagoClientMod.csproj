@@ -380,6 +380,8 @@
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_CanGoStage.cs" />
 		<Compile Include="patches\Patch_SS_GoStageRoot\Patch_get_IsUnlock.cs" />
 		<Compile Include="patches\Patch_StageSelectAreaIconUI\Patch_SetAnimatorState.cs" />
+		<Compile Include="services\client\APSessionService.cs" />
+		<Compile Include="services\client\IAPSessionService.cs" />
 		<Compile Include="services\game\ActiveSceneService.cs" />
 		<Compile Include="services\game\GameSaveDataService.cs" />
 		<Compile Include="services\game\GoalCheckVisibilityService.cs" />

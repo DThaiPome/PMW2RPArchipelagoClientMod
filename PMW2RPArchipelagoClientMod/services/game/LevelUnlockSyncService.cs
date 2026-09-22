@@ -191,18 +191,15 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 var stageId = _goldenFruitToLevelUnlock(goldenFruitItem);
                 if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Locked)
                 {
-                    _melonMod.LoggerInstance.Msg("UNLOCKING STAGE FROM GOLDEN FRUIT: " + stageId);
                     _unlockStage(stageId);
                 }
             }
             if (_unlocks.AreAllGoldenFruitsUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Locked)
             {
-                _melonMod.LoggerInstance.Msg("UNLOCKING SPOOKY FROM FRUITS");
                 _gameSaveDataService.SetStageFlag(EWorldStage.Stage6_4, EStageFlag.Unlock);
             }
             if (_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked)
             {
-                _melonMod.LoggerInstance.Msg("UNLOCKING TOC-MAN FROM KEYS");
                 _unlockStage(EWorldStage.Stage6_5);
             }
         }

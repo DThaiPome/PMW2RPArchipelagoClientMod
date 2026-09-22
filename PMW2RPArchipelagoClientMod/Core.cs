@@ -35,6 +35,7 @@ namespace PMW2RPArchipelagoClientMod
 
             // Run this last so that services have a chance to subscribe to events
             ServiceFactory.APConnectionService.OnLateUpdate();
+            ServiceFactory.APSessionService.OnLateUpdate();
         }
     }
 }
