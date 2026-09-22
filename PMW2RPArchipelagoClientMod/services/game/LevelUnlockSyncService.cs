@@ -139,7 +139,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     _locations.ClearStage(stage);
                 }
-                else if (flag != EStageFlag.Clear && _locations.ClearedStages.Contains(stage))
+                else if (flag != EStageFlag.Locked && flag != EStageFlag.Clear && _locations.ClearedStages.Contains(stage))
                 {
                     _gameSaveDataService.SetStageFlag(stage, EStageFlag.Clear);
                 }
@@ -250,7 +250,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     _locations.ClearGoldMedal(stageId);
                 }
-                else if (medal != EEstimateTime.Gold && _locations.ClearedGoldMedals.Contains(stageId))
+                else if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Clear && medal != EEstimateTime.Gold && _locations.ClearedGoldMedals.Contains(stageId))
                 {
                     PACWSaveData.SetStageTime((int)stageId, (stageInfo.estimateTimeG - 1) / 100.0);
                 }
@@ -296,15 +296,15 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _flushFillerUnlocks()
         {
-            int ogLifeCount = _gameSaveDataService.GetLifeCount();
+            int ogLifeCount = _gameSaveDataService.GetStockNum();
             int lives = _unlocks.FlushLives();
 
             if (!_activeSceneService.InNonVillageStage || !_playerPacmanStateService.IsInMoveState)
             {
                 if (lives > 0)
                 {
-                    _gameSaveDataService.AddExtraLife();
-                    _syncStockCount(ogLifeCount + 1);
+                    _gameSaveDataService.SetStockNum(ogLifeCount + lives);
+                    _syncStockCount(ogLifeCount + lives);
                 }
                 return;
             }
@@ -313,8 +313,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
             if (lives > 0)
             {
-                StageStateManager.AddStock(1);
-                _syncStockCount(ogLifeCount + 1);
+                StageStateManager.AddStock(lives);
+                _syncStockCount(ogLifeCount + lives);
             }
 
             int dots = _unlocks.FlushPacDots();

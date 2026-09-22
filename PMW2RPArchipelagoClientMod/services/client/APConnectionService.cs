@@ -39,8 +39,9 @@ namespace PMW2RPArchipelagoClientMod.services.client
             _apSessionService.OnAboutToConnect += _resetConnectStates;
             _apSessionService.OnConnectionSuccessful += _onLoginSuccess;
             _apSessionService.OnItemReceived += _onItemReceived;
+            _apSessionService.OnLocationClearedRemotely += _onLocationClearedRemotely;
 
-            lock(_xItemsInitializedLock)
+            lock (_xItemsInitializedLock)
             {
                 _xItemsInitialized = true;
                 _xCanInitItems = false;
@@ -83,12 +84,9 @@ namespace PMW2RPArchipelagoClientMod.services.client
             }
         }
 
-        private void _onCheckedLocationsUpdated(ReadOnlyCollection<long> newCheckedLocations)
+        private void _onLocationClearedRemotely(long locationid)
         {
-            foreach (long id in newCheckedLocations)
-            {
-                LocationCheckedRemotely?.Invoke(id);
-            }
+            LocationCheckedRemotely?.Invoke(locationid);
         }
 
         public void SendLocationChecked(long id)

@@ -24,7 +24,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         void SetSkinUnlocked(EPlayerSkin skin, bool unlocked);
         EPlayerSkin GetPlayerSkin();
         void SetPlayerSkin(EPlayerSkin skin);
-        int GetLifeCount();
-        void AddExtraLife();
+        int GetStockNum();
+        void SetStockNum(int stock);
     }
 }
