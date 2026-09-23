@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- ILRepack -->
+    <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <ItemGroup>
+			<InputAssemblies Include="$(TargetPath)" />
+			<InputAssemblies Include="$(TargetDir)\Newtonsoft.Json.dll" />
+            <InputAssemblies Include="$(TargetDir)\Archipelago.MultiClient.Net.dll" />
+
+			<LibraryPath Include="$(TargetDir)" />
+        </ItemGroup>
+
+		<ILRepack
+            TargetPlatformVersion="v4"
+            TargetKind="SameAsPrimaryAssembly"
+            InputAssemblies="@(InputAssemblies)"
+            Wildcards="true"
+            LibraryPath="@(LibraryPath)"
+            Parallel="true"
+            OutputFile="$(TargetDir)$(TargetName)Standalone$(TargetExt)"
+            Internalize="True"
+        />
+    </Target>
+    <!-- /ILRepack -->
+</Project>

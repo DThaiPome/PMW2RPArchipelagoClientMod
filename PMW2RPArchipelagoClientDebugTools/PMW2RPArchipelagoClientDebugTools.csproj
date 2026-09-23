@@ -365,7 +365,7 @@
 	</ItemGroup>
 
 	<!-- ENABLE THIS TO ENABLE DEBUG TOOLS-->
-	<!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
 		<Exec Command="COPY &quot;$(TargetPath)&quot; &quot;$(GamePath)/Plugins&quot;" />
 	</Target> -->
 </Project>
