@@ -14,6 +14,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private Dictionary<GoldenFruitItem, GameObject> _goldenFruitObjs = new Dictionary<GoldenFruitItem, GameObject>();
         private Dictionary<GoldenFruitItem, GameObject> _fruitParentObjs = new Dictionary<GoldenFruitItem, GameObject>();
+        private Dictionary<PastKeyItem, GameObject> _keyObjs = new Dictionary<PastKeyItem, GameObject>();
 
         private bool _shouldSync = false;
 
@@ -39,10 +40,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
             if (_shouldSync)
             {
                 _syncPacVillageObjRefs();
+                _syncPastMapObjRefs();
                 _shouldSync = false;
             }
             _syncGoldenFruitVisibility();
             _syncFruitsVisibility();
+            _syncKeysVisibility();
         }
 
         private void _ItemReceived(ItemInfo item)
@@ -66,6 +69,16 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncFruitParentObjRefs();
         }
 
+        private void _syncPastMapObjRefs()
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "StageSelect_Past")
+            {
+                return;
+            }
+
+            _cloneAndSyncKeyObjs();
+        }
+
         private void _syncGoldenFruitObjRefs()
         {
             _goldenFruitObjs.Clear();
@@ -76,6 +89,52 @@ namespace PMW2RPArchipelagoClientMod.services.game
         {
             _fruitParentObjs.Clear();
             _syncObjRefsFromGoldenFruit(_fruitParentObjs, _parentObjFromFruit);
+        }
+
+        private void _cloneAndSyncKeyObjs()
+        {
+            foreach (GameObject obj in _keyObjs.Values)
+            {
+                if (obj != null)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+            }
+            _keyObjs.Clear();
+
+            GameObject areaLockObj = GameObject.Find("AreaLock_Area2_Past");
+            if (areaLockObj == null)
+            {
+                return;
+            }
+
+            GameObject rootKeyObj = areaLockObj.transform.Find("RootPos/P1/Root_Key")?.gameObject ?? null;
+            if (rootKeyObj == null)
+            {
+                return;
+            }
+
+            for (PastKeyItem key = PastKeyItem.WindyWoodsKey; key < PastKeyItem.MAX; key++)
+            {
+                Transform rootPos = _rootPosTransformFromKey(key);
+                if (rootPos == null)
+                {
+                    continue;
+                }
+
+                var newKeyObj = UnityEngine.Object.Instantiate(rootKeyObj);
+                GameObject keyModelObj = newKeyObj.transform.Find("SM_Fruit_Key")?.gameObject ?? null;
+                if (keyModelObj == null)
+                {
+                    UnityEngine.Object.Destroy(newKeyObj);
+                    continue;
+                }
+
+                keyModelObj.SetActive(true);
+                newKeyObj.transform.position = rootPos.position;
+                newKeyObj.transform.rotation = rootPos.rotation;
+                _keyObjs[key] = newKeyObj;
+            }
         }
 
         private void _syncObjRefsFromGoldenFruit(Dictionary<GoldenFruitItem, GameObject> objs, Func<GoldenFruitItem, GameObject> fruitToObj)
@@ -102,7 +161,17 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncObjVisibilityToGoldenFruitUnlocks(_fruitParentObjs);
         }
 
+        private void _syncKeysVisibility()
+        {
+            _syncObjVisibilityToUnlocks(_keyObjs, _unlocks.PastKeys.Contains);
+        }
+
         private void _syncObjVisibilityToGoldenFruitUnlocks(Dictionary<GoldenFruitItem, GameObject> objs)
+        {
+            _syncObjVisibilityToUnlocks(objs, _unlocks.GoldenFruit.Contains);
+        }
+
+        private void _syncObjVisibilityToUnlocks<T>(Dictionary<T, GameObject> objs, Func<T, bool> isUnlocked)
         {
             foreach (var pair in objs)
             {
@@ -111,8 +180,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     continue;
                 }
-                GoldenFruitItem fruit = pair.Key;
-                obj.SetActive(_unlocks.GoldenFruit.Contains(fruit));
+                T item = pair.Key;
+                obj.SetActive(isUnlocked(item));
             }
         }
 
@@ -140,6 +209,26 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 GoldenFruitItem.GoldenMelon => "Fruits_Melon",
                 _ => throw new NotImplementedException("weird golden fruit")
             });
+        }
+
+        private Transform _rootPosTransformFromKey(PastKeyItem key)
+        {
+            GameObject areaLockObj = GameObject.Find(key switch
+            {
+                PastKeyItem.WindyWoodsKey => "AreaLock_Area2_Past",
+                PastKeyItem.ThunderSnowMountainKey => "AreaLock_Area3_Past",
+                PastKeyItem.FieryCavernsKey => "AreaLock_Area4_Past",
+                PastKeyItem.DimUnderwatersKey => "AreaLock_Area5_Past",
+                PastKeyItem.GhostIslandKey => "AreaLock_Area6_Past",
+                PastKeyItem.MAX => throw new NotImplementedException(),
+                _ => throw new NotImplementedException("weird key")
+            });
+            if (areaLockObj == null)
+            {
+                return null;
+            }
+
+            return areaLockObj.transform.Find(key == PastKeyItem.GhostIslandKey ? "RootPos (1)" : "RootPos");
         }
     }
 }
