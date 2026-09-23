@@ -3,13 +3,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
-using Il2CppCoffee.UIExtensions;
 using MelonLoader;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.client
 {

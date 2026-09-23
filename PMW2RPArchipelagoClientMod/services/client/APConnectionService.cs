@@ -1,11 +1,6 @@
-﻿using Archipelago.MultiClient.Net;
-using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
-using Archipelago.MultiClient.Net.Models;
+﻿using Archipelago.MultiClient.Net.Models;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
-using PMW2RPArchipelagoClientMod.util;
-using System.Collections.ObjectModel;
 
 namespace PMW2RPArchipelagoClientMod.services.client
 {
