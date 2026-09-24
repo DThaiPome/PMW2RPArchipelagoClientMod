@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using PMW2RPArchipelagoClientMod.models.data;
 
 namespace PMW2RPArchipelagoClientMod.services.items.mapping.locations
 {
@@ -13,6 +14,15 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping.locations
 
         public void ClearLocation(ILocationsSource locations)
         {
+            GoalBossOption? goalBoss = ServiceFactory.APConnectionService.GoalBoss;
+            if ((goalBoss ?? GoalBossOption.Spooky) == GoalBossOption.Spooky && _stage == EWorldStage.Stage6_4)
+            {
+                return;
+            }
+            if ((goalBoss ?? GoalBossOption.TocMan) == GoalBossOption.TocMan && _stage == EWorldStage.Stage6_5)
+            {
+                return;
+            }
             locations.ClearStage(_stage);
         }
     }
