@@ -64,11 +64,18 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 EStageFlag stageFlag = _gameSaveDataService.GetStageFlag(stage);
                 if (unlocked && stageFlag == EStageFlag.Locked)
                 {
-                    if (stage == EWorldStage.Stage6_5 && !_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
+                    if (stage == EWorldStage.Stage6_5)
                     {
-                        continue;
+                        if (_unlocks.AreAllKeysUnlocked()
+                            && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
+                        {
+                            _unlockStage(stage);
+                        }
                     }
-                    _unlockStage(stage);
+                    else
+                    {
+                        _unlockStage(stage);
+                    }
                 }
             }
         }
@@ -208,7 +215,9 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     _unlockStage(stageId);
                 }
             }
-            if (_unlocks.AreAllKeysUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
+            if (_unlocks.AreAllKeysUnlocked()
+                && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked
+                && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
             {
                 _unlockStage(EWorldStage.Stage6_5);
             }
@@ -289,7 +298,9 @@ namespace PMW2RPArchipelagoClientMod.services.game
             EPlayerSkin.Xmas,
             EPlayerSkin.Xmas2,
             EPlayerSkin.Xmas3,
-            EPlayerSkin.Sonic
+            EPlayerSkin.Sonic,
+            EPlayerSkin.Tocman,
+            EPlayerSkin.PacLand
         };
 
         private void _syncSkinUnlocks()
