@@ -5,7 +5,12 @@ using PMW2RPArchipelagoClientMod.services.game;
 using PMW2RPArchipelagoClientMod.services.items;
 using PMW2RPArchipelagoClientMod.services.items.debug;
 using PMW2RPArchipelagoClientMod.services.items.mapping;
+using PMW2RPArchipelagoClientMod.services.items.v2;
 using PMW2RPArchipelagoClientMod.services.traps;
+using ILocationsService = PMW2RPArchipelagoClientMod.services.items.ILocationsService;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.models.data.IUnlocksSource;
+using IUnlocksSourceMutable = PMW2RPArchipelagoClientMod.services.items.IUnlocksSourceMutable;
+using LocationsService = PMW2RPArchipelagoClientMod.services.items.LocationsService;
 
 namespace PMW2RPArchipelagoClientMod.services
 {
@@ -28,6 +33,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static VoiceLineTrapService _voiceLineTrapService = null;
         private static StageSelectUIService _stageSelectUIService = null;
         private static GoalCheckVisibilityService _goalCheckVisibilityService = null;
+        private static IIdMapperService _idMapperService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -268,6 +274,18 @@ namespace PMW2RPArchipelagoClientMod.services
                     _goalCheckVisibilityService = new GoalCheckVisibilityService(ModInstance, Unlocks, APConnectionService);
                 }
                 return _goalCheckVisibilityService;
+            }
+        }
+
+        public static IIdMapperService IdMapperService
+        {
+            get
+            {
+                if (_idMapperService == null)
+                {
+                    _idMapperService = new IdMapperService(ModInstance);
+                }
+                return _idMapperService;
             }
         }
     }

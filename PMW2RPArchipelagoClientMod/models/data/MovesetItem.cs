@@ -7,6 +7,7 @@
         RevRoll = 2,
         PacDotAttack = 3,
         Flutter = 4,
-        ProgressiveDolphinKick = 5
+        ProgressiveDolphinKick = 5,
+        MAX = 6
     }
 }
