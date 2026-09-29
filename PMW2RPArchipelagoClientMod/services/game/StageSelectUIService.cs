@@ -2,8 +2,8 @@
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
-using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
+using PMW2RPArchipelagoClientMod.services.items.item;
+using PMW2RPArchipelagoClientMod.services.items.item.items;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {

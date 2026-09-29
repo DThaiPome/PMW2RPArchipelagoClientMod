@@ -3,16 +3,9 @@ using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.game;
 using PMW2RPArchipelagoClientMod.services.items;
-using PMW2RPArchipelagoClientMod.services.items.debug;
-using PMW2RPArchipelagoClientMod.services.items.mapping;
-using PMW2RPArchipelagoClientMod.services.items.v2;
-using PMW2RPArchipelagoClientMod.services.items.v2.item;
-using PMW2RPArchipelagoClientMod.services.items.v2.location;
+using PMW2RPArchipelagoClientMod.services.items.item;
+using PMW2RPArchipelagoClientMod.services.items.location;
 using PMW2RPArchipelagoClientMod.services.traps;
-using ILocationsService = PMW2RPArchipelagoClientMod.services.items.v2.location.ILocationsService;
-using IUnlocksService = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksService;
-using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
-using LocationsService = PMW2RPArchipelagoClientMod.services.items.v2.location.LocationsService;
 
 namespace PMW2RPArchipelagoClientMod.services
 {

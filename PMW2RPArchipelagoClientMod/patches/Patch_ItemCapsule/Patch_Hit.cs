@@ -1,7 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
 using PMW2RPArchipelagoClientMod.services;
-using PMW2RPArchipelagoClientMod.services.items.v2.location.locations;
+using PMW2RPArchipelagoClientMod.services.items.location.locations;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_ItemCapsule
 {

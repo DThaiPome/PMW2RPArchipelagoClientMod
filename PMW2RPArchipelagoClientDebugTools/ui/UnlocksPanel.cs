@@ -4,10 +4,10 @@ using UniverseLib.UI;
 using UniverseLib.UI.Panels;
 using PMW2RPArchipelagoClientMod.models.data;
 using Il2Cpp;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
-using IUnlocksSourceMutable = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSourceMutable;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables;
+using PMW2RPArchipelagoClientMod.services.items.item.items;
+using PMW2RPArchipelagoClientMod.services.items.item.items.@base;
+using PMW2RPArchipelagoClientMod.services.items.item.consumables;
+using PMW2RPArchipelagoClientMod.services.items.item;
 
 namespace PMW2RPArchipelagoClientDebugTools.ui
 {

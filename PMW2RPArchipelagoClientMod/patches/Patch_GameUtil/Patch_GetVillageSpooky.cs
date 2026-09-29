@@ -1,7 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
 using PMW2RPArchipelagoClientMod.services;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using PMW2RPArchipelagoClientMod.services.items.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
 {

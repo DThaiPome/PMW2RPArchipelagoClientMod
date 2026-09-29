@@ -3,7 +3,7 @@ using Il2Cpp;
 using Il2CppPacman;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services;
-using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using PMW2RPArchipelagoClientMod.services.items.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
 {
