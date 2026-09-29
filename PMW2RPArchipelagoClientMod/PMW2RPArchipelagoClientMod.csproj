@@ -396,6 +396,7 @@
 		<Compile Include="models\data\MovesetKind.cs" />
 		<Compile Include="services\items\item\ComboItemSource.cs" />
 		<Compile Include="services\items\item\consumables\base\ConsumableDelegates.cs" />
+		<Compile Include="services\items\item\consumables\base\IConsumablesDelegates.cs" />
 		<Compile Include="services\items\item\consumables\base\IUnlockableConsumable.cs" />
 		<Compile Include="services\items\item\consumables\base\IUnlockableConsumableId.cs" />
 		<Compile Include="services\items\item\consumables\base\AUnlockableConsumable.cs" />
@@ -414,7 +415,6 @@
 		<Compile Include="services\items\item\items\PastKeyItem.cs" />
 		<Compile Include="services\items\item\items\StageItem.cs" />
 		<Compile Include="services\items\item\IUnlocksService.cs" />
-		<Compile Include="services\items\item\SingleCallMultiConsumableDispatcher.cs" />
 		<Compile Include="services\items\location\locations\base\AUnlockableLocation.cs" />
 		<Compile Include="services\items\IdMapperService.cs" />
 		<Compile Include="services\items\IIdMapperService.cs" />

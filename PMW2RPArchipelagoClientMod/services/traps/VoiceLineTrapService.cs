@@ -31,9 +31,7 @@ namespace PMW2RPArchipelagoClientMod.services.traps
             _melonMod = melonMod;
             _unlocks = unlocks;
 
-            ConsumableDelegates consumableDelegates = new ConsumableDelegates();
-            consumableDelegates.OnTriggerVoiceLineTrap += _onTriggerVoiceLineTrap;
-            _unlocks.GiveConsumableReceiver(consumableDelegates);
+            _unlocks.ConsumablesDelegates.OnTriggerVoiceLineTrap += _onTriggerVoiceLineTrap;
         }
 
         private void _onTriggerVoiceLineTrap()

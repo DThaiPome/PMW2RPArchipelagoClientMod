@@ -12,13 +12,16 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
     {
         private Dictionary<IUnlockableItemId, int> _unlockCounts = new Dictionary<IUnlockableItemId, int>();
         private Queue<IUnlockableConsumableId> _pendingConsumables = new Queue<IUnlockableConsumableId>();
-        private SingleCallMultiConsumableDispatcher _consumableDispatchers = new SingleCallMultiConsumableDispatcher();
+
+        private ConsumableDelegates _consumableDelegates = new ConsumableDelegates();
+
+        public IConsumablesDelegates ConsumablesDelegates => _consumableDelegates;
 
         public void FlushConsumables()
         {
             foreach (var consumable in _pendingConsumables)
             {
-                consumable.Consume(_consumableDispatchers);
+                consumable.Consume(_consumableDelegates);
             }
             _pendingConsumables.Clear();
         }
@@ -26,11 +29,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         public int GetCountReceived(IUnlockableItemId item)
         {
             return _unlockCounts.GetValueOrDefault(item, 0);
-        }
-
-        public void GiveConsumableReceiver(IConsumableDispatcher dispatcher)
-        {
-            _consumableDispatchers.AddDispatcher(dispatcher);
         }
 
         public bool IsUnlocked(IUnlockableItemId item)

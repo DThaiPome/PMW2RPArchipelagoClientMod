@@ -19,7 +19,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         private Dictionary<IUnlockableItemId, int> _permanentUnlockCounts = new Dictionary<IUnlockableItemId, int>();
         private Queue<IUnlockableConsumableId> _pendingConsumables = new Queue<IUnlockableConsumableId>();
-        private SingleCallMultiConsumableDispatcher _consumableDispatchers = new SingleCallMultiConsumableDispatcher();
+        private ConsumableDelegates _consumablesDelegates = new ConsumableDelegates();
+
+        private bool _shouldBlockConsumables;
+
+        public IConsumablesDelegates ConsumablesDelegates => _consumablesDelegates;
 
         public UnlocksSource(MelonMod melonMod,
             IAPConnectionService apConnectioNService,
@@ -36,10 +40,12 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         private void _onInitItems(IReadOnlyList<ItemInfo> items)
         {
             _resetUnlocks();
+            _shouldBlockConsumables = true;
             foreach (var item in items)
             {
                 _unlockItem(item);
             }
+            _shouldBlockConsumables = false;
         }
 
         private void _onItemReceived(ItemInfo item)
@@ -54,7 +60,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
             {
                 i.Unlock(this);
             }
-            else if (_idMapperService.TryGetConsumableFromId(id, out var consumable))
+            else if (!_shouldBlockConsumables && _idMapperService.TryGetConsumableFromId(id, out var consumable))
             {
                 _pendingConsumables.Enqueue(consumable);
             }
@@ -97,7 +103,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         {
             foreach (var consumable in _pendingConsumables)
             {
-                consumable.Consume(_consumableDispatchers);
+                consumable.Consume(_consumablesDelegates);
             }
             _pendingConsumables.Clear();
         }
@@ -110,11 +116,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         public void OnLateUpdate()
         {
             FlushConsumables();
-        }
-
-        public void GiveConsumableReceiver(IConsumableDispatcher dispatcher)
-        {
-            _consumableDispatchers.AddDispatcher(dispatcher);
         }
 
         public void ReceiveConsumable(IUnlockableConsumableId consumableId)

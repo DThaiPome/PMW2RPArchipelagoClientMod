@@ -26,7 +26,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static IIdMapperService _idMapperService = null;
         private static IUnlocksService _unlocksSource = null;
         private static IUnlocksService _debugUnlocksSource = null;
-        private static IUnlocksService _comboUnlocksSource = null;
+        private static IUnlocksSource _comboUnlocksSource = null;
         private static ILocationsService _locationsService = null;
 
         public static void Init(MelonMod melonMod)

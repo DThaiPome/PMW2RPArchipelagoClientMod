@@ -46,11 +46,9 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _activeSceneService = activeSceneService;
             _playerPacmanStateService = playerPacmanStateService;
 
-            var consumablesDispatcher = new ConsumableDelegates();
-            consumablesDispatcher.OnGivePacDots += _onReceivePacDots;
-            consumablesDispatcher.OnGiveLives += _onReceiveLives;
-            consumablesDispatcher.OnGivePoints += _onReceivePoints;
-            _unlocks.GiveConsumableReceiver(consumablesDispatcher);
+            _unlocks.ConsumablesDelegates.OnGivePacDots += _onReceivePacDots;
+            _unlocks.ConsumablesDelegates.OnGiveLives += _onReceiveLives;
+            _unlocks.ConsumablesDelegates.OnGivePoints += _onReceivePoints;
         }
 
         public void OnLateUpdate()

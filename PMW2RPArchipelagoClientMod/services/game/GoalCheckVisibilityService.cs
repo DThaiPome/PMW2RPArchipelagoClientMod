@@ -205,7 +205,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         {
             return GameObject.Find(fruit switch
             {
-                EFruits.Cherry => "Fruits_Cherries",
+                EFruits.Cherry => "Fruits_Cherry",
                 EFruits.Strawberry => "Fruits_Strawberry",
                 EFruits.Apple => "Fruits_Apple",
                 EFruits.Orange => "Fruits_Orange",

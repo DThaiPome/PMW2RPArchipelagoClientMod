@@ -12,7 +12,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
     {
         bool IsUnlocked(IUnlockableItemId item);
         int GetCountReceived(IUnlockableItemId item);
-        void FlushConsumables();
-        void GiveConsumableReceiver(IConsumableDispatcher dispatcher);
+        IConsumablesDelegates ConsumablesDelegates { get; }
     }
 }

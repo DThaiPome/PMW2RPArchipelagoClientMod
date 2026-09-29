@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.items.item.consumables.@base
 {
-    public class ConsumableDelegates : IConsumableDispatcher
+    public class ConsumableDelegates : IConsumableDispatcher, IConsumablesDelegates
     {
         public Action<int> OnGiveLives { get; set; }
         public Action<int> OnGivePacDots { get; set; }
