@@ -1,4 +1,5 @@
-﻿using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
+﻿using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.item
     public interface IUnlocksSourceMutable : IUnlocksSource
     {
         void ReceiveItem(IUnlockableItemId item);
+        void ReceiveConsumable(IUnlockableConsumableId consumableId);
+        void RescindItem(IUnlockableItemId item);
     }
 }

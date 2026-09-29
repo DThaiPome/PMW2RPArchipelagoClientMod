@@ -13,8 +13,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         public new ProgressiveDolphinKick DolphinKick { get; set; }
 
         public IDictionary<EWorldStage, bool> StagesMutable { get; }
-        public ISet<GoldenFruitItem> GoldenFruitMutable { get;}
-        public ISet<PastKeyItem> PastKeysMutable { get; }
+        public ISet<GoldenFruitKind> GoldenFruitMutable { get;}
+        public ISet<PastKeyKind> PastKeysMutable { get; }
         public ISet<EPlayerSkin> SkinsMutable { get; }
         public ISet<EFruits> FruitSwitchesMutable { get; }
         public void GivePacDots(int count);

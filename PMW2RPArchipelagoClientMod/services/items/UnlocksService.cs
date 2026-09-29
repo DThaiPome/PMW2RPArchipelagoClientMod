@@ -15,8 +15,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private ICheckIdMapperService _itemIdMapperService;
 
         private Dictionary<EWorldStage, bool> _stages = new Dictionary<EWorldStage, bool>();
-        private HashSet<GoldenFruitItem> _goldenFruit = new HashSet<GoldenFruitItem>();
-        private HashSet<PastKeyItem> _pastKeys = new HashSet<PastKeyItem>();
+        private HashSet<GoldenFruitKind> _goldenFruit = new HashSet<GoldenFruitKind>();
+        private HashSet<PastKeyKind> _pastKeys = new HashSet<PastKeyKind>();
         private HashSet<EPlayerSkin> _skins = new HashSet<EPlayerSkin>();
         private HashSet<EFruits> _fruitsSwitches = new HashSet<EFruits>();
 
@@ -49,11 +49,11 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IDictionary<EWorldStage, bool> StagesMutable => _stages;
 
-        public IImmutableSet<GoldenFruitItem> GoldenFruit => _goldenFruit.ToImmutableHashSet();
-        public ISet<GoldenFruitItem> GoldenFruitMutable => _goldenFruit;
+        public IImmutableSet<GoldenFruitKind> GoldenFruit => _goldenFruit.ToImmutableHashSet();
+        public ISet<GoldenFruitKind> GoldenFruitMutable => _goldenFruit;
 
-        public IImmutableSet<PastKeyItem> PastKeys => _pastKeys.ToImmutableHashSet();
-        public ISet<PastKeyItem> PastKeysMutable => _pastKeys;
+        public IImmutableSet<PastKeyKind> PastKeys => _pastKeys.ToImmutableHashSet();
+        public ISet<PastKeyKind> PastKeysMutable => _pastKeys;
 
         public IImmutableSet<EPlayerSkin> Skins => _skins.ToImmutableHashSet();
         public ISet<EPlayerSkin> SkinsMutable => _skins;

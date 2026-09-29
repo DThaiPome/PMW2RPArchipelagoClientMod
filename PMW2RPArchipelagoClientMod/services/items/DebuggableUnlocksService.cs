@@ -11,8 +11,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
         private IUnlocksService _debugUnlocksSource;
 
         private FallbackDictionary<EWorldStage> _stages;
-        private FallbackSet<GoldenFruitItem> _goldenFruit;
-        private FallbackSet<PastKeyItem> _pastKeys;
+        private FallbackSet<GoldenFruitKind> _goldenFruit;
+        private FallbackSet<PastKeyKind> _pastKeys;
         private FallbackSet<EPlayerSkin> _skins;
         private FallbackSet<EFruits> _fruitSwitches;
 
@@ -23,8 +23,8 @@ namespace PMW2RPArchipelagoClientMod.services.items
             _debugUnlocksSource = debugUnlocksSource;
             
             _stages = new FallbackDictionary<EWorldStage>(() => _releaseUnlocksSource.Stages, () => _debugUnlocksSource.Stages);
-            _goldenFruit = new FallbackSet<GoldenFruitItem>(() => _releaseUnlocksSource.GoldenFruit, () => _debugUnlocksSource.GoldenFruit);
-            _pastKeys = new FallbackSet<PastKeyItem>(() => _releaseUnlocksSource.PastKeys, () => _debugUnlocksSource.PastKeys);
+            _goldenFruit = new FallbackSet<GoldenFruitKind>(() => _releaseUnlocksSource.GoldenFruit, () => _debugUnlocksSource.GoldenFruit);
+            _pastKeys = new FallbackSet<PastKeyKind>(() => _releaseUnlocksSource.PastKeys, () => _debugUnlocksSource.PastKeys);
             _skins = new FallbackSet<EPlayerSkin>(() => _releaseUnlocksSource.Skins, () => _debugUnlocksSource.Skins);
             _fruitSwitches = new FallbackSet<EFruits>(() => _releaseUnlocksSource.FruitSwitches, () => _debugUnlocksSource.FruitSwitches);
         }
@@ -43,9 +43,9 @@ namespace PMW2RPArchipelagoClientMod.services.items
 
         public IImmutableDictionary<EWorldStage, bool> Stages => _stages;
 
-        public IImmutableSet<GoldenFruitItem> GoldenFruit => _goldenFruit;
+        public IImmutableSet<GoldenFruitKind> GoldenFruit => _goldenFruit;
 
-        public IImmutableSet<PastKeyItem> PastKeys => _pastKeys;
+        public IImmutableSet<PastKeyKind> PastKeys => _pastKeys;
 
         public IImmutableSet<EPlayerSkin> Skins => _skins;
 

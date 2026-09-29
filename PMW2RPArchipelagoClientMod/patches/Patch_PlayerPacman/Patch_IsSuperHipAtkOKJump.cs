@@ -3,6 +3,7 @@ using Il2Cpp;
 using Il2CppPacman;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
 {
@@ -11,7 +12,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix(ref bool __result, EJumpKind jump)
         {
-            if (ServiceFactory.Unlocks.ButtBounce != ProgressiveButtBounce.SuperButtBounce)
+            if (MovesetItem.GetButtBounceLevel(ServiceFactory.Unlocks) != ProgressiveButtBounce.SuperButtBounce)
             {
                 __result = false;
                 return false;

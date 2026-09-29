@@ -2,6 +2,8 @@
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -45,7 +47,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 {
                     continue;
                 }
-                bool stageUnlocked = isLevelRando ? _unlocks.Stages.GetValueOrDefault(stage, false) : _gameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
+                bool stageUnlocked = isLevelRando ? StageItem.IsStageReceived(_unlocks, stage) : _gameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
                 if (stageUnlocked)
                 {
                     continue;

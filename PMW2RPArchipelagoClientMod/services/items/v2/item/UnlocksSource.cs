@@ -1,7 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.services.client;
-using PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@base;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PMW2RPArchipelagoClientMod.services.items.v2.item
 {
-    public class UnlocksSource : IUnlocksSourceMutable, IItemsDispatcher, IConsumableDispatcher
+    public class UnlocksSource : IUnlocksService, IItemsDispatcher
     {
         private MelonMod _melonMod;
         private IAPConnectionService _apConnectionService;
@@ -19,6 +19,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.item
 
         private Dictionary<IUnlockableItemId, int> _permanentUnlockCounts = new Dictionary<IUnlockableItemId, int>();
         private Queue<IUnlockableConsumableId> _pendingConsumables = new Queue<IUnlockableConsumableId>();
+        private SingleCallMultiConsumableDispatcher _consumableDispatchers = new SingleCallMultiConsumableDispatcher();
 
         public UnlocksSource(MelonMod melonMod,
             IAPConnectionService apConnectioNService,
@@ -92,28 +93,33 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.item
             }
         }
 
-        public void GivePacDots(int count)
-        {
-            // TODO: Send count to service
-        }
-
-        public void GiveLives(int count)
-        {
-            // TODO: Send count to service
-        }
-
-        public void TriggerVoiceLineTrap()
-        {
-            // TODO: Send count to service
-        }
-
         public void FlushConsumables()
         {
             foreach (var consumable in _pendingConsumables)
             {
-                consumable.Consume(this);
+                consumable.Consume(_consumableDispatchers);
             }
             _pendingConsumables.Clear();
+        }
+
+        public void RescindItem(IUnlockableItemId item)
+        {
+            // Nope
+        }
+
+        public void OnLateUpdate()
+        {
+            FlushConsumables();
+        }
+
+        public void GiveConsumableReceiver(IConsumableDispatcher dispatcher)
+        {
+            _consumableDispatchers.AddDispatcher(dispatcher);
+        }
+
+        public void ReceiveConsumable(IUnlockableConsumableId consumableId)
+        {
+            _pendingConsumables.Enqueue(consumableId);
         }
     }
 }

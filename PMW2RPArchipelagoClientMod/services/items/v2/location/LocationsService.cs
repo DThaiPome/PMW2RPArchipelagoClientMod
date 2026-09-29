@@ -14,8 +14,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.location
 {
     public class LocationsService : ILocationsService, ILocationsDispatcher
     {
-        private static readonly IUnlockableLocationId SPOOKY_LOCATION = new StageClearedLocation(EWorldStage.Stage6_4);
-        private static readonly IUnlockableLocationId TOCMAN_LOCATION = new StageClearedLocation(EWorldStage.Stage6_5);
+        private static readonly IUnlockableLocationId SPOOKY_LOCATION = new StageClearLocation(EWorldStage.Stage6_4);
+        private static readonly IUnlockableLocationId TOCMAN_LOCATION = new StageClearLocation(EWorldStage.Stage6_5);
 
         private MelonMod _melonMod;
         private IAPConnectionService _apConnectionService;

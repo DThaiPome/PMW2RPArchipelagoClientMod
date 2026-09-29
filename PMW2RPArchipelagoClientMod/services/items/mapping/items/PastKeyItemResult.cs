@@ -4,9 +4,9 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping.items
 {
     public class PastKeyItemResult : IItemMapEntry
     {
-        private PastKeyItem _pastKey;
+        private PastKeyKind _pastKey;
 
-        public PastKeyItemResult(PastKeyItem pastKey)
+        public PastKeyItemResult(PastKeyKind pastKey)
         {
             _pastKey = pastKey;
         }

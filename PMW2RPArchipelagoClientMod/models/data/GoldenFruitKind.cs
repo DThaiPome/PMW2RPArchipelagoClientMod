@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.models.data
 {
-    public enum GoldenFruitItem
+    public enum GoldenFruitKind
     {
         GoldenCherry = 0,
         GoldenStrawberry = 1,

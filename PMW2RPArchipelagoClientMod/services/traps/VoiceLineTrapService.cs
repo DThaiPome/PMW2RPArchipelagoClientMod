@@ -1,7 +1,9 @@
 ﻿using Il2CppCriWare;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.util;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
 
 namespace PMW2RPArchipelagoClientMod.services.traps
 {
@@ -20,12 +22,23 @@ namespace PMW2RPArchipelagoClientMod.services.traps
         private long _msSinceVoiceLine;
 
         private int _voiceClipsRemaining;
+
+        private int _pendingVoiceLineTraps;
         
 
         public VoiceLineTrapService(MelonMod melonMod, IUnlocksSource unlocks)
         {
             _melonMod = melonMod;
             _unlocks = unlocks;
+
+            ConsumableDelegates consumableDelegates = new ConsumableDelegates();
+            consumableDelegates.OnTriggerVoiceLineTrap += _onTriggerVoiceLineTrap;
+            _unlocks.GiveConsumableReceiver(consumableDelegates);
+        }
+
+        private void _onTriggerVoiceLineTrap()
+        {
+            _pendingVoiceLineTraps++;
         }
 
         private void _resetCooldown()
@@ -54,8 +67,9 @@ namespace PMW2RPArchipelagoClientMod.services.traps
             {
                 _triggerVoiceClip();
             }
-            else if (_unlocks.DequeueVoiceLineTrap())
+            else if (_pendingVoiceLineTraps > 0)
             {
+                _pendingVoiceLineTraps--;
                 _startVoiceClips();
             }
         }

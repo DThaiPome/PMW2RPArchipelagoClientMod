@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
-using PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables;
-using PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.item;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.location.locations;
@@ -26,6 +26,32 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2
         public IdMapperService(MelonMod melonMod)
         {
             _melonMod = melonMod;
+        }
+
+        public void Init()
+        {
+            _registerAll();
+        }
+
+        private void _registerAll()
+        {
+            FruitSwitchItem.Register();
+            GoldenFruitItem.Register();
+            MovesetItem.Register();
+            PastKeyItem.Register();
+            SkinItem.Register();
+            StageItem.Register();
+
+            CollectCapsuleLocation.Register();
+            GalaxianCollectedLocation.Register();
+            GoldMedalClearLocation.Register();
+            MissionClearLocation.Register();
+            StageClearLocation.Register();
+
+            ExtraLifeItem.Register();
+            PacDotBundle.Register();
+            PointsBundle.Register();
+            VoiceLineTrap.Register();
         }
 
         private bool _tryGetSupplierFromDict<T>(Dictionary<IdRange, Func<long, T>> dict, long id, out Func<long, T> supplier)

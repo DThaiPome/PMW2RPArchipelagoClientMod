@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.models.data
 {
-    public enum MovesetItem
+    public enum MovesetKind
     {
         ProgressiveButtBounce = 0,
         FlipKick = 1,

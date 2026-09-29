@@ -2,6 +2,7 @@
 using HarmonyLib;
 using PMW2RPArchipelagoClientMod.services;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
 {
@@ -10,7 +11,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
     {
         private static bool Prefix(bool flag, ref bool super)
         {
-            ProgressiveButtBounce buttBounce = ServiceFactory.Unlocks.ButtBounce;
+            ProgressiveButtBounce buttBounce = MovesetItem.GetButtBounceLevel(ServiceFactory.Unlocks);
             if (buttBounce == ProgressiveButtBounce.SuperButtBounce)
             {
                 return true;

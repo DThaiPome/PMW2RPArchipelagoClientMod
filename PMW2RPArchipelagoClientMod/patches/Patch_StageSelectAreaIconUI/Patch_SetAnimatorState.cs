@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_StageSelectAreaIconUI
 {
@@ -17,7 +18,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_StageSelectAreaIconUI
                 return;
             }
 
-            bool stageUnlocked = isLevelRando ? ServiceFactory.Unlocks.Stages.GetValueOrDefault(stage, false) : ServiceFactory.GameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
+            bool stageUnlocked = isLevelRando ? StageItem.IsStageReceived(ServiceFactory.Unlocks, stage) : ServiceFactory.GameSaveDataService.GetStageFlag(stage) != EStageFlag.Locked;
             state = stageUnlocked ? state : StageSelectAreaIconUI.EAnimatorState.DISABLED;
             return;
         }

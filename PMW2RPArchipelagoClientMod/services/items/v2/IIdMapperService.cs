@@ -1,4 +1,4 @@
-﻿using PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@base;
+﻿using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
 using PMW2RPArchipelagoClientMod.services.items.v2.location.locations.@base;
 using System;
@@ -11,6 +11,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2
 {
     public interface IIdMapperService
     {
+        void Init();
         void RegisterItemInRange(long idGte, long idLt, Func<long, IUnlockableItemId> idToItem);
         void RegisterLocationInRange(long idGte, long idLt, Func<long, IUnlockableLocationId> idToLocation);
         void RegisterConsumableInRange(long idGte, long idLt, Func<long, IUnlockableConsumableId> idToConsumable);

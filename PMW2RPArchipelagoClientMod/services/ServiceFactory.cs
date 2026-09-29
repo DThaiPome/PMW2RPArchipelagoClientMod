@@ -6,34 +6,35 @@ using PMW2RPArchipelagoClientMod.services.items;
 using PMW2RPArchipelagoClientMod.services.items.debug;
 using PMW2RPArchipelagoClientMod.services.items.mapping;
 using PMW2RPArchipelagoClientMod.services.items.v2;
+using PMW2RPArchipelagoClientMod.services.items.v2.item;
+using PMW2RPArchipelagoClientMod.services.items.v2.location;
 using PMW2RPArchipelagoClientMod.services.traps;
-using ILocationsService = PMW2RPArchipelagoClientMod.services.items.ILocationsService;
-using IUnlocksSource = PMW2RPArchipelagoClientMod.models.data.IUnlocksSource;
-using IUnlocksSourceMutable = PMW2RPArchipelagoClientMod.services.items.IUnlocksSourceMutable;
-using LocationsService = PMW2RPArchipelagoClientMod.services.items.LocationsService;
+using ILocationsService = PMW2RPArchipelagoClientMod.services.items.v2.location.ILocationsService;
+using IUnlocksService = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksService;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
+using LocationsService = PMW2RPArchipelagoClientMod.services.items.v2.location.LocationsService;
 
 namespace PMW2RPArchipelagoClientMod.services
 {
     public class ServiceFactory
     {
         private static MelonMod _melonMod = null;
-        private static DebugUnlockService _debugUnlockService = null;
-        private static UnlocksService _releaseUnlocksService = null;
-        private static DebuggableUnlocksService _comboUnlocksService = null;
         private static PlayerPacmanStateService _playerPacmanStateService = null;
         private static LevelUnlockSyncService _levelUnlockSyncService = null;
         private static ActiveSceneService _activeSceneService = null;
         private static IGameSaveDataService _gameSaveDataService = null;
         private static IAPConnectionService _apConnectionService = null;
         private static IAPSessionService _apSessionService = null;
-        private static ICheckIdMapperService _checkIdMapperService = null;
-        private static ILocationsService _locationsService = null;
         private static StageDataPatchService _stageDataPatchService = null;
         private static StageSelectCinematicService _stageSelectCinematicService = null;
         private static VoiceLineTrapService _voiceLineTrapService = null;
         private static StageSelectUIService _stageSelectUIService = null;
         private static GoalCheckVisibilityService _goalCheckVisibilityService = null;
         private static IIdMapperService _idMapperService = null;
+        private static IUnlocksService _unlocksSource = null;
+        private static IUnlocksService _debugUnlocksSource = null;
+        private static IUnlocksService _comboUnlocksSource = null;
+        private static ILocationsService _locationsService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -60,47 +61,28 @@ namespace PMW2RPArchipelagoClientMod.services
             }
         }
 
-        public static IUnlocksSourceMutable DebugUnlocksService
-        {
-            get
-            {
-                if (_debugUnlockService == null)
-                {
-                    _debugUnlockService = new DebugUnlockService(ModInstance);
-                }
-                return _debugUnlockService;
-            }
-        }
-
-        public static IUnlocksSourceMutable ReleaseUnlocksService
-        {
-            get
-            {
-                if (_releaseUnlocksService == null)
-                {
-                    _releaseUnlocksService = new UnlocksService(ModInstance, APConnectionService, CheckIdMapperService);
-                }
-                return _releaseUnlocksService;
-            }
-        }
-
-        public static IUnlocksService ComboUnlocksService
-        {
-            get
-            {
-                if (_comboUnlocksService == null)
-                {
-                    _comboUnlocksService = new DebuggableUnlocksService(ReleaseUnlocksService, DebugUnlocksService);
-                }
-                return _comboUnlocksService;
-            }
-        }
-
         public static IUnlocksService UnlocksService
         {
             get
             {
-                return ComboUnlocksService;
+                if (_unlocksSource == null)
+                {
+                    _unlocksSource = new UnlocksSource(ModInstance, APConnectionService, IdMapperService);
+                }
+                return _unlocksSource;
+            }
+        }
+        
+
+        public static IUnlocksService DebugUnlocksService
+        {
+            get
+            {
+                if (_debugUnlocksSource == null)
+                {
+                    _debugUnlocksSource = new DebugUnlocksSource();
+                }
+                return _debugUnlocksSource;
             }
         }
 
@@ -108,7 +90,11 @@ namespace PMW2RPArchipelagoClientMod.services
         {
             get
             {
-                return UnlocksService;
+                if (_comboUnlocksSource == null)
+                {
+                    _comboUnlocksSource = new ComboItemSource(UnlocksService, DebugUnlocksService);
+                }
+                return _comboUnlocksSource;
             }
         }
 
@@ -191,25 +177,13 @@ namespace PMW2RPArchipelagoClientMod.services
             }
         }
 
-        public static ICheckIdMapperService CheckIdMapperService
-        {
-            get
-            {
-                if (_checkIdMapperService == null)
-                {
-                    _checkIdMapperService = new CheckIdMapperService();
-                }
-                return _checkIdMapperService;
-            }
-        }
-
         public static ILocationsService LocationsService
         {
             get
             {
                 if (_locationsService == null)
                 {
-                    _locationsService = new LocationsService(ModInstance, APConnectionService, CheckIdMapperService);
+                    _locationsService = new LocationsService(ModInstance, APConnectionService, IdMapperService);
                 }
                 return _locationsService;
             }

@@ -2,9 +2,14 @@
 using Il2CppUI;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
+using ILocationsSource = PMW2RPArchipelagoClientMod.services.items.v2.location.ILocationsSource;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.items;
 using UnityEngine;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
+using PMW2RPArchipelagoClientMod.services.items.v2.location.locations;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -18,6 +23,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private StageSelectCinematicService _stageSelectCinematicService;
         private ActiveSceneService _activeSceneService;
         private PlayerPacmanStateService _playerPacmanStateService;
+
+        private int _pendingPacDots;
+        private int _pendingLives;
+        private int _pendingPoints;
 
         public LevelUnlockSyncService(MelonMod melonMod,
             IUnlocksSource unlocks,
@@ -36,6 +45,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _stageSelectCinematicService = stageSelectCinematicService;
             _activeSceneService = activeSceneService;
             _playerPacmanStateService = playerPacmanStateService;
+
+            var consumablesDispatcher = new ConsumableDelegates();
+            consumablesDispatcher.OnGivePacDots += _onReceivePacDots;
+            consumablesDispatcher.OnGiveLives += _onReceiveLives;
+            consumablesDispatcher.OnGivePoints += _onReceivePoints;
+            _unlocks.GiveConsumableReceiver(consumablesDispatcher);
         }
 
         public void OnLateUpdate()
@@ -60,13 +75,13 @@ namespace PMW2RPArchipelagoClientMod.services.game
         {
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
-                bool unlocked = _unlocks.Stages.GetValueOrDefault(stage, false);
+                bool unlocked = StageItem.IsStageReceived(_unlocks, stage);
                 EStageFlag stageFlag = _gameSaveDataService.GetStageFlag(stage);
                 if (unlocked && stageFlag == EStageFlag.Locked)
                 {
                     if (stage == EWorldStage.Stage6_5)
                     {
-                        if (_unlocks.AreAllKeysUnlocked()
+                        if (PastKeyItem.AreAllKeysUnlocked(_unlocks)
                             && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
                         {
                             _unlockStage(stage);
@@ -141,12 +156,13 @@ namespace PMW2RPArchipelagoClientMod.services.game
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
                 EStageFlag flag = _gameSaveDataService.GetStageFlag(stage);
+                bool stageClearRemotely = StageClearLocation.IsStageClear(_locations, stage);
 
-                if (flag == EStageFlag.Clear && !_locations.ClearedStages.Contains(stage))
+                if (flag == EStageFlag.Clear && !stageClearRemotely)
                 {
-                    _locations.ClearStage(stage);
+                    StageClearLocation.ClearStage(_locations, stage);
                 }
-                else if (flag != EStageFlag.Locked && flag != EStageFlag.Clear && _locations.ClearedStages.Contains(stage))
+                else if (flag != EStageFlag.Locked && flag != EStageFlag.Clear && stageClearRemotely)
                 {
                     _gameSaveDataService.SetStageFlag(stage, EStageFlag.Clear);
                 }
@@ -158,12 +174,13 @@ namespace PMW2RPArchipelagoClientMod.services.game
             for (EMissionKind kind = EMissionKind.Mission1; kind < EMissionKind.Mission99; kind++)
             {
                 EMissionFlag flag = _gameSaveDataService.GetMissionFlag(kind);
+                bool missionClearRemotely = MissionClearLocation.IsMissionClear(_locations, kind);
                 
-                if (flag == EMissionFlag.Achieved && !_locations.ClearedMissions.Contains(kind))
+                if (flag == EMissionFlag.Achieved && !missionClearRemotely)
                 {
-                    _locations.ClearMission(kind);
+                    MissionClearLocation.ClearMission(_locations, kind);
                 }
-                else if (flag != EMissionFlag.Achieved && _locations.ClearedMissions.Contains(kind))
+                else if (flag != EMissionFlag.Achieved && missionClearRemotely)
                 {
                     _gameSaveDataService.SetMissionFlag(kind, EMissionFlag.Achieved);
                 }
@@ -175,11 +192,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
             for (int mazeId = 0; mazeId < 15; mazeId++)
             {
                 bool unlocked = _gameSaveDataService.CheckMazeUnlock(mazeId);
-                if (unlocked && !_locations.UnlockedMazes.Contains(mazeId))
+                bool unlockedRemotely = GalaxianCollectedLocation.IsGalaxianCollected(_locations, mazeId);
+                if (unlocked && !unlockedRemotely)
                 {
-                    _locations.UnlockMaze(mazeId);
+                    GalaxianCollectedLocation.ClearGalaxianCollected(_locations, mazeId);
                 }
-                else if (!unlocked && _locations.UnlockedMazes.Contains(mazeId))
+                else if (!unlocked && unlockedRemotely)
                 {
                     // TODO: This might not do anything if a maze gets unlocked remotely while that level is actually being played. Find a way to fix this maybe, not urgent.
                     _gameSaveDataService.UnlockMaze(mazeId);
@@ -194,7 +212,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 return;
             }
 
-            foreach (var goldenFruitItem in _unlocks.GoldenFruit)
+            foreach (var goldenFruitItem in GoldenFruitItem.GetReceivedGoldenFruits(_unlocks))
             {
                 var stageId = _goldenFruitToLevelUnlock(goldenFruitItem);
                 if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Locked)
@@ -202,12 +220,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     _unlockStage(stageId);
                 }
             }
-            if (_unlocks.AreAllGoldenFruitsUnlocked() && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Locked)
+            if (GoldenFruitItem.AreAllGoldenFruitsUnlocked(_unlocks) && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Locked)
             {
                 _gameSaveDataService.SetStageFlag(EWorldStage.Stage6_4, EStageFlag.Unlock);
             }
 
-            foreach (var pastKeyItem in _unlocks.PastKeys)
+            foreach (var pastKeyItem in PastKeyItem.GetPastKeysReceived(_unlocks))
             {
                 var stageId = _keyToLevelUnlock(pastKeyItem);
                 if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Locked)
@@ -215,7 +233,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     _unlockStage(stageId);
                 }
             }
-            if (_unlocks.AreAllKeysUnlocked()
+            if (PastKeyItem.AreAllKeysUnlocked(_unlocks)
                 && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_5) == EStageFlag.Locked
                 && _gameSaveDataService.GetStageFlag(EWorldStage.Stage6_4) == EStageFlag.Clear)
             {
@@ -223,28 +241,28 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private EWorldStage _goldenFruitToLevelUnlock(GoldenFruitItem goldenFruitItem)
+        private EWorldStage _goldenFruitToLevelUnlock(EFruits goldenFruitItem)
         {
             return goldenFruitItem switch
             {
-                GoldenFruitItem.GoldenCherry => EWorldStage.Stage2_1,
-                GoldenFruitItem.GoldenStrawberry => EWorldStage.Stage3_1,
-                GoldenFruitItem.GoldenApple => EWorldStage.Stage4_1,
-                GoldenFruitItem.GoldenOrange => EWorldStage.Stage5_1,
-                GoldenFruitItem.GoldenMelon => EWorldStage.Stage6_1,
+                EFruits.Cherry => EWorldStage.Stage2_1,
+                EFruits.Strawberry => EWorldStage.Stage3_1,
+                EFruits.Apple => EWorldStage.Stage4_1,
+                EFruits.Orange => EWorldStage.Stage5_1,
+                EFruits.Melon => EWorldStage.Stage6_1,
                 _ => throw new NotImplementedException("what kinda golden fruit is this")
             };
         }
 
-        private EWorldStage _keyToLevelUnlock(PastKeyItem pastKeyItem)
+        private EWorldStage _keyToLevelUnlock(PastKeyKind pastKeyItem)
         {
             return pastKeyItem switch
             {
-                PastKeyItem.WindyWoodsKey => EWorldStage.Stage8_1,
-                PastKeyItem.ThunderSnowMountainKey => EWorldStage.Stage9_1,
-                PastKeyItem.FieryCavernsKey => EWorldStage.Stage10_1,
-                PastKeyItem.DimUnderwatersKey => EWorldStage.Stage11_1,
-                PastKeyItem.GhostIslandKey => EWorldStage.Stage12_1,
+                PastKeyKind.WindyWoodsKey => EWorldStage.Stage8_1,
+                PastKeyKind.ThunderSnowMountainKey => EWorldStage.Stage9_1,
+                PastKeyKind.FieryCavernsKey => EWorldStage.Stage10_1,
+                PastKeyKind.DimUnderwatersKey => EWorldStage.Stage11_1,
+                PastKeyKind.GhostIslandKey => EWorldStage.Stage12_1,
                 _ => throw new NotImplementedException("what kinda key is this")
             };
         }
@@ -272,17 +290,18 @@ namespace PMW2RPArchipelagoClientMod.services.game
             foreach (var stageInfo in MasterData.StageList.m_stageList)
             {
                 EWorldStage stageId = (EWorldStage)stageInfo.stageId;
-                if (stageInfo.stageId == (int)EWorldStage.Stage5_3)
+                if (stageId == EWorldStage.PacVillage || stageId == EWorldStage.Stage5_3 || stageId >= EWorldStage.StageSonic_1)
                 {
                     continue;
                 }
                 double time = PACWSaveData.GetStageTime((int)stageId);
                 EEstimateTime medal = time == 0 ? EEstimateTime.None : stageInfo.GetMedalKind(time + 0.01);
-                if (medal == EEstimateTime.Gold && !_locations.ClearedGoldMedals.Contains(stageId))
+                bool goldMedalClearedRemotely = GoldMedalClearLocation.IsGoldMedalClear(_locations, stageId);
+                if (medal == EEstimateTime.Gold && !goldMedalClearedRemotely)
                 {
-                    _locations.ClearGoldMedal(stageId);
+                    GoldMedalClearLocation.ClearGoldMedal(_locations, stageId);
                 }
-                else if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Clear && medal != EEstimateTime.Gold && _locations.ClearedGoldMedals.Contains(stageId))
+                else if (_gameSaveDataService.GetStageFlag(stageId) == EStageFlag.Clear && medal != EEstimateTime.Gold && goldMedalClearedRemotely)
                 {
                     PACWSaveData.SetStageTime((int)stageId, (stageInfo.estimateTimeG - 1) / 100.0);
                 }
@@ -312,7 +331,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                     continue;
                 }
                 bool unlockedInSave = _gameSaveDataService.IsSkinUnlocked(skin);
-                bool unlockedInWorld = _unlocks.Skins.Contains(skin);
+                bool unlockedInWorld = SkinItem.IsSkinReceived(_unlocks, skin);
                 if (!unlockedInSave && unlockedInWorld)
                 {
                     _gameSaveDataService.SetSkinUnlocked(skin, true);
@@ -331,7 +350,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private void _flushFillerUnlocks()
         {
             int ogLifeCount = _gameSaveDataService.GetStockNum();
-            int lives = _unlocks.FlushLives();
+            int lives = _pendingLives;
+            _pendingLives = 0;
 
             if (!_activeSceneService.InNonVillageStage || !_playerPacmanStateService.IsInMoveState)
             {
@@ -351,13 +371,15 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 _syncStockCount(ogLifeCount + lives);
             }
 
-            int dots = _unlocks.FlushPacDots();
+            int dots = _pendingPacDots;
+            _pendingPacDots = 0;
             if (dots > 0)
             {
                 StageStateManager.AddPacDot(dots);
             }
 
-            int score = _unlocks.FlushPoints();
+            int score = _pendingPoints;
+            _pendingPoints = 0;
             if (score > 0)
             {
                 StageStateManager.AddScore(EStageScore.Dot, Vector3.zero, score);
@@ -373,6 +395,21 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
 
             lifeGauge.SetStock(count, Vector3.zero);
+        }
+
+        public void _onReceivePacDots(int count)
+        {
+            _pendingPacDots += count;
+        }
+
+        public void _onReceiveLives(int count)
+        {
+            _pendingLives += count;
+        }
+
+        public void _onReceivePoints(int count)
+        {
+            _pendingPoints += count;
         }
     }
 }

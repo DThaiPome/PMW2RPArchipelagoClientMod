@@ -16,17 +16,5 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.location.locations.@base
             if (this == other) return true;
             return Id == other.Id;
         }
-
-        bool Equals<R>(IUnlockableLocation<R> other)
-        {
-            if (other == null) return false;
-            if (typeof(T) == typeof(R)) return false;
-            return Equals((IUnlockableLocation<T>)other);
-        }
-
-        new int GetHashCode()
-        {
-            return typeof(T).GetHashCode() + Id.GetHashCode();
-        }
     }
 }

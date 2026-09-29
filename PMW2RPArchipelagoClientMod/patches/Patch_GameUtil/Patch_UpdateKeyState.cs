@@ -2,6 +2,7 @@
 using Il2Cpp;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
 {
@@ -13,11 +14,11 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_GameUtil
             var unlocks = ServiceFactory.Unlocks;
             __result = asign switch
             {
-                EKeyAsign.FlipKick => _overrideKeyState(__result, unlocks.FlipKick),
-                EKeyAsign.PacDash => _overrideKeyState(__result, unlocks.Dash),
-                EKeyAsign.DotAttack => _overrideKeyState(__result, unlocks.Bomb),
-                EKeyAsign.Hunbari => _overrideKeyState(__result, unlocks.Flutter),
-                EKeyAsign.DolphinKick => _overrideKeyState(__result, unlocks.DolphinKick != ProgressiveDolphinKick.None),
+                EKeyAsign.FlipKick => _overrideKeyState(__result, MovesetItem.IsFlipKickReceived(unlocks)),
+                EKeyAsign.PacDash => _overrideKeyState(__result, MovesetItem.IsRevRollReceived(unlocks)),
+                EKeyAsign.DotAttack => _overrideKeyState(__result, MovesetItem.IsDotThrowReceived(unlocks)),
+                EKeyAsign.Hunbari => _overrideKeyState(__result, MovesetItem.IsFlutterReceived(unlocks)),
+                EKeyAsign.DolphinKick => _overrideKeyState(__result, MovesetItem.GetDolphinKickLevel(unlocks) != ProgressiveDolphinKick.None),
                 _ => __result
             };
         }

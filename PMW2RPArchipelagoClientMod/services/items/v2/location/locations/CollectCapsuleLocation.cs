@@ -13,9 +13,31 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.location.locations
         private static readonly long GASHAPON_OFFSET = 3000;
         private static readonly long CAPSULE_CEIL = GASHAPON_OFFSET + (long)ECapsule.Capsule54;
 
+        public static Dictionary<ECapsule, CollectCapsuleLocation> CAPSULE_LOCATIONS { get; private set; }
+
         static CollectCapsuleLocation()
         {
+
+            CAPSULE_LOCATIONS = new Dictionary<ECapsule, CollectCapsuleLocation>();
+            for (var capsule = ECapsule.Capsule1; capsule < ECapsule.Capsule54; capsule++)
+            {
+                CAPSULE_LOCATIONS[capsule] = new CollectCapsuleLocation(capsule);
+            }
+        }
+
+        public static void Register()
+        {
             ServiceFactory.IdMapperService.RegisterLocationInRange(GASHAPON_OFFSET, CAPSULE_CEIL, id => new CollectCapsuleLocation(id));
+        }
+
+        public static bool IsCapsuleCollected(ILocationsSource locations, ECapsule capsule)
+        {
+            return locations.IsCleared(CAPSULE_LOCATIONS[capsule]);
+        }
+
+        public static void ClearCapsuleCollected(ILocationsSource locations, ECapsule capsule)
+        {
+            locations.Clear(CAPSULE_LOCATIONS[capsule]);
         }
 
         private ECapsule _capsule;

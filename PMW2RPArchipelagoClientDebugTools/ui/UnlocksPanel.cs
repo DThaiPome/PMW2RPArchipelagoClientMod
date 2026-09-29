@@ -4,6 +4,10 @@ using UniverseLib.UI;
 using UniverseLib.UI.Panels;
 using PMW2RPArchipelagoClientMod.models.data;
 using Il2Cpp;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
+using IUnlocksSourceMutable = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSourceMutable;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables;
 
 namespace PMW2RPArchipelagoClientDebugTools.ui
 {
@@ -21,8 +25,8 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private GameObject _uiRoot;
 
         private Dictionary<EWorldStage, Toggle> _stageToggles = new Dictionary<EWorldStage, Toggle>();
-        private Dictionary<GoldenFruitItem, Toggle> _goldenFruitToggles = new Dictionary<GoldenFruitItem, Toggle>();
-        private Dictionary<PastKeyItem, Toggle> _pastKeyToggles = new Dictionary<PastKeyItem, Toggle>();
+        private Dictionary<EFruits, Toggle> _goldenFruitToggles = new Dictionary<EFruits, Toggle>();
+        private Dictionary<PastKeyKind, Toggle> _pastKeyToggles = new Dictionary<PastKeyKind, Toggle>();
 
         public UnlocksPanel(UIBase owner) : base(owner)
         {
@@ -63,15 +67,17 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _constructToggle(columnObj, "flutter", "Flutter", out _flutterToggle);
 
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            _kickToggle.isOn = debugUnlocksService.FlipKick;
-            _dashToggle.isOn = debugUnlocksService.Dash;
-            _bombToggle.isOn = debugUnlocksService.Bomb;
-            _flutterToggle.isOn = debugUnlocksService.Flutter;
+            _kickToggle.isOn = MovesetItem.IsFlipKickReceived(debugUnlocksService);
+            _dashToggle.isOn = MovesetItem.IsRevRollReceived(debugUnlocksService);
+            _bombToggle.isOn = MovesetItem.IsDotThrowReceived(debugUnlocksService);
+            _flutterToggle.isOn = MovesetItem.IsFlutterReceived(debugUnlocksService);
 
-            _buttBounceToggle1.isOn = debugUnlocksService.ButtBounce != ProgressiveButtBounce.None;
-            _buttBounceToggle2.isOn = debugUnlocksService.ButtBounce == ProgressiveButtBounce.SuperButtBounce;
-            _dolphinKickToggle1.isOn = debugUnlocksService.DolphinKick != ProgressiveDolphinKick.None;
-            _dolphinKickToggle2.isOn = debugUnlocksService.DolphinKick == ProgressiveDolphinKick.SuperDolphinKick;
+            var buttBounceLevel = MovesetItem.GetButtBounceLevel(debugUnlocksService);
+            var dolphinKickLevel = MovesetItem.GetDolphinKickLevel(debugUnlocksService);
+            _buttBounceToggle1.isOn = buttBounceLevel != ProgressiveButtBounce.None;
+            _buttBounceToggle2.isOn = buttBounceLevel == ProgressiveButtBounce.SuperButtBounce;
+            _dolphinKickToggle1.isOn = dolphinKickLevel != ProgressiveDolphinKick.None;
+            _dolphinKickToggle2.isOn = dolphinKickLevel == ProgressiveDolphinKick.SuperDolphinKick;
         }
 
         private void _constructStageToggles()
@@ -82,7 +88,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
                 _constructToggle(columnObj, stage.ToString(), stage.ToString(), out Toggle toggle);
-                bool unlocked = debugUnlocksService.Stages.GetValueOrDefault(stage, false);
+                bool unlocked = StageItem.IsStageReceived(debugUnlocksService, stage);
                 toggle.isOn = unlocked;
                 _stageToggles.Add(stage, toggle);
             }
@@ -93,17 +99,17 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             var columnObj = UIFactory.CreateUIObject("keyColumn", _uiRoot);
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            for (GoldenFruitItem item = GoldenFruitItem.GoldenCherry; item < GoldenFruitItem.MAX; item++)
+            for (EFruits item = EFruits.Cherry; item < EFruits.MAX; item++)
             {
                 _constructToggle(columnObj, item.ToString(), item.ToString(), out Toggle toggle);
-                bool unlocked = debugUnlocksService.GoldenFruit.Contains(item);
+                bool unlocked = GoldenFruitItem.IsGoldenFruitReceived(debugUnlocksService, item);
                 toggle.isOn = unlocked;
                 _goldenFruitToggles.Add(item, toggle);
             }
-            for (PastKeyItem item = PastKeyItem.WindyWoodsKey; item < PastKeyItem.MAX; item++)
+            for (PastKeyKind item = PastKeyKind.WindyWoodsKey; item < PastKeyKind.MAX; item++)
             {
                 _constructToggle(columnObj, item.ToString(), item.ToString(), out Toggle toggle);
-                bool unlocked = debugUnlocksService.PastKeys.Contains(item);
+                bool unlocked = PastKeyItem.IsPastKeyReceived(debugUnlocksService, item);
                 toggle.isOn = unlocked;
                 _pastKeyToggles.Add(item, toggle);
             }
@@ -124,22 +130,22 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
 
         private void _givePacDotClick()
         {
-            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GivePacDots(1);
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.ReceiveConsumable(new PacDotBundle(FillerKind.PacDot1));
         }
 
         private void _givePointClick()
         {
-            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GivePoints(100);
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.ReceiveConsumable(new PointsBundle(FillerKind.Points100));
         }
 
         private void _giveLifeClick()
         {
-            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.GiveLife();
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.ReceiveConsumable(new ExtraLifeItem());
         }
 
         private void _giveVoiceLineTrap()
         {
-            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.QueueVoiceLineTrap();
+            PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService.ReceiveConsumable(new VoiceLineTrap());
         }
 
         private void _constructToggle(GameObject parent, string name, string label, out Toggle toggle)
@@ -160,35 +166,59 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private void _updateMoveset()
         {
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            debugUnlocksService.FlipKick = _kickToggle.isOn;
-            debugUnlocksService.Dash = _dashToggle.isOn;
-            debugUnlocksService.Bomb = _bombToggle.isOn;
-            debugUnlocksService.Flutter = _flutterToggle.isOn;
+            _toggleUnlock(debugUnlocksService, _kickToggle.isOn, MovesetItem.MOVESET_ITEMS[MovesetKind.FlipKick]);
+            _toggleUnlock(debugUnlocksService, _dashToggle.isOn, MovesetItem.MOVESET_ITEMS[MovesetKind.RevRoll]);
+            _toggleUnlock(debugUnlocksService, _bombToggle.isOn, MovesetItem.MOVESET_ITEMS[MovesetKind.PacDotAttack]);
+            _toggleUnlock(debugUnlocksService, _flutterToggle.isOn, MovesetItem.MOVESET_ITEMS[MovesetKind.Flutter]);
 
-            if (_buttBounceToggle1.isOn && _buttBounceToggle2.isOn)
+            int buttBounceCount = _buttBounceToggle1.isOn ? 1 : 0;
+            if (_buttBounceToggle2.isOn)
             {
-                debugUnlocksService.ButtBounce = ProgressiveButtBounce.SuperButtBounce;
+                buttBounceCount++;
             }
-            else if (_buttBounceToggle1.isOn || _buttBounceToggle2.isOn)
-            {
-                debugUnlocksService.ButtBounce = ProgressiveButtBounce.ButtBounce;
-            }
-            else
-            {
-                debugUnlocksService.ButtBounce = ProgressiveButtBounce.None;
-            }
+            _bringUnlockCountToTarget(debugUnlocksService, buttBounceCount, MovesetItem.MOVESET_ITEMS[MovesetKind.ProgressiveButtBounce]);
 
-            if (_dolphinKickToggle1.isOn && _dolphinKickToggle2.isOn)
+            int dolphinKickCount = _dolphinKickToggle1.isOn ? 1 : 0;
+            if (_dolphinKickToggle2.isOn)
             {
-                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.SuperDolphinKick;
+                dolphinKickCount++;
             }
-            else if (_dolphinKickToggle1.isOn || _dolphinKickToggle2.isOn)
+            _bringUnlockCountToTarget(debugUnlocksService, dolphinKickCount, MovesetItem.MOVESET_ITEMS[MovesetKind.ProgressiveDolphinKick]);
+        }
+
+        private void _toggleUnlock(IUnlocksSourceMutable unlocks, bool shouldBeUnlocked, IUnlockableItemId item)
+        {
+            bool itemReceived = unlocks.IsUnlocked(item);
+            if (itemReceived && !shouldBeUnlocked)
             {
-                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.DolphinKick;
+                unlocks.RescindItem(item);
             }
-            else
+            else if (!itemReceived && shouldBeUnlocked)
             {
-                debugUnlocksService.DolphinKick = ProgressiveDolphinKick.None;
+                unlocks.ReceiveItem(item);
+            }
+        }
+
+        private void _bringUnlockCountToTarget(IUnlocksSourceMutable unlocks, int count, IUnlockableItemId item)
+        {
+            int ogCount = unlocks.GetCountReceived(item);
+            if (ogCount == count)
+            {
+                return;
+            }
+            if (ogCount > count)
+            {
+                for (int i = 0; i < (ogCount - count); i++)
+                {
+                    unlocks.RescindItem(item);
+                }
+            }
+            else if (ogCount < count)
+            {
+                for (int i = 0; i < (count - ogCount); i++)
+                {
+                    unlocks.ReceiveItem(item);
+                }
             }
         }
 
@@ -197,38 +227,22 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
             for (EWorldStage stage = EWorldStage.Stage1_1; stage < EWorldStage.StageSonic_1; stage++)
             {
-                debugUnlocksService.StagesMutable[stage] = _stageToggles[stage].isOn;
+                _toggleUnlock(debugUnlocksService, _stageToggles[stage].isOn, StageItem.STAGE_ITEMS[stage]);
             }
         }
         
         private void _updateKeys()
         {
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            for (GoldenFruitItem item = GoldenFruitItem.GoldenCherry; item < GoldenFruitItem.MAX; item++)
+            for (EFruits item = EFruits.Cherry; item < EFruits.MAX; item++)
             {
                 bool isOn = _goldenFruitToggles[item].isOn;
-                if (isOn && !debugUnlocksService.GoldenFruit.Contains(item))
-                {
-                    PMW2RPArchipelagoClientMod.services.ServiceFactory.ModInstance.LoggerInstance.Msg("GOLDEN FRUIT UNLOCKED: " + item);
-                    debugUnlocksService.GoldenFruitMutable.Add(item);
-                }
-                else if (!isOn && debugUnlocksService.GoldenFruit.Contains(item))
-                {
-                    PMW2RPArchipelagoClientMod.services.ServiceFactory.ModInstance.LoggerInstance.Msg("GOLDEN FRUIT LOCKED: " + item);
-                    debugUnlocksService.GoldenFruitMutable.Remove(item);
-                }
+                _toggleUnlock(debugUnlocksService, isOn, GoldenFruitItem.GOLDEN_FRUIT_ITEMS[item]);
             }
-            for (PastKeyItem item = PastKeyItem.WindyWoodsKey; item < PastKeyItem.MAX; item++)
+            for (PastKeyKind item = PastKeyKind.WindyWoodsKey; item < PastKeyKind.MAX; item++)
             {
                 bool isOn = _pastKeyToggles[item].isOn;
-                if (isOn && !debugUnlocksService.PastKeys.Contains(item))
-                {
-                    debugUnlocksService.PastKeysMutable.Add(item);
-                }
-                else if (!isOn && debugUnlocksService.PastKeys.Contains(item))
-                {
-                    debugUnlocksService.PastKeysMutable.Remove(item);
-                }
+                _toggleUnlock(debugUnlocksService, isOn, PastKeyItem.PAST_KEY_ITEMS[item]);
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
 using PMW2RPArchipelagoClientMod.services;
 
-[assembly: MelonInfo(typeof(PMW2RPArchipelagoClientMod.Core), "PMW2RPArchipelagoClientMod", "1.2.0a", "DThaiPome", null)]
+[assembly: MelonInfo(typeof(PMW2RPArchipelagoClientMod.Core), "PMW2RPArchipelagoClientMod", "1.2.0-a", "DThaiPome", null)]
 [assembly: MelonGame("Bandai Namco Entertainment Inc.", "PAC-MAN WORLD 2 Re-PAC")]
 
 namespace PMW2RPArchipelagoClientMod
@@ -11,6 +11,7 @@ namespace PMW2RPArchipelagoClientMod
         public override void OnInitializeMelon()
         {
             ServiceFactory.Init(this);
+            ServiceFactory.IdMapperService.Init();
             LoggerInstance.Msg("Initialized PMW2RPArchipelagoClientMod.");
         }
 

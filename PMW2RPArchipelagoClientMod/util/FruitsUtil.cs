@@ -1,5 +1,7 @@
 ﻿using Il2Cpp;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
 
 namespace PMW2RPArchipelagoClientMod.util
 {
@@ -12,7 +14,7 @@ namespace PMW2RPArchipelagoClientMod.util
                 return true;
             }
             EFruits fruit = (EFruits)(item - EItem.Cherry);
-            return unlocks.FruitSwitches.Contains(fruit);
+            return FruitSwitchItem.IsFruitSwitchReceived(unlocks, fruit);
         }
     }
 }

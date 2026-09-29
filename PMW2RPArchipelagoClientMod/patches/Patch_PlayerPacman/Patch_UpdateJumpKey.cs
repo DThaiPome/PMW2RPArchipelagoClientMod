@@ -2,6 +2,7 @@
 using Il2Cpp;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
 {
@@ -14,7 +15,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_PlayerPacman
         private static void Prefix(PlayerPacman __instance)
         {
             if (GameUtil.UpdateKeyState(__instance.m_padNum, __instance.m_playerNo, EKeyAsign.Jump, __instance.m_jumpKeyState) == EKeyState.KeyDown
-                && ServiceFactory.Unlocks.ButtBounce == ProgressiveButtBounce.None
+                && MovesetItem.GetButtBounceLevel(ServiceFactory.Unlocks) == ProgressiveButtBounce.None
                 && !__instance.IsJumpOK)
             {
                 ServiceFactory.PlayerPacmanStateService.PushSkipEndJump();

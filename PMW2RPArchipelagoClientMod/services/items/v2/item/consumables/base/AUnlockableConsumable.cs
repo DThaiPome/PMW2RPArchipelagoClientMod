@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using PMW2RPArchipelagoClientMod.services.items.v2.item;
 using PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base;
 
-namespace PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@base
+namespace PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base
 {
     public abstract class AUnlockableConsumable<T> : IUnlockableConsumable<T>
     {
@@ -20,5 +20,14 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@b
         }
 
         public abstract void Consume(IConsumableDispatcher dispatcher);
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (!(obj is AUnlockableConsumable<T> other)) return false;
+
+            return _id == other._id;
+        }
     }
 }

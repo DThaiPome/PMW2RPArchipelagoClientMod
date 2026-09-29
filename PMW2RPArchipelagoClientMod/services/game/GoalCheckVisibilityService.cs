@@ -2,7 +2,10 @@
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
 using UnityEngine;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using Il2Cpp;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -12,9 +15,9 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private IUnlocksSource _unlocks;
         private IAPConnectionService _apConnectionService;
 
-        private Dictionary<GoldenFruitItem, GameObject> _goldenFruitObjs = new Dictionary<GoldenFruitItem, GameObject>();
-        private Dictionary<GoldenFruitItem, GameObject> _fruitParentObjs = new Dictionary<GoldenFruitItem, GameObject>();
-        private Dictionary<PastKeyItem, GameObject> _keyObjs = new Dictionary<PastKeyItem, GameObject>();
+        private Dictionary<EFruits, GameObject> _goldenFruitObjs = new Dictionary<EFruits, GameObject>();
+        private Dictionary<EFruits, GameObject> _fruitParentObjs = new Dictionary<EFruits, GameObject>();
+        private Dictionary<PastKeyKind, GameObject> _keyObjs = new Dictionary<PastKeyKind, GameObject>();
 
         private bool _shouldSync = false;
 
@@ -114,7 +117,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 return;
             }
 
-            for (PastKeyItem key = PastKeyItem.WindyWoodsKey; key < PastKeyItem.MAX; key++)
+            for (PastKeyKind key = PastKeyKind.WindyWoodsKey; key < PastKeyKind.MAX; key++)
             {
                 Transform rootPos = _rootPosTransformFromKey(key);
                 if (rootPos == null)
@@ -137,10 +140,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private void _syncObjRefsFromGoldenFruit(Dictionary<GoldenFruitItem, GameObject> objs, Func<GoldenFruitItem, GameObject> fruitToObj)
+        private void _syncObjRefsFromGoldenFruit(Dictionary<EFruits, GameObject> objs, Func<EFruits, GameObject> fruitToObj)
         {
 
-            for (GoldenFruitItem fruit = GoldenFruitItem.GoldenCherry; fruit < GoldenFruitItem.MAX; fruit++)
+            for (EFruits fruit = EFruits.Cherry; fruit < EFruits.MAX; fruit++)
             {
                 GameObject obj = fruitToObj(fruit);
                 if (obj == null)
@@ -163,12 +166,12 @@ namespace PMW2RPArchipelagoClientMod.services.game
 
         private void _syncKeysVisibility()
         {
-            _syncObjVisibilityToUnlocks(_keyObjs, _unlocks.PastKeys.Contains);
+            _syncObjVisibilityToUnlocks(_keyObjs, key => PastKeyItem.IsPastKeyReceived(_unlocks, key));
         }
 
-        private void _syncObjVisibilityToGoldenFruitUnlocks(Dictionary<GoldenFruitItem, GameObject> objs)
+        private void _syncObjVisibilityToGoldenFruitUnlocks(Dictionary<EFruits, GameObject> objs)
         {
-            _syncObjVisibilityToUnlocks(objs, _unlocks.GoldenFruit.Contains);
+            _syncObjVisibilityToUnlocks(objs, fruit => GoldenFruitItem.IsGoldenFruitReceived(_unlocks, fruit));
         }
 
         private void _syncObjVisibilityToUnlocks<T>(Dictionary<T, GameObject> objs, Func<T, bool> isUnlocked)
@@ -185,42 +188,42 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private GameObject _objFromFruit(GoldenFruitItem fruit)
+        private GameObject _objFromFruit(EFruits fruit)
         {
             return GameObject.Find(fruit switch
             {
-                GoldenFruitItem.GoldenCherry => "SM_Fruit_Cherries_Gold",
-                GoldenFruitItem.GoldenStrawberry => "SM_Fruit_Berry_Gold",
-                GoldenFruitItem.GoldenApple => "SM_Fruit_Apple_Gold",
-                GoldenFruitItem.GoldenOrange => "SM_Fruit_Orange_Gold",
-                GoldenFruitItem.GoldenMelon => "SM_Fruit_Melon_Gold",
+                EFruits.Cherry => "SM_Fruit_Cherries_Gold",
+                EFruits.Strawberry => "SM_Fruit_Berry_Gold",
+                EFruits.Apple => "SM_Fruit_Apple_Gold",
+                EFruits.Orange => "SM_Fruit_Orange_Gold",
+                EFruits.Melon => "SM_Fruit_Melon_Gold",
                 _ => throw new NotImplementedException("weird golden fruit")
             });
         }
 
-        private GameObject _parentObjFromFruit(GoldenFruitItem fruit)
+        private GameObject _parentObjFromFruit(EFruits fruit)
         {
             return GameObject.Find(fruit switch
             {
-                GoldenFruitItem.GoldenCherry => "Fruits_Cherries",
-                GoldenFruitItem.GoldenStrawberry => "Fruits_Strawberry",
-                GoldenFruitItem.GoldenApple => "Fruits_Apple",
-                GoldenFruitItem.GoldenOrange => "Fruits_Orange",
-                GoldenFruitItem.GoldenMelon => "Fruits_Melon",
+                EFruits.Cherry => "Fruits_Cherries",
+                EFruits.Strawberry => "Fruits_Strawberry",
+                EFruits.Apple => "Fruits_Apple",
+                EFruits.Orange => "Fruits_Orange",
+                EFruits.Melon => "Fruits_Melon",
                 _ => throw new NotImplementedException("weird golden fruit")
             });
         }
 
-        private Transform _rootPosTransformFromKey(PastKeyItem key)
+        private Transform _rootPosTransformFromKey(PastKeyKind key)
         {
             GameObject areaLockObj = GameObject.Find(key switch
             {
-                PastKeyItem.WindyWoodsKey => "AreaLock_Area2_Past",
-                PastKeyItem.ThunderSnowMountainKey => "AreaLock_Area3_Past",
-                PastKeyItem.FieryCavernsKey => "AreaLock_Area4_Past",
-                PastKeyItem.DimUnderwatersKey => "AreaLock_Area5_Past",
-                PastKeyItem.GhostIslandKey => "AreaLock_Area6_Past",
-                PastKeyItem.MAX => throw new NotImplementedException(),
+                PastKeyKind.WindyWoodsKey => "AreaLock_Area2_Past",
+                PastKeyKind.ThunderSnowMountainKey => "AreaLock_Area3_Past",
+                PastKeyKind.FieryCavernsKey => "AreaLock_Area4_Past",
+                PastKeyKind.DimUnderwatersKey => "AreaLock_Area5_Past",
+                PastKeyKind.GhostIslandKey => "AreaLock_Area6_Past",
+                PastKeyKind.MAX => throw new NotImplementedException(),
                 _ => throw new NotImplementedException("weird key")
             });
             if (areaLockObj == null)
@@ -228,7 +231,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
                 return null;
             }
 
-            return areaLockObj.transform.Find(key == PastKeyItem.GhostIslandKey ? "RootPos (1)" : "RootPos");
+            return areaLockObj.transform.Find(key == PastKeyKind.GhostIslandKey ? "RootPos (1)" : "RootPos");
         }
     }
 }

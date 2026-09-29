@@ -78,8 +78,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
 
         private IItemMapEntry _mapGoldenFruitItem(long id)
         {
-            GoldenFruitItem item = (GoldenFruitItem)(id - GOLDEN_FRUIT_OFFSET);
-            if (item >= GoldenFruitItem.MAX)
+            GoldenFruitKind item = (GoldenFruitKind)(id - GOLDEN_FRUIT_OFFSET);
+            if (item >= GoldenFruitKind.MAX)
             {
                 return new UnknownItemResult(id);
             }
@@ -88,8 +88,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
 
         private IItemMapEntry _mapPastKeyItem(long id)
         {
-            PastKeyItem item = (PastKeyItem)(id - KEY_OFFSET);
-            if (item >= PastKeyItem.MAX)
+            PastKeyKind item = (PastKeyKind)(id - KEY_OFFSET);
+            if (item >= PastKeyKind.MAX)
             {
                 return new UnknownItemResult(id);
             }
@@ -97,14 +97,14 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping
         }
         private IItemMapEntry _mapMoveset(long id)
         {
-            return (MovesetItem)(id - MOVEMENT_OFFSET) switch
+            return (MovesetKind)(id - MOVEMENT_OFFSET) switch
             {
-                MovesetItem.ProgressiveButtBounce => new ButtBounceItemResult(),
-                MovesetItem.FlipKick => new FlipKickItemResult(),
-                MovesetItem.RevRoll => new DashItemResult(),
-                MovesetItem.PacDotAttack => new BombItemResult(),
-                MovesetItem.ProgressiveDolphinKick => new DolphinKickItemResult(),
-                MovesetItem.Flutter => new FlutterItemResult(),
+                MovesetKind.ProgressiveButtBounce => new ButtBounceItemResult(),
+                MovesetKind.FlipKick => new FlipKickItemResult(),
+                MovesetKind.RevRoll => new DashItemResult(),
+                MovesetKind.PacDotAttack => new BombItemResult(),
+                MovesetKind.ProgressiveDolphinKick => new DolphinKickItemResult(),
+                MovesetKind.Flutter => new FlutterItemResult(),
                 _ => new UnknownItemResult(id)
             };
         }

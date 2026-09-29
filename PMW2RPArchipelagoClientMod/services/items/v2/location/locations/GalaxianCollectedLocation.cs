@@ -5,35 +5,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Il2Cpp.StageManager;
 
 namespace PMW2RPArchipelagoClientMod.services.items.v2.location.locations
 {
-    public class GalaxianCollectedLocation : AUnlockableLocation<EWorldStage>
+    public class GalaxianCollectedLocation : AUnlockableLocation<int>
     {
         private static readonly long GALAXIAN_OFFSET = 4000;
-        private static readonly long STAGE_ID_CEIL = GALAXIAN_OFFSET + (long)EWorldStage.StageSonic_1 + 1;
+        private static readonly long STAGE_ID_CEIL = GALAXIAN_OFFSET + 15;
+
+        public static Dictionary<int, GalaxianCollectedLocation> GALAXIAN_LOCATIONS { get; private set; }
 
         static GalaxianCollectedLocation()
+        {
+            GALAXIAN_LOCATIONS = new Dictionary<int, GalaxianCollectedLocation>();
+            for (var maze = 0; maze < 15; maze++)
+            {
+                GALAXIAN_LOCATIONS[maze] = new GalaxianCollectedLocation(maze);
+            }
+        }
+
+        public static void Register()
         {
             ServiceFactory.IdMapperService.RegisterLocationInRange(GALAXIAN_OFFSET, STAGE_ID_CEIL, id => new GalaxianCollectedLocation(id));
         }
 
-        private EWorldStage _stage;
+        public static bool IsGalaxianCollected(ILocationsSource locations, int maze)
+        {
+            return locations.IsCleared(GALAXIAN_LOCATIONS[maze]);
+        }
+
+        public static void ClearGalaxianCollected(ILocationsSource locations, int maze)
+        {
+            locations.Clear(GALAXIAN_LOCATIONS[maze]);
+        }
+
+        private int _maze;
 
         public GalaxianCollectedLocation(long id) : base(id)
         {
-            _stage = (EWorldStage)(id - 1 - GALAXIAN_OFFSET);
-            if (_stage < EWorldStage.PacVillage || _stage >= EWorldStage.StageSonic_1)
-            {
-                ServiceFactory.ModInstance.LoggerInstance.Warning("Parsed unsupported galaxian ID: " + id);
-            }
+            _maze = (int)(id - GALAXIAN_OFFSET);
         }
 
-        public GalaxianCollectedLocation(EWorldStage stage) : base((long)stage + 1 + GALAXIAN_OFFSET)
+        public GalaxianCollectedLocation(int maze) : base((long)maze + GALAXIAN_OFFSET)
         {
-            _stage = stage;
+            _maze = maze;
         }
 
-        public override EWorldStage Location => _stage;
+        public override int Location => _maze;
     }
 }

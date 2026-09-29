@@ -11,17 +11,5 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.item.items.@base
         long Id { get; }
 
         void Unlock(IItemsDispatcher dispatcher);
-
-        public bool Equals(IUnlockableItemId other)
-        {
-            if (other == null) return false;
-            if (this == other) return true;
-            return Id == other.Id;
-        }
-
-        int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
     }
 }

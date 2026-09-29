@@ -11,7 +11,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.item.items
     {
         public UnknownItem(long id) : base(id)
         {
-            ServiceFactory.ModInstance.LoggerInstance.Warning("Found unknown item with id: " + Id);
         }
 
         public override long Item => Id;

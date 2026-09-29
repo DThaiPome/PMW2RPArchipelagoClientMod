@@ -1,6 +1,8 @@
 ﻿using Il2Cpp;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
+using PMW2RPArchipelagoClientMod.services.items.v2.item.items;
+using IUnlocksSource = PMW2RPArchipelagoClientMod.services.items.v2.item.IUnlocksSource;
 
 namespace PMW2RPArchipelagoClientMod.services.game
 {
@@ -54,7 +56,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
         public void SetSuperDK(PlayerPacman __instance)
         {
             _setSuperDKDefaults(__instance);
-            if (_unlocksSource.DolphinKick != ProgressiveDolphinKick.SuperDolphinKick)
+            if (MovesetItem.GetDolphinKickLevel(_unlocksSource) != ProgressiveDolphinKick.SuperDolphinKick)
             {
                 __instance.scSwimSDKChargeTimeMin = -1;
                 __instance.scSwimSDKChargeTimeMax = -1;

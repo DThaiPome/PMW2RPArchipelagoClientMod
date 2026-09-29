@@ -1,6 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
 using PMW2RPArchipelagoClientMod.services;
+using PMW2RPArchipelagoClientMod.services.items.v2.location.locations;
 
 namespace PMW2RPArchipelagoClientMod.patches.Patch_ItemCapsule
 {
@@ -9,7 +10,7 @@ namespace PMW2RPArchipelagoClientMod.patches.Patch_ItemCapsule
     {
         private static void Prefix(ItemCapsule __instance)
         {
-            ServiceFactory.Locations.CollectCapsule(__instance.m_capsuleId);
+            CollectCapsuleLocation.ClearCapsuleCollected(ServiceFactory.Locations, __instance.m_capsuleId);
         }
     }
 }

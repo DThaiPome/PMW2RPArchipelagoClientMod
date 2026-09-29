@@ -12,26 +12,26 @@ namespace PMW2RPArchipelagoClientMod.models.data
         public ProgressiveButtBounce ButtBounce { get; }
         public ProgressiveDolphinKick DolphinKick { get; }
         public IImmutableDictionary<EWorldStage, bool> Stages { get; }
-        public IImmutableSet<GoldenFruitItem> GoldenFruit { get; }
-        public IImmutableSet<PastKeyItem> PastKeys { get; }
+        public IImmutableSet<GoldenFruitKind> GoldenFruit { get; }
+        public IImmutableSet<PastKeyKind> PastKeys { get; }
         public IImmutableSet<EPlayerSkin> Skins { get; }
         public IImmutableSet<EFruits> FruitSwitches { get; }
 
-        private static readonly IEnumerable<GoldenFruitItem> _allGoldenFruits = [GoldenFruitItem.GoldenCherry,
-            GoldenFruitItem.GoldenStrawberry,
-            GoldenFruitItem.GoldenApple,
-            GoldenFruitItem.GoldenOrange,
-            GoldenFruitItem.GoldenMelon];
+        private static readonly IEnumerable<GoldenFruitKind> _allGoldenFruits = [GoldenFruitKind.GoldenCherry,
+            GoldenFruitKind.GoldenStrawberry,
+            GoldenFruitKind.GoldenApple,
+            GoldenFruitKind.GoldenOrange,
+            GoldenFruitKind.GoldenMelon];
         public bool AreAllGoldenFruitsUnlocked()
         {
             return GoldenFruit.SetEquals(_allGoldenFruits);
         }
 
-        private static readonly IEnumerable<PastKeyItem> _allKeys = [PastKeyItem.WindyWoodsKey,
-            PastKeyItem.ThunderSnowMountainKey,
-            PastKeyItem.FieryCavernsKey,
-            PastKeyItem.DimUnderwatersKey,
-            PastKeyItem.GhostIslandKey];
+        private static readonly IEnumerable<PastKeyKind> _allKeys = [PastKeyKind.WindyWoodsKey,
+            PastKeyKind.ThunderSnowMountainKey,
+            PastKeyKind.FieryCavernsKey,
+            PastKeyKind.DimUnderwatersKey,
+            PastKeyKind.GhostIslandKey];
         public bool AreAllKeysUnlocked()
         {
             return PastKeys.SetEquals(_allKeys);

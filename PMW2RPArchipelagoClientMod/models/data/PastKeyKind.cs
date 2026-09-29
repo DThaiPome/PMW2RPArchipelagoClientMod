@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.models.data
 {
-    public enum PastKeyItem
+    public enum PastKeyKind
     {
         WindyWoodsKey = 0,
         ThunderSnowMountainKey = 1,

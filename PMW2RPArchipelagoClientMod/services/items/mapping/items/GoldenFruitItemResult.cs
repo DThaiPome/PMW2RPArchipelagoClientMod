@@ -4,9 +4,9 @@ namespace PMW2RPArchipelagoClientMod.services.items.mapping.items
 {
     public class GoldenFruitItemResult : IItemMapEntry
     {
-        private GoldenFruitItem _goldenFruit;
+        private GoldenFruitKind _goldenFruit;
 
-        public GoldenFruitItemResult(GoldenFruitItem item)
+        public GoldenFruitItemResult(GoldenFruitKind item)
         {
             _goldenFruit = item;
         }

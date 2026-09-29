@@ -22,5 +22,19 @@ namespace PMW2RPArchipelagoClientMod.services.items.v2.location.locations.@base
         {
             dispatcher.ClearLocation(this);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (!(obj is AUnlockableLocation<T> other)) return false;
+
+            return _id == other._id;
+        }
+
+        public override int GetHashCode()
+        {
+            return _id.GetHashCode();
+        }
     }
 }

@@ -1,11 +1,11 @@
-﻿using PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables.@base;
+﻿using PMW2RPArchipelagoClientMod.services.items.v2.item.consumables.@base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMW2RPArchipelagoClientMod.services.items.v2.consumable.consumables
+namespace PMW2RPArchipelagoClientMod.services.items.v2.item.consumables
 {
     public class UnknownConsumable : AUnlockableConsumable<long>
     {
