@@ -1,11 +1,10 @@
 ﻿using MelonLoader;
-using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.game;
-using PMW2RPArchipelagoClientMod.services.items;
 using PMW2RPArchipelagoClientMod.services.items.item;
 using PMW2RPArchipelagoClientMod.services.items.location;
 using PMW2RPArchipelagoClientMod.services.traps;
+using PMW2RPArchipelagoClientMod.services.unlocks.registry;
 
 namespace PMW2RPArchipelagoClientMod.services
 {

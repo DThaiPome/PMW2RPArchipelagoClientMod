@@ -1,6 +1,5 @@
 ﻿using Il2Cpp;
 using MelonLoader;
-using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.items.item;
 using PMW2RPArchipelagoClientMod.services.items.item.items;

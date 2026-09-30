@@ -3,11 +3,9 @@ using Il2CppUI;
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
-using PMW2RPArchipelagoClientMod.services.items;
 using UnityEngine;
 using PMW2RPArchipelagoClientMod.services.items.item.items;
 using PMW2RPArchipelagoClientMod.services.items.location.locations;
-using PMW2RPArchipelagoClientMod.services.items.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.item;
 using PMW2RPArchipelagoClientMod.services.items.location;
 
