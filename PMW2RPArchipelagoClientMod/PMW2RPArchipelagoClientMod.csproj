@@ -353,6 +353,7 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+		<Compile Include="models\data\GoldenFruitKind.cs" />
 		<Compile Include="models\data\FillerKind.cs" />
 		<Compile Include="models\data\GoalBossOption.cs" />
 		<Compile Include="models\data\PastKeyKind.cs" />
@@ -442,6 +443,7 @@
 		<Compile Include="services\traps\VoiceLineTrapService.cs" />
 		<Compile Include="services\unlocks\registry\MapFromIdRange.cs" />
 		<Compile Include="services\unlocks\registry\WorldConstants.cs" />
+		<Compile Include="util\PMW2RPConstants.cs" />
 		<Compile Include="util\FruitsUtil.cs" />
 		<Compile Include="util\TimeUtil.cs" />
 		<Content Include="Directory.Build.props" />

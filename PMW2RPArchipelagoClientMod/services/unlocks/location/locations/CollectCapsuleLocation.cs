@@ -6,16 +6,17 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 {
     [MapFromIdRange(
         inclusiveMin: WorldConstants.GASHAPON_OFFSET,
-        exclusiveMax: WorldConstants.GASHAPON_OFFSET + (long)ECapsule.Capsule54)]
+        exclusiveMax: WorldConstants.GASHAPON_OFFSET + (long)CAPSULE_CAP)]
     public class CollectCapsuleLocation : AUnlockableLocation<ECapsule>
     {
+        public const ECapsule CAPSULE_CAP = ECapsule.Capsule55;
+
         public static Dictionary<ECapsule, CollectCapsuleLocation> CAPSULE_LOCATIONS { get; private set; }
 
         static CollectCapsuleLocation()
         {
-
             CAPSULE_LOCATIONS = new Dictionary<ECapsule, CollectCapsuleLocation>();
-            for (var capsule = ECapsule.Capsule1; capsule < ECapsule.Capsule54; capsule++)
+            for (var capsule = ECapsule.Capsule1; capsule < CAPSULE_CAP; capsule++)
             {
                 CAPSULE_LOCATIONS[capsule] = new CollectCapsuleLocation(capsule);
             }
@@ -23,11 +24,15 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 
         public static bool IsCapsuleCollected(ILocationsSource locations, ECapsule capsule)
         {
-            return locations.IsCleared(CAPSULE_LOCATIONS[capsule]);
+            return capsule > ECapsule.None && capsule < CAPSULE_CAP && locations.IsCleared(CAPSULE_LOCATIONS[capsule]);
         }
 
         public static void ClearCapsuleCollected(ILocationsSource locations, ECapsule capsule)
         {
+            if (capsule <= ECapsule.None || capsule >= CAPSULE_CAP)
+            {
+                return;
+            }
             locations.Clear(CAPSULE_LOCATIONS[capsule]);
         }
 
@@ -36,7 +41,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
         public CollectCapsuleLocation(long id) : base(id)
         {
             _capsule = (ECapsule)(id - WorldConstants.GASHAPON_OFFSET);
-            if (_capsule <= ECapsule.None || _capsule >= ECapsule.Capsule54)
+            if (_capsule <= ECapsule.None || _capsule >= CAPSULE_CAP)
             {
                 ServiceFactory.ModInstance.LoggerInstance.Warning("Parsed unsupported capsule ID: " + id);
             }

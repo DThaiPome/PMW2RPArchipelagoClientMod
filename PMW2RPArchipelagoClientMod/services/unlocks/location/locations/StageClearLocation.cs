@@ -2,12 +2,13 @@
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
+using PMW2RPArchipelagoClientMod.util;
 
 namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 {
     [MapFromIdRange(
         inclusiveMin: WorldConstants.LEVEL_OFFSET,
-        exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)EWorldStage.StageSonic_1 + 1)]
+        exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
     public class StageClearLocation : AUnlockableLocation<EWorldStage>
     {
         public static Dictionary<EWorldStage, StageClearLocation> STAGE_CLEAR_LOCATIONS { get; private set; }
@@ -28,6 +29,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 
         public static void ClearStage(ILocationsSource locations, EWorldStage stage)
         {
+            if (stage <= EWorldStage.PacVillage || stage >= PMW2RPConstants.STAGE_CAP)
+            {
+                return;
+            }
             locations.Clear(STAGE_CLEAR_LOCATIONS[stage]);
         }
 

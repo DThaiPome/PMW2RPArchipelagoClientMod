@@ -15,8 +15,8 @@ namespace PMW2RPArchipelagoClientMod.services.game
         private IUnlocksSource _unlocks;
         private IAPConnectionService _apConnectionService;
 
-        private Dictionary<EFruits, GameObject> _goldenFruitObjs = new Dictionary<EFruits, GameObject>();
-        private Dictionary<EFruits, GameObject> _fruitParentObjs = new Dictionary<EFruits, GameObject>();
+        private Dictionary<GoldenFruitKind, GameObject> _goldenFruitObjs = new Dictionary<GoldenFruitKind, GameObject>();
+        private Dictionary<GoldenFruitKind, GameObject> _fruitParentObjs = new Dictionary<GoldenFruitKind, GameObject>();
         private Dictionary<PastKeyKind, GameObject> _keyObjs = new Dictionary<PastKeyKind, GameObject>();
 
         private bool _shouldSync = false;
@@ -140,10 +140,10 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private void _syncObjRefsFromGoldenFruit(Dictionary<EFruits, GameObject> objs, Func<EFruits, GameObject> fruitToObj)
+        private void _syncObjRefsFromGoldenFruit(Dictionary<GoldenFruitKind, GameObject> objs, Func<GoldenFruitKind, GameObject> fruitToObj)
         {
 
-            for (EFruits fruit = EFruits.Cherry; fruit < EFruits.MAX; fruit++)
+            for (GoldenFruitKind fruit = GoldenFruitKind.Cherry; fruit < GoldenFruitKind.MAX; fruit++)
             {
                 GameObject obj = fruitToObj(fruit);
                 if (obj == null)
@@ -169,7 +169,7 @@ namespace PMW2RPArchipelagoClientMod.services.game
             _syncObjVisibilityToUnlocks(_keyObjs, key => PastKeyItem.IsPastKeyReceived(_unlocks, key));
         }
 
-        private void _syncObjVisibilityToGoldenFruitUnlocks(Dictionary<EFruits, GameObject> objs)
+        private void _syncObjVisibilityToGoldenFruitUnlocks(Dictionary<GoldenFruitKind, GameObject> objs)
         {
             _syncObjVisibilityToUnlocks(objs, fruit => GoldenFruitItem.IsGoldenFruitReceived(_unlocks, fruit));
         }
@@ -188,28 +188,28 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private GameObject _objFromFruit(EFruits fruit)
+        private GameObject _objFromFruit(GoldenFruitKind fruit)
         {
             return GameObject.Find(fruit switch
             {
-                EFruits.Cherry => "SM_Fruit_Cherries_Gold",
-                EFruits.Strawberry => "SM_Fruit_Berry_Gold",
-                EFruits.Apple => "SM_Fruit_Apple_Gold",
-                EFruits.Orange => "SM_Fruit_Orange_Gold",
-                EFruits.Melon => "SM_Fruit_Melon_Gold",
+                GoldenFruitKind.Cherry => "SM_Fruit_Cherries_Gold",
+                GoldenFruitKind.Strawberry => "SM_Fruit_Berry_Gold",
+                GoldenFruitKind.Apple => "SM_Fruit_Apple_Gold",
+                GoldenFruitKind.Orange => "SM_Fruit_Orange_Gold",
+                GoldenFruitKind.Melon => "SM_Fruit_Melon_Gold",
                 _ => throw new NotImplementedException("weird golden fruit")
             });
         }
 
-        private GameObject _parentObjFromFruit(EFruits fruit)
+        private GameObject _parentObjFromFruit(GoldenFruitKind fruit)
         {
             return GameObject.Find(fruit switch
             {
-                EFruits.Cherry => "Fruits_Cherry",
-                EFruits.Strawberry => "Fruits_Strawberry",
-                EFruits.Apple => "Fruits_Apple",
-                EFruits.Orange => "Fruits_Orange",
-                EFruits.Melon => "Fruits_Melon",
+                GoldenFruitKind.Cherry => "Fruits_Cherry",
+                GoldenFruitKind.Strawberry => "Fruits_Strawberry",
+                GoldenFruitKind.Apple => "Fruits_Apple",
+                GoldenFruitKind.Orange => "Fruits_Orange",
+                GoldenFruitKind.Melon => "Fruits_Melon",
                 _ => throw new NotImplementedException("weird golden fruit")
             });
         }

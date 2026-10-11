@@ -237,15 +237,15 @@ namespace PMW2RPArchipelagoClientMod.services.game
             }
         }
 
-        private EWorldStage _goldenFruitToLevelUnlock(EFruits goldenFruitItem)
+        private EWorldStage _goldenFruitToLevelUnlock(GoldenFruitKind goldenFruitItem)
         {
             return goldenFruitItem switch
             {
-                EFruits.Cherry => EWorldStage.Stage2_1,
-                EFruits.Strawberry => EWorldStage.Stage3_1,
-                EFruits.Apple => EWorldStage.Stage4_1,
-                EFruits.Orange => EWorldStage.Stage5_1,
-                EFruits.Melon => EWorldStage.Stage6_1,
+                GoldenFruitKind.Cherry => EWorldStage.Stage2_1,
+                GoldenFruitKind.Strawberry => EWorldStage.Stage3_1,
+                GoldenFruitKind.Apple => EWorldStage.Stage4_1,
+                GoldenFruitKind.Orange => EWorldStage.Stage5_1,
+                GoldenFruitKind.Melon => EWorldStage.Stage6_1,
                 _ => throw new NotImplementedException("what kinda golden fruit is this")
             };
         }

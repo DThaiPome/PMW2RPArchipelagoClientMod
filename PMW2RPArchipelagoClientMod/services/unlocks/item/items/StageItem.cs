@@ -1,12 +1,13 @@
 ﻿using Il2Cpp;
 using PMW2RPArchipelagoClientMod.services.items.item.items.@base;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
+using PMW2RPArchipelagoClientMod.util;
 
 namespace PMW2RPArchipelagoClientMod.services.items.item.items
 {
     [MapFromIdRange(
         inclusiveMin: WorldConstants.LEVEL_OFFSET,
-        exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)EWorldStage.StageSonic_1 + 1)]
+        exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
     public class StageItem : APermanentUnlockableItem<EWorldStage>
     {
         public static Dictionary<EWorldStage, StageItem> STAGE_ITEMS { get; private set; }
@@ -22,6 +23,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
 
         public static bool IsStageReceived(IUnlocksSource unlocks, EWorldStage stage)
         {
+            if (stage <= EWorldStage.PacVillage || stage >= PMW2RPConstants.STAGE_CAP)
+            {
+                return false;
+            }
             return unlocks.IsUnlocked(STAGE_ITEMS[stage]);
         }
 

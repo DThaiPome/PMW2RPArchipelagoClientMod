@@ -1,12 +1,13 @@
 ﻿using Il2Cpp;
 using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
+using PMW2RPArchipelagoClientMod.util;
 
 namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 {
     [MapFromIdRange(
         inclusiveMin: WorldConstants.TIMETRIAL_OFFSET,
-        exclusiveMax: WorldConstants.TIMETRIAL_OFFSET + (long)EWorldStage.StageSonic_1 + 1)]
+        exclusiveMax: WorldConstants.TIMETRIAL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
     public class GoldMedalClearLocation : AUnlockableLocation<EWorldStage>
     {
         public static Dictionary<EWorldStage, GoldMedalClearLocation> GOLD_MEDAL_LOCATIONS { get; private set; }
@@ -22,11 +23,15 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
 
         public static bool IsGoldMedalClear(ILocationsSource locations, EWorldStage stage)
         {
-            return locations.IsCleared(GOLD_MEDAL_LOCATIONS[stage]);
+            return stage > EWorldStage.PacVillage && stage < PMW2RPConstants.STAGE_CAP && locations.IsCleared(GOLD_MEDAL_LOCATIONS[stage]);
         }
 
         public static void ClearGoldMedal(ILocationsSource locations, EWorldStage stage)
         {
+            if (stage <= EWorldStage.PacVillage || stage >= PMW2RPConstants.STAGE_CAP)
+            {
+                return;
+            }
             locations.Clear(GOLD_MEDAL_LOCATIONS[stage]);
         }
 

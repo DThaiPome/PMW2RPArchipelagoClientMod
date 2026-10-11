@@ -25,7 +25,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private GameObject _uiRoot;
 
         private Dictionary<EWorldStage, Toggle> _stageToggles = new Dictionary<EWorldStage, Toggle>();
-        private Dictionary<EFruits, Toggle> _goldenFruitToggles = new Dictionary<EFruits, Toggle>();
+        private Dictionary<GoldenFruitKind, Toggle> _goldenFruitToggles = new Dictionary<GoldenFruitKind, Toggle>();
         private Dictionary<PastKeyKind, Toggle> _pastKeyToggles = new Dictionary<PastKeyKind, Toggle>();
 
         public UnlocksPanel(UIBase owner) : base(owner)
@@ -99,7 +99,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             var columnObj = UIFactory.CreateUIObject("keyColumn", _uiRoot);
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(columnObj, childControlWidth: true, childControlHeight: true, forceWidth: true, forceHeight: false);
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            for (EFruits item = EFruits.Cherry; item < EFruits.MAX; item++)
+            for (GoldenFruitKind item = GoldenFruitKind.Cherry; item < GoldenFruitKind.MAX; item++)
             {
                 _constructToggle(columnObj, item.ToString(), item.ToString(), out Toggle toggle);
                 bool unlocked = GoldenFruitItem.IsGoldenFruitReceived(debugUnlocksService, item);
@@ -234,7 +234,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
         private void _updateKeys()
         {
             var debugUnlocksService = PMW2RPArchipelagoClientMod.services.ServiceFactory.DebugUnlocksService;
-            for (EFruits item = EFruits.Cherry; item < EFruits.MAX; item++)
+            for (GoldenFruitKind item = GoldenFruitKind.Cherry; item < GoldenFruitKind.MAX; item++)
             {
                 bool isOn = _goldenFruitToggles[item].isOn;
                 _toggleUnlock(debugUnlocksService, isOn, GoldenFruitItem.GOLDEN_FRUIT_ITEMS[item]);
