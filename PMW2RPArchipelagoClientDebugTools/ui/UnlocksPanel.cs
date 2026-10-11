@@ -186,7 +186,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             _bringUnlockCountToTarget(debugUnlocksService, dolphinKickCount, MovesetItem.MOVESET_ITEMS[MovesetKind.ProgressiveDolphinKick]);
         }
 
-        private void _toggleUnlock(IUnlocksSourceMutable unlocks, bool shouldBeUnlocked, IUnlockableItemId item)
+        private void _toggleUnlock(IUnlocksSourceMutable unlocks, bool shouldBeUnlocked, IUnlockableItem item)
         {
             bool itemReceived = unlocks.IsUnlocked(item);
             if (itemReceived && !shouldBeUnlocked)
@@ -199,7 +199,7 @@ namespace PMW2RPArchipelagoClientDebugTools.ui
             }
         }
 
-        private void _bringUnlockCountToTarget(IUnlocksSourceMutable unlocks, int count, IUnlockableItemId item)
+        private void _bringUnlockCountToTarget(IUnlocksSourceMutable unlocks, int count, IUnlockableItem item)
         {
             int ogCount = unlocks.GetCountReceived(item);
             if (ogCount == count)

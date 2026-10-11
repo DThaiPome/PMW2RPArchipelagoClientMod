@@ -5,8 +5,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 {
     public interface IUnlocksSource
     {
-        bool IsUnlocked(IUnlockableItemId item);
-        int GetCountReceived(IUnlockableItemId item);
+        bool IsUnlocked(IUnlockableItem item);
+        int GetCountReceived(IUnlockableItem item);
         IConsumablesDelegates ConsumablesDelegates { get; }
     }
 }

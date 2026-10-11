@@ -7,11 +7,11 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
     public interface IIdMapperService
     {
         void Init();
-        void RegisterItemInRange(long idGte, long idLt, Func<long, IUnlockableItemId> idToItem);
-        void RegisterLocationInRange(long idGte, long idLt, Func<long, IUnlockableLocationId> idToLocation);
-        void RegisterConsumableInRange(long idGte, long idLt, Func<long, IUnlockableConsumableId> idToConsumable);
-        bool TryGetItemFromId(long id, out IUnlockableItemId item);
-        bool TryGetLocationFromId(long id, out IUnlockableLocationId location);
-        bool TryGetConsumableFromId(long id, out IUnlockableConsumableId consumable);
+        void RegisterItemInRange(long idGte, long idLt, Func<long, IUnlockableItem> idToItem);
+        void RegisterLocationInRange(long idGte, long idLt, Func<long, IUnlockableLocation> idToLocation);
+        void RegisterConsumableInRange(long idGte, long idLt, Func<long, IUnlockableConsumable> idToConsumable);
+        bool TryGetItemFromId(long id, out IUnlockableItem item);
+        bool TryGetLocationFromId(long id, out IUnlockableLocation location);
+        bool TryGetConsumableFromId(long id, out IUnlockableConsumable consumable);
     }
 }

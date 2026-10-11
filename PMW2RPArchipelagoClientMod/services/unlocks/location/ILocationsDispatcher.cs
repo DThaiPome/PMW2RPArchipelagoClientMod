@@ -4,6 +4,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
 {
     public interface ILocationsDispatcher
     {
-        void ClearLocation(IUnlockableLocationId location);
+        void ClearLocation(IUnlockableLocation location);
     }
 }

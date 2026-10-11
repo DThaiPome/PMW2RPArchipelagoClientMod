@@ -5,6 +5,7 @@ using PMW2RPArchipelagoClientMod.services.items.item;
 using PMW2RPArchipelagoClientMod.services.items.location;
 using PMW2RPArchipelagoClientMod.services.traps;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
+using PMW2RPArchipelagoClientMod.services.util;
 
 namespace PMW2RPArchipelagoClientMod.services
 {
@@ -27,6 +28,7 @@ namespace PMW2RPArchipelagoClientMod.services
         private static IUnlocksService _debugUnlocksSource = null;
         private static IUnlocksSource _comboUnlocksSource = null;
         private static ILocationsService _locationsService = null;
+        private static IReflectionService _reflectionService = null;
 
         public static void Init(MelonMod melonMod)
         {
@@ -249,9 +251,21 @@ namespace PMW2RPArchipelagoClientMod.services
             {
                 if (_idMapperService == null)
                 {
-                    _idMapperService = new IdMapperService(ModInstance);
+                    _idMapperService = new IdMapperService(ModInstance, APConnectionService, ReflectionService);
                 }
                 return _idMapperService;
+            }
+        }
+
+        public static IReflectionService ReflectionService
+        {
+            get
+            {
+                if (ReflectionService == null)
+                {
+                    _reflectionService = new ReflectionService();
+                }
+                return _reflectionService;
             }
         }
     }

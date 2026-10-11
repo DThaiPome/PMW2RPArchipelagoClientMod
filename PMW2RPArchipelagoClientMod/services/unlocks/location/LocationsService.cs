@@ -14,7 +14,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
         private IAPConnectionService _apConnectionService;
         private IIdMapperService _idMapperService;
 
-        private HashSet<IUnlockableLocationId> _clearedLocations = new HashSet<IUnlockableLocationId>();
+        private HashSet<IUnlockableLocation> _clearedLocations = new HashSet<IUnlockableLocation>();
         private HashSet<long> _sentLocations = new HashSet<long>();
 
         public LocationsService(MelonMod melonMod,
@@ -57,22 +57,22 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
             _sentLocations.Clear();
         }
 
-        public void Clear(IUnlockableLocationId location)
+        public void Clear(IUnlockableLocation location)
         {
             _clearLocation(location);
         }
 
-        public void ClearLocation(IUnlockableLocationId location)
+        public void ClearLocation(IUnlockableLocation location)
         {
             _clearLocation(location);
         }
 
-        private void _clearLocation(IUnlockableLocationId location)
+        private void _clearLocation(IUnlockableLocation location)
         {
             _clearedLocations.Add(location);
         }
 
-        public bool IsCleared(IUnlockableLocationId location)
+        public bool IsCleared(IUnlockableLocation location)
         {
             return _clearedLocations.Contains(location);
         }
@@ -90,15 +90,15 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
                 {
                     continue;
                 }
-                if (location.Equals(StageClearLocation.STAGE_CLEAR_LOCATIONS[EWorldStage.Stage6_4]) && _apConnectionService.GoalBoss == GoalBossOption.Spooky
-                    || location.Equals(StageClearLocation.STAGE_CLEAR_LOCATIONS[EWorldStage.Stage6_5]) && _apConnectionService.GoalBoss == GoalBossOption.TocMan)
+                if (location.Equals(StageClearLocation.StageLocationFor(EWorldStage.Stage6_4)) && _apConnectionService.GoalBoss == GoalBossOption.Spooky
+                    || location.Equals(StageClearLocation.StageLocationFor(EWorldStage.Stage6_5)) && _apConnectionService.GoalBoss == GoalBossOption.TocMan)
                 {
                     _apConnectionService.Goal();
                 }
             }
         }
 
-        private bool _sendLocationClearedIfNeeded(IUnlockableLocationId location)
+        private bool _sendLocationClearedIfNeeded(IUnlockableLocation location)
         {
             long id = location.Id;
             if (_sentLocations.Contains(id))

@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.consumables.@base
 {
-    public abstract class AUnlockableConsumable<T> : IUnlockableConsumable<T>
+    public abstract class AUnlockableConsumable<T> : IUnlockableConsumable
     {
         protected long _id { get; private set; }
         public abstract T Consumable { get; }

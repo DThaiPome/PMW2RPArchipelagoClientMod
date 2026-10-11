@@ -16,12 +16,12 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         public IConsumablesDelegates ConsumablesDelegates => _releaseUnlocksSource.ConsumablesDelegates;
 
-        public int GetCountReceived(IUnlockableItemId item)
+        public int GetCountReceived(IUnlockableItem item)
         {
             return _releaseUnlocksSource.GetCountReceived(item) + _debugUnlocksSource.GetCountReceived(item);
         }
 
-        public bool IsUnlocked(IUnlockableItemId item)
+        public bool IsUnlocked(IUnlockableItem item)
         {
             return _releaseUnlocksSource.IsUnlocked(item) || _debugUnlocksSource.IsUnlocked(item);
         }

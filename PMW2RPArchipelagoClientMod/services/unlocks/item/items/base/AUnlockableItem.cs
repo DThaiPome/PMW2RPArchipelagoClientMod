@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.items.@base
 {
-    public abstract class AUnlockableItem<T> : IUnlockableItem<T>
+    public abstract class AUnlockableItem<T> : IUnlockableItem
     {
         protected readonly long _id;
         public long Id => _id;

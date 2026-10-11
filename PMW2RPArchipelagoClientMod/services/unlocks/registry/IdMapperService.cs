@@ -1,10 +1,12 @@
 ﻿using MelonLoader;
+using PMW2RPArchipelagoClientMod.services.client;
 using PMW2RPArchipelagoClientMod.services.items.item.consumables;
 using PMW2RPArchipelagoClientMod.services.items.item.consumables.@base;
 using PMW2RPArchipelagoClientMod.services.items.item.items;
 using PMW2RPArchipelagoClientMod.services.items.item.items.@base;
 using PMW2RPArchipelagoClientMod.services.items.location.locations;
 using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
+using PMW2RPArchipelagoClientMod.services.util;
 using System.Reflection;
 
 namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
@@ -12,14 +14,27 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
     public class IdMapperService : IIdMapperService
     {
         private MelonMod _melonMod;
+        private IAPConnectionService _apConnectionService;
+        private IReflectionService _reflectionService;
 
-        private Dictionary<IdRange, Func<long, IUnlockableItemId>> _itemSuppliers = new Dictionary<IdRange, Func<long, IUnlockableItemId>>();
-        private Dictionary<IdRange, Func<long, IUnlockableLocationId>> _locationSuppliers = new Dictionary<IdRange, Func<long, IUnlockableLocationId>>();
-        private Dictionary<IdRange, Func<long, IUnlockableConsumableId>> _consumableSuppliers = new Dictionary<IdRange, Func<long, IUnlockableConsumableId>>();
+        private Dictionary<IdRange, Func<long, IUnlockableItem>> _itemSuppliers = new Dictionary<IdRange, Func<long, IUnlockableItem>>();
+        private Dictionary<IdRange, Func<long, IUnlockableLocation>> _locationSuppliers = new Dictionary<IdRange, Func<long, IUnlockableLocation>>();
+        private Dictionary<IdRange, Func<long, IUnlockableConsumable>> _consumableSuppliers = new Dictionary<IdRange, Func<long, IUnlockableConsumable>>();
 
-        public IdMapperService(MelonMod melonMod)
+        private readonly Dictionary<Type, object> _injectionObjs;
+
+        public IdMapperService(MelonMod melonMod,
+            IAPConnectionService apConnectionService,
+            IReflectionService reflectionService)
         {
             _melonMod = melonMod;
+            _apConnectionService = apConnectionService;
+            _reflectionService = reflectionService;
+
+            _injectionObjs = new Dictionary<Type, object>
+            {
+                { typeof(IAPConnectionService), _apConnectionService }
+            };
         }
 
         public void Init()
@@ -29,7 +44,7 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
         
         private void _registerSuppliers()
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (var type in _reflectionService.GetLoadedTypes())
             {
                 MapFromIdRange attr = type.GetCustomAttribute<MapFromIdRange>();
                 if (attr == null)
@@ -38,30 +53,71 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
                 }
                 long min = attr.InclusiveMin;
                 long max = attr.ExclusiveMax;
-                if (type.IsAssignableTo(typeof(IUnlockableItemId)))
+                if (type.IsAssignableTo(typeof(IUnlockableItem)))
                 {
-                    _registerIfAble<IUnlockableItemId>(type, min, max, RegisterItemInRange);
+                    _registerIfAble<IUnlockableItem>(type, min, max, RegisterItemInRange);
                 }
-                else if (type.IsAssignableTo(typeof(IUnlockableLocationId)))
+                else if (type.IsAssignableTo(typeof(IUnlockableLocation)))
                 {
-                    _registerIfAble<IUnlockableLocationId>(type, min, max, RegisterLocationInRange);
+                    _registerIfAble<IUnlockableLocation>(type, min, max, RegisterLocationInRange);
                 }
-                else if (type.IsAssignableTo(typeof(IUnlockableConsumableId)))
+                else if (type.IsAssignableTo(typeof(IUnlockableConsumable)))
                 {
-                    _registerIfAble<IUnlockableConsumableId>(type, min, max, RegisterConsumableInRange);
+                    _registerIfAble<IUnlockableConsumable>(type, min, max, RegisterConsumableInRange);
                 }
             }
         }
 
         private void _registerIfAble<T>(Type type, long min, long max, Action<long, long, Func<long, T>> register)
         {
-            ConstructorInfo ctr = type.GetConstructor([typeof(long)]);
+            ConstructorInfo[] ctrs = type.GetConstructors();
+            ConstructorInfo ctr = null;
+            _findConstructorWithAnyOfTypes(ctrs, [typeof(long)], ref ctr);
             if (ctr == null)
             {
-                _melonMod.LoggerInstance.Warning("NO ID CONSTRUCTOR FOUND FOR REGISTERED TYPE: " + type);
-                return;
+                _findConstructorWithAnyOfTypes(ctrs, _injectionObjs.Keys, ref ctr);
             }
-            register.Invoke(min, max, id => (T)ctr.Invoke([id]));
+            if (ctr == null)
+            {
+                ctr = type.GetConstructor([]);
+            }
+            if (ctr == null)
+            {
+                throw new InvalidDataException("no constructor for tagged class");
+            }
+            register.Invoke(min, max, id => _invokeMappedConstructor<T>(ctr, id));
+        }
+
+        private void _findConstructorWithAnyOfTypes(IEnumerable<ConstructorInfo> ctrs, IEnumerable<Type> paramTypes, ref ConstructorInfo ctr)
+        {
+            foreach (var ci in ctrs)
+            {
+                if (ci.GetParameters().Any(pi => paramTypes.Contains(pi.ParameterType)))
+                {
+                    ctr = ci;
+                    return;
+                }
+            }
+        }
+
+        private T _invokeMappedConstructor<T>(ConstructorInfo ctr, long id)
+        {
+            return (T)ctr.Invoke(ctr.GetParameters().Select<ParameterInfo, object>(pi =>
+            {
+                if (pi.ParameterType == typeof(long))
+                {
+                    return id;
+                }
+                if (_injectionObjs.TryGetValue(pi.ParameterType, out object obj))
+                {
+                    return obj;
+                }
+                else
+                {
+                    // idk man just keep your constructors clean and everything will be fine
+                    return null;
+                }
+            }).ToArray());
         }
 
         private bool _tryGetSupplierFromDict<T>(Dictionary<IdRange, Func<long, T>> dict, long id, out Func<long, T> supplier)
@@ -78,12 +134,12 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
             return false;
         }
 
-        public void RegisterItemInRange(long idGte, long idLt, Func<long, IUnlockableItemId> idToItem)
+        public void RegisterItemInRange(long idGte, long idLt, Func<long, IUnlockableItem> idToItem)
         {
             _registerEntryInRange(_itemSuppliers, idGte, idLt, idToItem);
         }
 
-        public void RegisterLocationInRange(long idGte, long idLt, Func<long, IUnlockableLocationId> idToLocation)
+        public void RegisterLocationInRange(long idGte, long idLt, Func<long, IUnlockableLocation> idToLocation)
         {
             _registerEntryInRange(_locationSuppliers, idGte, idLt, idToLocation);
         }
@@ -100,12 +156,12 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
             dict.Add(range, supplier);
         }
 
-        public void RegisterConsumableInRange(long idGte, long idLt, Func<long, IUnlockableConsumableId> idToConsumable)
+        public void RegisterConsumableInRange(long idGte, long idLt, Func<long, IUnlockableConsumable> idToConsumable)
         {
             _registerEntryInRange(_consumableSuppliers, idGte, idLt, idToConsumable);
         }
 
-        public bool TryGetItemFromId(long id, out IUnlockableItemId item)
+        public bool TryGetItemFromId(long id, out IUnlockableItem item)
         {
             if (_tryGetSupplierFromDict(_itemSuppliers, id, out var supplier))
             {
@@ -116,7 +172,7 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
             return false;
         }
 
-        public bool TryGetLocationFromId(long id, out IUnlockableLocationId location)
+        public bool TryGetLocationFromId(long id, out IUnlockableLocation location)
         {
             if (_tryGetSupplierFromDict(_locationSuppliers, id, out var supplier))
             {
@@ -127,7 +183,7 @@ namespace PMW2RPArchipelagoClientMod.services.unlocks.registry
             return false;
         }
 
-        public bool TryGetConsumableFromId(long id, out IUnlockableConsumableId consumable)
+        public bool TryGetConsumableFromId(long id, out IUnlockableConsumable consumable)
         {
             if (_tryGetSupplierFromDict(_consumableSuppliers, id, out var supplier))
             {

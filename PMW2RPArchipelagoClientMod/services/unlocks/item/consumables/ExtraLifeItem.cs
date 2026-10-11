@@ -11,10 +11,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.consumables
     {
         private const long EXTRA_LIFE_ID = WorldConstants.FILLER_OFFSET + (long)FillerKind.ExtraLife;
 
-        public ExtraLifeItem(long id) : base(id)
-        {
-        }
-
         public ExtraLifeItem() : base(WorldConstants.FILLER_OFFSET + (long)FillerKind.ExtraLife)
         {
         }

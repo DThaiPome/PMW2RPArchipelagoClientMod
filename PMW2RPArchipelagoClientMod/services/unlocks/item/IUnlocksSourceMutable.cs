@@ -5,8 +5,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 {
     public interface IUnlocksSourceMutable : IUnlocksSource
     {
-        void ReceiveItem(IUnlockableItemId item);
-        void ReceiveConsumable(IUnlockableConsumableId consumableId);
-        void RescindItem(IUnlockableItemId item);
+        void ReceiveItem(IUnlockableItem item);
+        void ReceiveConsumable(IUnlockableConsumable consumableId);
+        void RescindItem(IUnlockableItem item);
     }
 }

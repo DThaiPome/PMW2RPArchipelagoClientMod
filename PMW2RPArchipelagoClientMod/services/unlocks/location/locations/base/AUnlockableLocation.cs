@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.location.locations.@base
 {
-    public abstract class AUnlockableLocation<T> : IUnlockableLocation<T>
+    public abstract class AUnlockableLocation<T> : IUnlockableLocation
     {
         protected readonly long _id;
         public long Id => _id;

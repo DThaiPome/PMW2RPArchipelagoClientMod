@@ -4,6 +4,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 {
     public interface IItemsDispatcher
     {
-        void UnlockPermanently(IUnlockableItemId item);
+        void UnlockPermanently(IUnlockableItem item);
     }
 }

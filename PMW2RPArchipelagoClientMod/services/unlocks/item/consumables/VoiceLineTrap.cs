@@ -10,10 +10,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.consumables
     {
         private const long VOICE_LINE_TRAP_ID = 11000;
 
-        public VoiceLineTrap(long id) : base(id)
-        {
-        }
-
         public VoiceLineTrap() : base(VOICE_LINE_TRAP_ID)
         {
         }

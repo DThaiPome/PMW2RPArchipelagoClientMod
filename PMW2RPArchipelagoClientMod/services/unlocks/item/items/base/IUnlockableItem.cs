@@ -1,7 +1,9 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.items.@base
 {
-    public interface IUnlockableItem<T> : IUnlockableItemId
+    public interface IUnlockableItem
     {
-        T Item { get; }
+        long Id { get; }
+
+        void Unlock(IItemsDispatcher dispatcher);
     }
 }

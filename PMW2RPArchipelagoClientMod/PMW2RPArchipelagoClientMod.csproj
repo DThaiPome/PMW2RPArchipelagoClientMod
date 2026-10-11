@@ -399,7 +399,6 @@
 		<Compile Include="services\unlocks\item\consumables\base\ConsumableDelegates.cs" />
 		<Compile Include="services\unlocks\item\consumables\base\IConsumablesDelegates.cs" />
 		<Compile Include="services\unlocks\item\consumables\base\IUnlockableConsumable.cs" />
-		<Compile Include="services\unlocks\item\consumables\base\IUnlockableConsumableId.cs" />
 		<Compile Include="services\unlocks\item\consumables\base\AUnlockableConsumable.cs" />
 		<Compile Include="services\unlocks\item\consumables\ExtraLifeItem.cs" />
 		<Compile Include="services\unlocks\item\consumables\PointsBundle.cs" />
@@ -423,9 +422,7 @@
 		<Compile Include="services\unlocks\location\ILocationsService.cs" />
 		<Compile Include="services\unlocks\location\ILocationsSource.cs" />
 		<Compile Include="services\unlocks\item\items\base\IUnlockableItem.cs" />
-		<Compile Include="services\unlocks\item\items\base\IUnlockableItemId.cs" />
 		<Compile Include="services\unlocks\location\locations\base\IUnlockableLocation.cs" />
-		<Compile Include="services\unlocks\location\locations\base\IUnlockableLocationId.cs" />
 		<Compile Include="services\unlocks\item\IItemsDispatcher.cs" />
 		<Compile Include="services\unlocks\item\IUnlocksSource.cs" />
 		<Compile Include="services\unlocks\item\IUnlocksSourceMutable.cs" />
@@ -443,6 +440,8 @@
 		<Compile Include="services\traps\VoiceLineTrapService.cs" />
 		<Compile Include="services\unlocks\registry\MapFromIdRange.cs" />
 		<Compile Include="services\unlocks\registry\WorldConstants.cs" />
+		<Compile Include="services\util\IReflectionService.cs" />
+		<Compile Include="services\util\ReflectionService.cs" />
 		<Compile Include="util\PMW2RPConstants.cs" />
 		<Compile Include="util\FruitsUtil.cs" />
 		<Compile Include="util\TimeUtil.cs" />

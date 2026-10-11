@@ -1,5 +1,4 @@
-﻿using Il2Cpp;
-using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
+﻿using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
 
 namespace PMW2RPArchipelagoClientMod.services.items.location.locations

@@ -13,8 +13,8 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         private IAPConnectionService _apConnectionService;
         private IIdMapperService _idMapperService;
 
-        private Dictionary<IUnlockableItemId, int> _permanentUnlockCounts = new Dictionary<IUnlockableItemId, int>();
-        private Queue<IUnlockableConsumableId> _pendingConsumables = new Queue<IUnlockableConsumableId>();
+        private Dictionary<IUnlockableItem, int> _permanentUnlockCounts = new Dictionary<IUnlockableItem, int>();
+        private Queue<IUnlockableConsumable> _pendingConsumables = new Queue<IUnlockableConsumable>();
         private ConsumableDelegates _consumablesDelegates = new ConsumableDelegates();
 
         private bool _shouldBlockConsumables;
@@ -68,22 +68,22 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
             _pendingConsumables.Clear();
         }
 
-        public int GetCountReceived(IUnlockableItemId item)
+        public int GetCountReceived(IUnlockableItem item)
         {
             return _permanentUnlockCounts.GetValueOrDefault(item, 0);
         }
 
-        public bool IsUnlocked(IUnlockableItemId item)
+        public bool IsUnlocked(IUnlockableItem item)
         {
             return _permanentUnlockCounts.ContainsKey(item);
         }
 
-        public void ReceiveItem(IUnlockableItemId item)
+        public void ReceiveItem(IUnlockableItem item)
         {
             item.Unlock(this);
         }
 
-        public void UnlockPermanently(IUnlockableItemId item)
+        public void UnlockPermanently(IUnlockableItem item)
         {
             if (_permanentUnlockCounts.ContainsKey(item))
             {
@@ -104,7 +104,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
             _pendingConsumables.Clear();
         }
 
-        public void RescindItem(IUnlockableItemId item)
+        public void RescindItem(IUnlockableItem item)
         {
             // Nope
         }
@@ -114,7 +114,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
             FlushConsumables();
         }
 
-        public void ReceiveConsumable(IUnlockableConsumableId consumableId)
+        public void ReceiveConsumable(IUnlockableConsumable consumableId)
         {
             _pendingConsumables.Enqueue(consumableId);
         }

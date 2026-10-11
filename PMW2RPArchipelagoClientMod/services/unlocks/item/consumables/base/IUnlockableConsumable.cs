@@ -1,7 +1,9 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.consumables.@base
 {
-    public interface IUnlockableConsumable<T> : IUnlockableConsumableId
+    public interface IUnlockableConsumable
     {
-        T Consumable { get; }
+        long Id { get; }
+
+        public void Consume(IConsumableDispatcher dispatcher);
     }
 }
