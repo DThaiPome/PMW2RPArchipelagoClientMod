@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.KEY_OFFSET,
         exclusiveMax: WorldConstants.KEY_OFFSET + (long)EPastKeyItem.MAX)]
-    public class PastKeyItem : APermanentUnlockableItem<EPastKeyItem>
+    public class PastKeyItem : APermanentUnlockableItem
     {
         public static Dictionary<EPastKeyItem, PastKeyItem> PAST_KEY_ITEMS { get; private set; }
 
@@ -47,6 +47,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
             _key = key;
         }
 
-        public override EPastKeyItem Item => _key;
+        public EPastKeyItem Item => _key;
     }
 }

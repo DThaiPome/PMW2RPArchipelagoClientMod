@@ -1,9 +1,8 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.consumables.@base
 {
-    public abstract class AUnlockableConsumable<T> : IUnlockableConsumable
+    public abstract class AUnlockableConsumable : IUnlockableConsumable
     {
         protected long _id { get; private set; }
-        public abstract T Consumable { get; }
         public long Id => _id;
 
         public AUnlockableConsumable(long id)
@@ -17,7 +16,7 @@
         {
             if (obj == null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (!(obj is AUnlockableConsumable<T> other)) return false;
+            if (!(obj is AUnlockableConsumable other)) return false;
 
             return _id == other._id;
         }

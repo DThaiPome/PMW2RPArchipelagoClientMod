@@ -16,11 +16,17 @@ namespace PMW2RPArchipelagoClientMod.Tests.services.unlocks.registry
         private Mock<IReflectionService> _mockReflectionService;
         private Mock<IAPConnectionService> _mockConnectionService;
 
+        private IIdMapperService _idMapperService;
+
         private void _setup()
         {
             _mockMelonMod = new Mock<MelonMod>();
             _mockConnectionService = new Mock<IAPConnectionService>();
             _mockReflectionService = new Mock<IReflectionService>();
+
+            _idMapperService = new IdMapperService(_mockMelonMod.Object,
+                _mockConnectionService.Object,
+                _mockReflectionService.Object);
         }
 
         [MapFromIdRange(
@@ -94,11 +100,8 @@ namespace PMW2RPArchipelagoClientMod.Tests.services.unlocks.registry
             _mockReflectionService.Setup(x => x.GetLoadedTypes())
                 .Returns([type]);
 
-            var idMapperService = new IdMapperService(_mockMelonMod.Object,
-                _mockConnectionService.Object,
-                _mockReflectionService.Object);
-            idMapperService.Init();
-            Assert.False(idMapperService.TryGetItemFromId(5, out var item));
+            _idMapperService.Init();
+            Assert.False(_idMapperService.TryGetItemFromId(5, out var item));
         }
 
         [MapFromIdRange(
@@ -126,10 +129,7 @@ namespace PMW2RPArchipelagoClientMod.Tests.services.unlocks.registry
             _mockReflectionService.Setup(x => x.GetLoadedTypes())
                 .Returns([typeof(Valid_NoValidConstructor)]);
 
-            var idMapperService = new IdMapperService(_mockMelonMod.Object,
-                _mockConnectionService.Object,
-                _mockReflectionService.Object);
-            Assert.Throws<InvalidDataException>(() => idMapperService.Init());
+            Assert.Throws<InvalidDataException>(() => _idMapperService.Init());
         }
 
         [MapFromIdRange(
@@ -299,18 +299,15 @@ namespace PMW2RPArchipelagoClientMod.Tests.services.unlocks.registry
             _mockReflectionService.Setup(x => x.GetLoadedTypes())
                 .Returns([type]);
 
-            var idMapperService = new IdMapperService(_mockMelonMod.Object,
-                _mockConnectionService.Object,
-                _mockReflectionService.Object);
-            idMapperService.Init();
+            _idMapperService.Init();
             if (dataType == typeof(IUnlockableItem))
             {
-                Assert.True(idMapperService.TryGetItemFromId(inId, out var item));
+                Assert.True(_idMapperService.TryGetItemFromId(inId, out var item));
                 Assert.Equal(outId, item.Id);
             }
             else if (dataType == typeof(IUnlockableLocation))
             {
-                Assert.True(idMapperService.TryGetLocationFromId(inId, out var location));
+                Assert.True(_idMapperService.TryGetLocationFromId(inId, out var location));
                 Assert.Equal(outId, location.Id);
             }
         }

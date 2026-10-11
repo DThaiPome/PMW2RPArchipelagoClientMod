@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
     [MapFromIdRange(
         inclusiveMin: WorldConstants.MISSION_OFFSET,
         exclusiveMax: WorldConstants.MISSION_OFFSET + (long)EMissionKind.Mission100)]
-    public class MissionClearLocation : AUnlockableLocation<EMissionKind>
+    public class MissionClearLocation : AUnlockableLocation
     {
         public static Dictionary<EMissionKind, MissionClearLocation> MISSION_LOCATIONS { get; private set; }
 
@@ -46,6 +46,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
             _mission = mission;
         }
 
-        public override EMissionKind Location => _mission;
+        public EMissionKind Location => _mission;
     }
 }

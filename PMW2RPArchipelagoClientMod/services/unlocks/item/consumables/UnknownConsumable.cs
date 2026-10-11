@@ -2,14 +2,12 @@
 
 namespace PMW2RPArchipelagoClientMod.services.items.item.consumables
 {
-    public class UnknownConsumable : AUnlockableConsumable<long>
+    public class UnknownConsumable : AUnlockableConsumable
     {
         public UnknownConsumable(long id) : base(id)
         {
             ServiceFactory.ModInstance.LoggerInstance.Warning("Parsed unknown consumable with ID: " + id);
         }
-
-        public override long Consumable => Id;
 
         public override void Consume(IConsumableDispatcher dispatcher)
         {

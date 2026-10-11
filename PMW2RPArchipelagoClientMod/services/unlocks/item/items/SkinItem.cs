@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.COSTUME_OFFSET,
         exclusiveMax: WorldConstants.COSTUME_OFFSET + (long)EPlayerSkin.MAX)]
-    public class SkinItem : APermanentUnlockableItem<EPlayerSkin>
+    public class SkinItem : APermanentUnlockableItem
     {
         public static Dictionary<EPlayerSkin, SkinItem> SKIN_ITEMS { get; private set; }
 
@@ -37,6 +37,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
             _skin = skin;
         }
 
-        public override EPlayerSkin Item => _skin;
+        public EPlayerSkin Item => _skin;
     }
 }

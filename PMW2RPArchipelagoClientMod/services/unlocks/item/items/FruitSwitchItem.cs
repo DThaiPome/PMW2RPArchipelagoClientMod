@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.FRUIT_SWITCH_OFFSET,
         exclusiveMax: WorldConstants.FRUIT_SWITCH_OFFSET + (long)EFruits.MAX)]
-    public class FruitSwitchItem : APermanentUnlockableItem<EFruits>
+    public class FruitSwitchItem : APermanentUnlockableItem
     {
         public static Dictionary<EFruits, FruitSwitchItem> FRUIT_SWITCH_ITEMS { get; private set; }
 
@@ -37,6 +37,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
             _fruit = fruit;
         }
 
-        public override EFruits Item => _fruit;
+        public EFruits Item => _fruit;
     }
 }

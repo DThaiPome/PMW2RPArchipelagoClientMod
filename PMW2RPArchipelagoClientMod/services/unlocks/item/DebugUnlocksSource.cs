@@ -5,7 +5,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 {
     public class DebugUnlocksSource : IUnlocksService
     {
-        private Dictionary<IUnlockableItem, int> _unlockCounts = new Dictionary<IUnlockableItem, int>();
+        private Dictionary<long, int> _unlockCounts = new Dictionary<long, int>();
         private Queue<IUnlockableConsumable> _pendingConsumables = new Queue<IUnlockableConsumable>();
 
         private ConsumableDelegates _consumableDelegates = new ConsumableDelegates();
@@ -23,12 +23,17 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         public int GetCountReceived(IUnlockableItem item)
         {
-            return _unlockCounts.GetValueOrDefault(item, 0);
+            return _unlockCounts.GetValueOrDefault(item.Id, 0);
         }
 
         public bool IsUnlocked(IUnlockableItem item)
         {
-            return _unlockCounts.ContainsKey(item);
+            return _unlockCounts.ContainsKey(item.Id);
+        }
+
+        public bool IsUnlocked(long id)
+        {
+            return _unlockCounts.ContainsKey(id);
         }
 
         public void OnLateUpdate()
@@ -43,26 +48,26 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         public void ReceiveItem(IUnlockableItem item)
         {
-            if (_unlockCounts.ContainsKey(item))
+            if (_unlockCounts.ContainsKey(item.Id))
             {
-                _unlockCounts[item]++;
+                _unlockCounts[item.Id]++;
             }
             else
             {
-                _unlockCounts.Add(item, 1);
+                _unlockCounts.Add(item.Id, 1);
             }
         }
 
         public void RescindItem(IUnlockableItem item)
         {
-            if (!_unlockCounts.ContainsKey(item))
+            if (!_unlockCounts.ContainsKey(item.Id))
             {
                 return;
             }
-            _unlockCounts[item]--;
-            if (_unlockCounts[item] == 0)
+            _unlockCounts[item.Id]--;
+            if (_unlockCounts[item.Id] == 0)
             {
-                _unlockCounts.Remove(item);
+                _unlockCounts.Remove(item.Id);
             }
         }
     }

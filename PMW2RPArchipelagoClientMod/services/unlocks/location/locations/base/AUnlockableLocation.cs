@@ -1,11 +1,9 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.location.locations.@base
 {
-    public abstract class AUnlockableLocation<T> : IUnlockableLocation
+    public abstract class AUnlockableLocation : IUnlockableLocation
     {
         protected readonly long _id;
         public long Id => _id;
-
-        public abstract T Location { get; }
 
         protected AUnlockableLocation(long id)
         {
@@ -21,7 +19,7 @@
         {
             if (obj == null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (!(obj is AUnlockableLocation<T> other)) return false;
+            if (!(obj is AUnlockableLocation other)) return false;
 
             return _id == other._id;
         }

@@ -2,13 +2,11 @@
 
 namespace PMW2RPArchipelagoClientMod.services.items.item.items
 {
-    public class UnknownItem : AUnlockableItem<long>
+    public class UnknownItem : AUnlockableItem
     {
         public UnknownItem(long id) : base(id)
         {
         }
-
-        public override long Item => Id;
 
         public override void Unlock(IItemsDispatcher dispatcher)
         {

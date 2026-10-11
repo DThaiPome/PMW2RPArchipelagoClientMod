@@ -1,11 +1,9 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.items.@base
 {
-    public abstract class AUnlockableItem<T> : IUnlockableItem
+    public abstract class AUnlockableItem : IUnlockableItem
     {
         protected readonly long _id;
         public long Id => _id;
-
-        public abstract T Item { get; }
 
         protected AUnlockableItem(long id)
         {
@@ -18,7 +16,7 @@
         {
             if (obj == null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (!(obj is AUnlockableItem<T> other)) return false;
+            if (!(obj is AUnlockableItem other)) return false;
             return _id == other._id;
         }
 

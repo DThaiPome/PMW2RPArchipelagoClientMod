@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.GOLDEN_FRUIT_OFFSET,
         exclusiveMax: WorldConstants.GOLDEN_FRUIT_OFFSET + (long)GoldenFruitKind.MAX)]
-    public class GoldenFruitItem : APermanentUnlockableItem<GoldenFruitKind>
+    public class GoldenFruitItem : APermanentUnlockableItem
     {
 
         public static Dictionary<GoldenFruitKind, GoldenFruitItem> GOLDEN_FRUIT_ITEMS { get; private set; }
@@ -47,6 +47,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
             _fruit = fruit;
         }
 
-        public override GoldenFruitKind Item => _fruit;
+        public GoldenFruitKind Item => _fruit;
     }
 }

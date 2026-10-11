@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
     [MapFromIdRange(
         inclusiveMin: WorldConstants.GASHAPON_OFFSET,
         exclusiveMax: WorldConstants.GASHAPON_OFFSET + (long)CAPSULE_CAP)]
-    public class CollectCapsuleLocation : AUnlockableLocation<ECapsule>
+    public class CollectCapsuleLocation : AUnlockableLocation
     {
         public const ECapsule CAPSULE_CAP = ECapsule.Capsule55;
 
@@ -52,6 +52,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
             _capsule = capsule;
         }
 
-        public override ECapsule Location => _capsule;
+        public ECapsule Location => _capsule;
     }
 }

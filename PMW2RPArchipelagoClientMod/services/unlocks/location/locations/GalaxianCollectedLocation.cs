@@ -6,7 +6,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
     [MapFromIdRange(
         inclusiveMin: WorldConstants.GALAXIAN_OFFSET,
         exclusiveMax: WorldConstants.GALAXIAN_OFFSET + GALAXIAN_CAP)]
-    public class GalaxianCollectedLocation : AUnlockableLocation<int>
+    public class GalaxianCollectedLocation : AUnlockableLocation
     {
         public const int GALAXIAN_CAP = 15;
 
@@ -47,6 +47,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
             _maze = maze;
         }
 
-        public override int Location => _maze;
+        public int Location => _maze;
     }
 }

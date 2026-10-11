@@ -13,7 +13,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         private IAPConnectionService _apConnectionService;
         private IIdMapperService _idMapperService;
 
-        private Dictionary<IUnlockableItem, int> _permanentUnlockCounts = new Dictionary<IUnlockableItem, int>();
+        private Dictionary<long, int> _permanentUnlockCounts = new Dictionary<long, int>();
         private Queue<IUnlockableConsumable> _pendingConsumables = new Queue<IUnlockableConsumable>();
         private ConsumableDelegates _consumablesDelegates = new ConsumableDelegates();
 
@@ -70,12 +70,12 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         public int GetCountReceived(IUnlockableItem item)
         {
-            return _permanentUnlockCounts.GetValueOrDefault(item, 0);
+            return _permanentUnlockCounts.GetValueOrDefault(item.Id, 0);
         }
 
         public bool IsUnlocked(IUnlockableItem item)
         {
-            return _permanentUnlockCounts.ContainsKey(item);
+            return _permanentUnlockCounts.ContainsKey(item.Id);
         }
 
         public void ReceiveItem(IUnlockableItem item)
@@ -85,13 +85,13 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
 
         public void UnlockPermanently(IUnlockableItem item)
         {
-            if (_permanentUnlockCounts.ContainsKey(item))
+            if (_permanentUnlockCounts.ContainsKey(item.Id))
             {
-                _permanentUnlockCounts[item]++;
+                _permanentUnlockCounts[item.Id]++;
             }
             else
             {
-                _permanentUnlockCounts.Add(item, 1);
+                _permanentUnlockCounts.Add(item.Id, 1);
             }
         }
 
@@ -117,6 +117,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         public void ReceiveConsumable(IUnlockableConsumable consumableId)
         {
             _pendingConsumables.Enqueue(consumableId);
+        }
+
+        public bool IsUnlocked(long id)
+        {
+            return _permanentUnlockCounts.ContainsKey(id);
         }
     }
 }

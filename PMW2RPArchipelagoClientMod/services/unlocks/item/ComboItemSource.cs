@@ -25,5 +25,10 @@ namespace PMW2RPArchipelagoClientMod.services.items.item
         {
             return _releaseUnlocksSource.IsUnlocked(item) || _debugUnlocksSource.IsUnlocked(item);
         }
+
+        public bool IsUnlocked(long id)
+        {
+            return _releaseUnlocksSource.IsUnlocked(id) || _debugUnlocksSource.IsUnlocked(id);
+        }
     }
 }

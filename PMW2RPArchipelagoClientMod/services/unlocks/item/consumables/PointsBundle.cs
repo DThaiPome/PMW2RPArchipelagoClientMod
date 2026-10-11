@@ -7,7 +7,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.consumables
     [MapFromIdRange(
         inclusiveMin: WorldConstants.FILLER_OFFSET + (long)FillerKind.Points100,
         exclusiveMax: WorldConstants.FILLER_OFFSET + (long)FillerKind.ExtraLife)]
-    public class PointsBundle : AUnlockableConsumable<FillerKind>
+    public class PointsBundle : AUnlockableConsumable
     {
         private FillerKind _kind;
 
@@ -21,7 +21,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.consumables
             _kind = kind;
         }
 
-        public override FillerKind Consumable => _kind;
+        public FillerKind Consumable => _kind;
 
         public override void Consume(IConsumableDispatcher dispatcher)
         {

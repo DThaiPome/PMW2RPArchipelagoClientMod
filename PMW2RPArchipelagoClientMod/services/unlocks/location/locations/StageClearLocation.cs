@@ -10,7 +10,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
     [MapFromIdRange(
         inclusiveMin: WorldConstants.LEVEL_OFFSET,
         exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
-    public class StageClearLocation : AUnlockableLocation<EWorldStage>
+    public class StageClearLocation : AUnlockableLocation
     {
         private static Dictionary<EWorldStage, StageClearLocation> STAGE_CLEAR_LOCATIONS;
 
@@ -87,6 +87,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
             base.Clear(dispatcher);
         }
 
-        public override EWorldStage Location => _stage;
+        public EWorldStage Location => _stage;
     }
 }

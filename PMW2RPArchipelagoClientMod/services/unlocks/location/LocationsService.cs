@@ -2,7 +2,6 @@
 using MelonLoader;
 using PMW2RPArchipelagoClientMod.models.data;
 using PMW2RPArchipelagoClientMod.services.client;
-using PMW2RPArchipelagoClientMod.services.items.location.locations;
 using PMW2RPArchipelagoClientMod.services.items.location.locations.@base;
 using PMW2RPArchipelagoClientMod.services.unlocks.registry;
 
@@ -14,7 +13,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
         private IAPConnectionService _apConnectionService;
         private IIdMapperService _idMapperService;
 
-        private HashSet<IUnlockableLocation> _clearedLocations = new HashSet<IUnlockableLocation>();
+        private HashSet<long> _clearedLocations = new HashSet<long>();
         private HashSet<long> _sentLocations = new HashSet<long>();
 
         public LocationsService(MelonMod melonMod,
@@ -69,12 +68,12 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
 
         private void _clearLocation(IUnlockableLocation location)
         {
-            _clearedLocations.Add(location);
+            _clearedLocations.Add(location.Id);
         }
 
         public bool IsCleared(IUnlockableLocation location)
         {
-            return _clearedLocations.Contains(location);
+            return _clearedLocations.Contains(location.Id);
         }
 
         public void OnLateUpdate()
@@ -84,23 +83,22 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
 
         private void _sendLocationsCleared()
         {
-            foreach (var location in _clearedLocations)
+            foreach (var locationId in _clearedLocations)
             {
-                if (!_sendLocationClearedIfNeeded(location))
+                if (!_sendLocationClearedIfNeeded(locationId))
                 {
                     continue;
                 }
-                if (location.Equals(StageClearLocation.StageLocationFor(EWorldStage.Stage6_4)) && _apConnectionService.GoalBoss == GoalBossOption.Spooky
-                    || location.Equals(StageClearLocation.StageLocationFor(EWorldStage.Stage6_5)) && _apConnectionService.GoalBoss == GoalBossOption.TocMan)
+                if (locationId.Equals(EWorldStage.Stage6_4) && _apConnectionService.GoalBoss == GoalBossOption.Spooky
+                    || locationId.Equals(EWorldStage.Stage6_5) && _apConnectionService.GoalBoss == GoalBossOption.TocMan)
                 {
                     _apConnectionService.Goal();
                 }
             }
         }
 
-        private bool _sendLocationClearedIfNeeded(IUnlockableLocation location)
+        private bool _sendLocationClearedIfNeeded(long id)
         {
-            long id = location.Id;
             if (_sentLocations.Contains(id))
             {
                 return false;
@@ -108,6 +106,11 @@ namespace PMW2RPArchipelagoClientMod.services.items.location
             _apConnectionService.SendLocationChecked(id);
             _sentLocations.Add(id);
             return true;
+        }
+
+        public bool IsCleared(long id)
+        {
+            return _clearedLocations.Contains(id);
         }
     }
 }

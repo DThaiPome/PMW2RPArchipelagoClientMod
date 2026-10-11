@@ -8,7 +8,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
     [MapFromIdRange(
         inclusiveMin: WorldConstants.TIMETRIAL_OFFSET,
         exclusiveMax: WorldConstants.TIMETRIAL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
-    public class GoldMedalClearLocation : AUnlockableLocation<EWorldStage>
+    public class GoldMedalClearLocation : AUnlockableLocation
     {
         public static Dictionary<EWorldStage, GoldMedalClearLocation> GOLD_MEDAL_LOCATIONS { get; private set; }
 
@@ -51,6 +51,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.location.locations
             _stage = stage;
         }
 
-        public override EWorldStage Location => _stage;
+        public EWorldStage Location => _stage;
     }
 }

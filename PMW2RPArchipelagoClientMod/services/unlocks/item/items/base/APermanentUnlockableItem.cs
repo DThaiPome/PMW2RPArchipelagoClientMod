@@ -1,6 +1,6 @@
 ﻿namespace PMW2RPArchipelagoClientMod.services.items.item.items.@base
 {
-    public abstract class APermanentUnlockableItem<T> : AUnlockableItem<T>
+    public abstract class APermanentUnlockableItem : AUnlockableItem
     {
         protected APermanentUnlockableItem(long id) : base(id)
         {

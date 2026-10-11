@@ -8,7 +8,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.LEVEL_OFFSET,
         exclusiveMax: WorldConstants.LEVEL_OFFSET + (long)PMW2RPConstants.STAGE_CAP + 1)]
-    public class StageItem : APermanentUnlockableItem<EWorldStage>
+    public class StageItem : APermanentUnlockableItem
     {
         public static Dictionary<EWorldStage, StageItem> STAGE_ITEMS { get; private set; }
 
@@ -42,6 +42,6 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
             _stage = stage;
         }
 
-        public override EWorldStage Item => _stage;
+        public EWorldStage Item => _stage;
     }
 }

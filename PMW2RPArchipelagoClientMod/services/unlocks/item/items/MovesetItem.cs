@@ -8,7 +8,7 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
     [MapFromIdRange(
         inclusiveMin: WorldConstants.MOVEMENT_OFFSET,
         exclusiveMax: WorldConstants.MOVEMENT_OFFSET + (long)EMovesetItem.MAX)]
-    public class MovesetItem : APermanentUnlockableItem<EMovesetItem>
+    public class MovesetItem : APermanentUnlockableItem
     {
         public static Dictionary<EMovesetItem, MovesetItem> MOVESET_ITEMS { get; private set; }
 
@@ -72,7 +72,5 @@ namespace PMW2RPArchipelagoClientMod.services.items.item.items
         {
             _moveset = moveset;
         }
-
-        public override EMovesetItem Item => _moveset;
     }
 }
